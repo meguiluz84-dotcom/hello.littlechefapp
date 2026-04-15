@@ -5,6 +5,11 @@ import imgCookies from "@/assets/recipe-cookies.jpg";
 import imgAntsOnLog from "@/assets/recipe-ants-on-log.jpg";
 import imgParfait from "@/assets/recipe-parfait.jpg";
 import imgMiniPizza from "@/assets/recipe-mini-pizza.jpg";
+import imgVeggieWrap from "@/assets/recipe-veggie-wrap.jpg";
+import imgBananaPops from "@/assets/recipe-banana-pops.jpg";
+import imgTrailMix from "@/assets/recipe-trail-mix.jpg";
+import imgRiceBalls from "@/assets/recipe-rice-balls.jpg";
+import imgFruitKabobs from "@/assets/recipe-fruit-kabobs.jpg";
 
 export interface Ingredient {
   emoji: string;
