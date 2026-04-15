@@ -35,7 +35,7 @@ export default function Celebration({ onDone, recipeEmoji }: Props) {
       {/* Big recipe emoji */}
       <motion.div
         initial={{ scale: 0 }}
-        animate={{ scale: [0, 1.3, 1] }}
+        animate={{ scale: 1.1 }}
         transition={{ type: "spring", bounce: 0.5 }}
         className="mb-8 text-9xl"
       >
