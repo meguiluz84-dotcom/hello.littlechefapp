@@ -231,8 +231,8 @@ export default function RecipeStepper({ recipe, onFinish, onBack }: Props) {
 
           {/* Action icon with unique animation */}
           <motion.div
-            animate={actionAnim.animate}
-            transition={actionAnim.transition}
+            animate={actionAnim.animate as Record<string, number[]>}
+            transition={actionAnim.transition as Record<string, unknown>}
             className="text-6xl"
           >
             {actionIcons[current.actionIcon]}
