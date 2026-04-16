@@ -10,6 +10,14 @@ import imgBananaPops from "@/assets/recipe-banana-pops.jpg";
 import imgTrailMix from "@/assets/recipe-trail-mix.jpg";
 import imgRiceBalls from "@/assets/recipe-rice-balls.jpg";
 import imgFruitKabobs from "@/assets/recipe-fruit-kabobs.jpg";
+import imgGranolaYogur from "@/assets/recipe-granola-yogur.jpg";
+import imgPinchos from "@/assets/recipe-pinchos.jpg";
+import imgPancakesBrocoli from "@/assets/recipe-pancakes-brocoli.jpg";
+import imgArepas from "@/assets/recipe-arepas.jpg";
+import imgEmpanadas from "@/assets/recipe-empanadas.jpg";
+import imgPizzaVegetal from "@/assets/recipe-pizza-vegetal.jpg";
+import imgGalletasCacao from "@/assets/recipe-galletas-cacao.jpg";
+import imgRosquitas from "@/assets/recipe-rosquitas.jpg";
 
 export interface Ingredient {
   emoji: string;
