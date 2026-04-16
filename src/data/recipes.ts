@@ -30,14 +30,25 @@ export interface RecipeStep {
   actionIcon: "cut" | "mix" | "pour" | "spread" | "place" | "shake" | "scoop" | "peel" | "wash";
 }
 
+export type RecipeCategory = "fruits" | "snacks" | "drinks" | "meals" | "desserts";
+
+export const categories: { id: RecipeCategory; emoji: string }[] = [
+  { id: "fruits", emoji: "🍎" },
+  { id: "snacks", emoji: "🥪" },
+  { id: "drinks", emoji: "🥤" },
+  { id: "meals", emoji: "🍳" },
+  { id: "desserts", emoji: "🍪" },
+];
+
 export interface Recipe {
   id: string;
   image: string;
   emoji: string;
-  color: string; // tailwind token
+  color: string;
+  category: RecipeCategory;
   ingredients: Ingredient[];
   steps: RecipeStep[];
-  difficulty: 1 | 2 | 3; // shown as stars
+  difficulty: 1 | 2 | 3;
 }
 
 export const recipes: Recipe[] = [
