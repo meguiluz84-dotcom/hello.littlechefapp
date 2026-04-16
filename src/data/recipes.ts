@@ -10,6 +10,14 @@ import imgBananaPops from "@/assets/recipe-banana-pops.jpg";
 import imgTrailMix from "@/assets/recipe-trail-mix.jpg";
 import imgRiceBalls from "@/assets/recipe-rice-balls.jpg";
 import imgFruitKabobs from "@/assets/recipe-fruit-kabobs.jpg";
+import imgGranolaYogur from "@/assets/recipe-granola-yogur.jpg";
+import imgPinchos from "@/assets/recipe-pinchos.jpg";
+import imgPancakesBrocoli from "@/assets/recipe-pancakes-brocoli.jpg";
+import imgArepas from "@/assets/recipe-arepas.jpg";
+import imgEmpanadas from "@/assets/recipe-empanadas.jpg";
+import imgPizzaVegetal from "@/assets/recipe-pizza-vegetal.jpg";
+import imgGalletasCacao from "@/assets/recipe-galletas-cacao.jpg";
+import imgRosquitas from "@/assets/recipe-rosquitas.jpg";
 
 export interface Ingredient {
   emoji: string;
@@ -258,6 +266,166 @@ export const recipes: Recipe[] = [
       { emoji: "🍈", ingredientEmojis: ["🍈"], actionIcon: "cut" },
       { emoji: "🍓", ingredientEmojis: ["🍓"], actionIcon: "place" },
       { emoji: "🍇", ingredientEmojis: ["🍇", "🍈", "🫐"], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "granola-yogur",
+    image: imgGranolaYogur,
+    emoji: "🥣",
+    color: "kids-yellow",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🥣", quantity: 1 },
+      { emoji: "🥛", quantity: 1 },
+      { emoji: "🍌", quantity: 1 },
+      { emoji: "🥝", quantity: 1 },
+      { emoji: "🥜", quantity: 1 },
+    ],
+    steps: [
+      { emoji: "🥣", ingredientEmojis: ["🥣", "🥜"], actionIcon: "mix" },
+      { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "peel" },
+      { emoji: "🍌", ingredientEmojis: ["🍌", "🥛"], actionIcon: "mix" },
+      { emoji: "🥝", ingredientEmojis: ["🥝"], actionIcon: "cut" },
+      { emoji: "🥣", ingredientEmojis: ["🥣", "🥝"], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "pinchos-queso",
+    image: imgPinchos,
+    emoji: "🍢",
+    color: "kids-red",
+    difficulty: 1,
+    ingredients: [
+      { emoji: "🧀", quantity: 2 },
+      { emoji: "🍅", quantity: 5 },
+      { emoji: "🍓", quantity: 3 },
+    ],
+    steps: [
+      { emoji: "🧀", ingredientEmojis: ["🧀"], actionIcon: "cut" },
+      { emoji: "🍅", ingredientEmojis: ["🍅"], actionIcon: "cut" },
+      { emoji: "🍓", ingredientEmojis: ["🍓"], actionIcon: "cut" },
+      { emoji: "🍢", ingredientEmojis: ["🧀", "🍅", "🍓"], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "pancakes-brocoli",
+    image: imgPancakesBrocoli,
+    emoji: "🥞",
+    color: "kids-green",
+    difficulty: 3,
+    ingredients: [
+      { emoji: "🥦", quantity: 1 },
+      { emoji: "🥚", quantity: 1 },
+      { emoji: "🥣", quantity: 1 },
+      { emoji: "🍌", quantity: 1 },
+      { emoji: "🥛", quantity: 1 },
+    ],
+    steps: [
+      { emoji: "🥦", ingredientEmojis: ["🥦"], actionIcon: "wash" },
+      { emoji: "🥦", ingredientEmojis: ["🥦"], actionIcon: "cut" },
+      { emoji: "🥚", ingredientEmojis: ["🥚", "🥣", "🍌", "🥛"], actionIcon: "mix" },
+      { emoji: "🥦", ingredientEmojis: ["🥦"], actionIcon: "mix" },
+      { emoji: "🥞", ingredientEmojis: [], actionIcon: "scoop" },
+    ],
+  },
+  {
+    id: "arepas-chia",
+    image: imgArepas,
+    emoji: "🫓",
+    color: "kids-orange",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🌾", quantity: 1 },
+      { emoji: "🌱", quantity: 1 },
+      { emoji: "🥚", quantity: 1 },
+      { emoji: "🍐", quantity: 1 },
+    ],
+    steps: [
+      { emoji: "🌾", ingredientEmojis: ["🌾", "🌱"], actionIcon: "mix" },
+      { emoji: "💧", ingredientEmojis: [], actionIcon: "pour" },
+      { emoji: "🖐️", ingredientEmojis: [], actionIcon: "mix" },
+      { emoji: "🫓", ingredientEmojis: [], actionIcon: "place" },
+      { emoji: "🥚", ingredientEmojis: ["🥚"], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "empanadas",
+    image: imgEmpanadas,
+    emoji: "🥟",
+    color: "kids-purple",
+    difficulty: 3,
+    ingredients: [
+      { emoji: "🌾", quantity: 1 },
+      { emoji: "🥩", quantity: 1 },
+      { emoji: "🥔", quantity: 1 },
+      { emoji: "🍅", quantity: 1 },
+    ],
+    steps: [
+      { emoji: "🥩", ingredientEmojis: ["🥩"], actionIcon: "cut" },
+      { emoji: "🥔", ingredientEmojis: ["🥔", "🍅"], actionIcon: "mix" },
+      { emoji: "🌾", ingredientEmojis: ["🌾"], actionIcon: "mix" },
+      { emoji: "🥟", ingredientEmojis: ["🥩", "🥔"], actionIcon: "scoop" },
+      { emoji: "🔥", ingredientEmojis: [], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "pizza-vegetal",
+    image: imgPizzaVegetal,
+    emoji: "🍕",
+    color: "kids-red",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🫓", quantity: 1 },
+      { emoji: "🧀", quantity: 1 },
+      { emoji: "🍅", quantity: 4 },
+      { emoji: "🥬", quantity: 2 },
+      { emoji: "🍄", quantity: 4 },
+    ],
+    steps: [
+      { emoji: "🫓", ingredientEmojis: ["🫓"], actionIcon: "place" },
+      { emoji: "🧀", ingredientEmojis: ["🧀"], actionIcon: "place" },
+      { emoji: "🥬", ingredientEmojis: ["🥬"], actionIcon: "wash" },
+      { emoji: "🍅", ingredientEmojis: ["🍅", "🥬", "🍄"], actionIcon: "place" },
+      { emoji: "🔥", ingredientEmojis: [], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "galletas-cacao",
+    image: imgGalletasCacao,
+    emoji: "🍪",
+    color: "kids-teal",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🥣", quantity: 1 },
+      { emoji: "🍫", quantity: 1 },
+      { emoji: "🍌", quantity: 1 },
+      { emoji: "🥚", quantity: 1 },
+    ],
+    steps: [
+      { emoji: "🥣", ingredientEmojis: ["🥣", "🥚"], actionIcon: "mix" },
+      { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "peel" },
+      { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "mix" },
+      { emoji: "🍫", ingredientEmojis: ["🍫"], actionIcon: "mix" },
+      { emoji: "🍪", ingredientEmojis: [], actionIcon: "scoop" },
+    ],
+  },
+  {
+    id: "rosquitas",
+    image: imgRosquitas,
+    emoji: "🍩",
+    color: "kids-pink",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🌾", quantity: 1 },
+      { emoji: "🧂", quantity: 1 },
+      { emoji: "🌱", quantity: 1 },
+    ],
+    steps: [
+      { emoji: "🌾", ingredientEmojis: ["🌾", "🧂"], actionIcon: "mix" },
+      { emoji: "💧", ingredientEmojis: [], actionIcon: "pour" },
+      { emoji: "🖐️", ingredientEmojis: [], actionIcon: "mix" },
+      { emoji: "🍩", ingredientEmojis: [], actionIcon: "scoop" },
+      { emoji: "🔥", ingredientEmojis: [], actionIcon: "place" },
     ],
   },
 ];
