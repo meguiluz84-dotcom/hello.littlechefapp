@@ -30,14 +30,25 @@ export interface RecipeStep {
   actionIcon: "cut" | "mix" | "pour" | "spread" | "place" | "shake" | "scoop" | "peel" | "wash";
 }
 
+export type RecipeCategory = "fruits" | "snacks" | "drinks" | "meals" | "desserts";
+
+export const categories: { id: RecipeCategory; emoji: string }[] = [
+  { id: "fruits", emoji: "🍎" },
+  { id: "snacks", emoji: "🥪" },
+  { id: "drinks", emoji: "🥤" },
+  { id: "meals", emoji: "🍳" },
+  { id: "desserts", emoji: "🍪" },
+];
+
 export interface Recipe {
   id: string;
   image: string;
   emoji: string;
-  color: string; // tailwind token
+  color: string;
+  category: RecipeCategory;
   ingredients: Ingredient[];
   steps: RecipeStep[];
-  difficulty: 1 | 2 | 3; // shown as stars
+  difficulty: 1 | 2 | 3;
 }
 
 export const recipes: Recipe[] = [
@@ -46,6 +57,7 @@ export const recipes: Recipe[] = [
     image: imgFruitSalad,
     emoji: "🥗",
     color: "kids-green",
+    category: "fruits",
     difficulty: 1,
     ingredients: [
       { emoji: "🍓", quantity: 3 },
@@ -65,6 +77,7 @@ export const recipes: Recipe[] = [
     image: imgSandwich,
     emoji: "🥪",
     color: "kids-orange",
+    category: "snacks",
     difficulty: 1,
     ingredients: [
       { emoji: "🍞", quantity: 2 },
@@ -83,6 +96,7 @@ export const recipes: Recipe[] = [
     image: imgSmoothie,
     emoji: "🥤",
     color: "kids-pink",
+    category: "drinks",
     difficulty: 1,
     ingredients: [
       { emoji: "🍌", quantity: 1 },
@@ -103,6 +117,7 @@ export const recipes: Recipe[] = [
     image: imgCookies,
     emoji: "🍪",
     color: "kids-purple",
+    category: "desserts",
     difficulty: 2,
     ingredients: [
       { emoji: "🥣", quantity: 2 },
@@ -123,6 +138,7 @@ export const recipes: Recipe[] = [
     image: imgAntsOnLog,
     emoji: "🐜",
     color: "kids-teal",
+    category: "snacks",
     difficulty: 1,
     ingredients: [
       { emoji: "🥬", quantity: 3 },
@@ -140,6 +156,7 @@ export const recipes: Recipe[] = [
     image: imgParfait,
     emoji: "🍨",
     color: "kids-blue",
+    category: "desserts",
     difficulty: 1,
     ingredients: [
       { emoji: "🥛", quantity: 1 },
@@ -160,6 +177,7 @@ export const recipes: Recipe[] = [
     image: imgMiniPizza,
     emoji: "🍕",
     color: "kids-red",
+    category: "meals",
     difficulty: 2,
     ingredients: [
       { emoji: "🍘", quantity: 4 },
@@ -177,6 +195,7 @@ export const recipes: Recipe[] = [
     image: imgVeggieWrap,
     emoji: "🌯",
     color: "kids-green",
+    category: "meals",
     difficulty: 2,
     ingredients: [
       { emoji: "🫓", quantity: 1 },
@@ -197,6 +216,7 @@ export const recipes: Recipe[] = [
     image: imgBananaPops,
     emoji: "🍫",
     color: "kids-purple",
+    category: "desserts",
     difficulty: 2,
     ingredients: [
       { emoji: "🍌", quantity: 2 },
@@ -216,6 +236,7 @@ export const recipes: Recipe[] = [
     image: imgTrailMix,
     emoji: "🥜",
     color: "kids-orange",
+    category: "snacks",
     difficulty: 1,
     ingredients: [
       { emoji: "🥜", quantity: 1 },
@@ -236,6 +257,7 @@ export const recipes: Recipe[] = [
     image: imgRiceBalls,
     emoji: "🍙",
     color: "kids-teal",
+    category: "meals",
     difficulty: 2,
     ingredients: [
       { emoji: "🍚", quantity: 1 },
@@ -254,6 +276,7 @@ export const recipes: Recipe[] = [
     image: imgFruitKabobs,
     emoji: "🍡",
     color: "kids-pink",
+    category: "fruits",
     difficulty: 1,
     ingredients: [
       { emoji: "🍓", quantity: 3 },
@@ -273,6 +296,7 @@ export const recipes: Recipe[] = [
     image: imgGranolaYogur,
     emoji: "🥣",
     color: "kids-yellow",
+    category: "snacks",
     difficulty: 2,
     ingredients: [
       { emoji: "🥣", quantity: 1 },
@@ -294,6 +318,7 @@ export const recipes: Recipe[] = [
     image: imgPinchos,
     emoji: "🍢",
     color: "kids-red",
+    category: "snacks",
     difficulty: 1,
     ingredients: [
       { emoji: "🧀", quantity: 2 },
@@ -312,6 +337,7 @@ export const recipes: Recipe[] = [
     image: imgPancakesBrocoli,
     emoji: "🥞",
     color: "kids-green",
+    category: "meals",
     difficulty: 3,
     ingredients: [
       { emoji: "🥦", quantity: 1 },
@@ -333,6 +359,7 @@ export const recipes: Recipe[] = [
     image: imgArepas,
     emoji: "🫓",
     color: "kids-orange",
+    category: "meals",
     difficulty: 2,
     ingredients: [
       { emoji: "🌾", quantity: 1 },
@@ -353,6 +380,7 @@ export const recipes: Recipe[] = [
     image: imgEmpanadas,
     emoji: "🥟",
     color: "kids-purple",
+    category: "meals",
     difficulty: 3,
     ingredients: [
       { emoji: "🌾", quantity: 1 },
@@ -373,6 +401,7 @@ export const recipes: Recipe[] = [
     image: imgPizzaVegetal,
     emoji: "🍕",
     color: "kids-red",
+    category: "meals",
     difficulty: 2,
     ingredients: [
       { emoji: "🫓", quantity: 1 },
@@ -394,6 +423,7 @@ export const recipes: Recipe[] = [
     image: imgGalletasCacao,
     emoji: "🍪",
     color: "kids-teal",
+    category: "desserts",
     difficulty: 2,
     ingredients: [
       { emoji: "🥣", quantity: 1 },
@@ -414,6 +444,7 @@ export const recipes: Recipe[] = [
     image: imgRosquitas,
     emoji: "🍩",
     color: "kids-pink",
+    category: "desserts",
     difficulty: 2,
     ingredients: [
       { emoji: "🌾", quantity: 1 },
