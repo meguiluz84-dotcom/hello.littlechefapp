@@ -22,6 +22,7 @@ import imgRosquitas from "@/assets/recipe-rosquitas.jpg";
 export interface Ingredient {
   emoji: string;
   quantity?: number;
+  grams?: number;
 }
 
 export interface RecipeStep {
