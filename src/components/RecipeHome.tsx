@@ -15,14 +15,19 @@ const colorMap: Record<string, string> = {
 
 interface RecipeHomeProps {
   onSelectRecipe: (recipe: Recipe) => void;
+  isCompleted?: (id: string) => boolean;
 }
 
-export default function RecipeHome({ onSelectRecipe }: RecipeHomeProps) {
+export default function RecipeHome({ onSelectRecipe, isCompleted }: RecipeHomeProps) {
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
 
   const filtered = activeCategory
     ? recipes.filter((r) => r.category === activeCategory)
     : recipes;
+
+  const completedCount = isCompleted
+    ? recipes.filter((r) => isCompleted(r.id)).length
+    : 0;
 
   return (
     <div className="min-h-screen bg-background px-4 pb-8 pt-6">
