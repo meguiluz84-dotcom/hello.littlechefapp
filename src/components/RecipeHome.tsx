@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { recipes, categories, type Recipe, type RecipeCategory } from "@/data/recipes";
+import dinoChef from "@/assets/dino-chef.png";
 
 const colorMap: Record<string, string> = {
   "kids-pink": "bg-kids-pink",
