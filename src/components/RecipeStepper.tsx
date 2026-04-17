@@ -179,13 +179,22 @@ export default function RecipeStepper({ recipe, onFinish, onBack }: Props) {
         ))}
       </div>
 
+      {/* Dino guide with action emoji */}
+      <div className="self-start">
+        <DinoBubble
+          emojis={`${actionIcons[current.actionIcon]}${current.emoji}`}
+          size="sm"
+          bubbleKey={step}
+        />
+      </div>
+
       {/* Step number badge */}
       <motion.div
         key={`num-${step}`}
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: "spring", bounce: 0.5 }}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground kids-shadow"
+        className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground kids-shadow"
       >
         {step + 1}
       </motion.div>
