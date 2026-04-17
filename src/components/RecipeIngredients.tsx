@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
+import DinoBubble from "./DinoBubble";
 
 interface Props {
   recipe: Recipe;
@@ -10,15 +11,20 @@ interface Props {
 export default function RecipeIngredients({ recipe, onStart, onBack }: Props) {
   return (
     <div className="flex min-h-screen flex-col items-center bg-background px-4 pb-8 pt-6">
+      {/* Dino guide */}
+      <div className="mb-4 self-start">
+        <DinoBubble emojis={`🧺${recipe.emoji}`} size="md" />
+      </div>
+
       {/* Recipe image */}
       <motion.img
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         src={recipe.image}
         alt=""
-        className="mb-6 h-40 w-40 rounded-3xl object-cover kids-shadow-lg"
-        width={160}
-        height={160}
+        className="mb-6 h-32 w-32 rounded-3xl object-cover kids-shadow-lg"
+        width={128}
+        height={128}
       />
 
       {/* Ingredients grid */}

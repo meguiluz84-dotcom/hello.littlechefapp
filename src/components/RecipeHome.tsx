@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { recipes, categories, type Recipe, type RecipeCategory } from "@/data/recipes";
-import dinoChef from "@/assets/dino-chef.png";
+import DinoBubble from "./DinoBubble";
 
 const colorMap: Record<string, string> = {
   "kids-pink": "bg-kids-pink",
@@ -32,22 +32,14 @@ export default function RecipeHome({ onSelectRecipe, isCompleted }: RecipeHomePr
 
   return (
     <div className="min-h-screen bg-background px-4 pb-8 pt-6">
-      {/* Header - dino chef mascot */}
+      {/* Header - dino chef mascot with greeting bubble */}
       <motion.div
-        initial={{ scale: 0, rotate: -20 }}
-        animate={{ scale: 1, rotate: 0 }}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
         transition={{ type: "spring", bounce: 0.5 }}
         className="mb-4 flex justify-center"
       >
-        <motion.img
-          src={dinoChef}
-          alt=""
-          width={128}
-          height={128}
-          animate={{ y: [0, -6, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="h-28 w-28 object-contain drop-shadow-lg"
-        />
+        <DinoBubble emojis="👋✨" size="lg" />
       </motion.div>
 
       {/* Stars trophy counter */}
