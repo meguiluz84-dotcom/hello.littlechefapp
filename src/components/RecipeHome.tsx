@@ -43,6 +43,19 @@ export default function RecipeHome({ onSelectRecipe, isCompleted }: RecipeHomePr
         </div>
       </motion.div>
 
+      {/* Stars trophy counter */}
+      {completedCount > 0 && (
+        <motion.div
+          initial={{ scale: 0, y: -10 }}
+          animate={{ scale: 1, y: 0 }}
+          transition={{ type: "spring", bounce: 0.5 }}
+          className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full bg-kids-yellow px-4 py-2 kids-shadow"
+        >
+          <span className="text-2xl">⭐</span>
+          <span className="text-xl font-extrabold text-foreground">×{completedCount}</span>
+        </motion.div>
+      )}
+
       {/* Category filter bar */}
       <div className="mx-auto mb-5 flex max-w-xl justify-center gap-2">
         {/* All button */}
