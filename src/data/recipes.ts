@@ -61,10 +61,10 @@ export const recipes: Recipe[] = [
     category: "fruits",
     difficulty: 1,
     ingredients: [
-      { emoji: "🍓", quantity: 3 },
-      { emoji: "🍌", quantity: 1 },
-      { emoji: "🫐", quantity: 5 },
-      { emoji: "🍇", quantity: 5 },
+      { emoji: "🍓", quantity: 3, grams: 45 },
+      { emoji: "🍌", quantity: 1, grams: 120 },
+      { emoji: "🫐", quantity: 5, grams: 5 },
+      { emoji: "🍇", quantity: 5, grams: 25 },
     ],
     steps: [
       { emoji: "🍓", ingredientEmojis: ["🍓"], actionIcon: "wash" },
@@ -81,9 +81,9 @@ export const recipes: Recipe[] = [
     category: "snacks",
     difficulty: 1,
     ingredients: [
-      { emoji: "🍞", quantity: 2 },
-      { emoji: "🥜", quantity: 1 },
-      { emoji: "🍓", quantity: 1 },
+      { emoji: "🍞", quantity: 2, grams: 60 },
+      { emoji: "🥜", quantity: 1, grams: 15 },
+      { emoji: "🍓", quantity: 1, grams: 15 },
     ],
     steps: [
       { emoji: "🍞", ingredientEmojis: ["🍞"], actionIcon: "place" },
@@ -100,10 +100,10 @@ export const recipes: Recipe[] = [
     category: "drinks",
     difficulty: 1,
     ingredients: [
-      { emoji: "🍌", quantity: 1 },
-      { emoji: "🍓", quantity: 3 },
-      { emoji: "🥛", quantity: 1 },
-      { emoji: "🍯", quantity: 1 },
+      { emoji: "🍌", quantity: 1, grams: 120 },
+      { emoji: "🍓", quantity: 3, grams: 45 },
+      { emoji: "🥛", quantity: 1, grams: 240 },
+      { emoji: "🍯", quantity: 1, grams: 20 },
     ],
     steps: [
       { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "peel" },
@@ -121,10 +121,10 @@ export const recipes: Recipe[] = [
     category: "desserts",
     difficulty: 2,
     ingredients: [
-      { emoji: "🥣", quantity: 2 },
-      { emoji: "🥜", quantity: 1 },
-      { emoji: "🍯", quantity: 1 },
-      { emoji: "🍫", quantity: 1 },
+      { emoji: "🥣", quantity: 2, grams: 100 },
+      { emoji: "🥜", quantity: 1, grams: 15 },
+      { emoji: "🍯", quantity: 1, grams: 20 },
+      { emoji: "🍫", quantity: 1, grams: 30 },
     ],
     steps: [
       { emoji: "🥜", ingredientEmojis: ["🥜", "🍯"], actionIcon: "mix" },
@@ -142,9 +142,9 @@ export const recipes: Recipe[] = [
     category: "snacks",
     difficulty: 1,
     ingredients: [
-      { emoji: "🥬", quantity: 3 },
-      { emoji: "🥜", quantity: 1 },
-      { emoji: "🫐", quantity: 6 },
+      { emoji: "🥬", quantity: 3, grams: 60 },
+      { emoji: "🥜", quantity: 1, grams: 15 },
+      { emoji: "🫐", quantity: 6, grams: 6 },
     ],
     steps: [
       { emoji: "🥬", ingredientEmojis: ["🥬"], actionIcon: "wash" },
@@ -160,10 +160,10 @@ export const recipes: Recipe[] = [
     category: "desserts",
     difficulty: 1,
     ingredients: [
-      { emoji: "🥛", quantity: 1 },
-      { emoji: "🍓", quantity: 3 },
-      { emoji: "🫐", quantity: 5 },
-      { emoji: "🥣", quantity: 1 },
+      { emoji: "🥛", quantity: 1, grams: 240 },
+      { emoji: "🍓", quantity: 3, grams: 45 },
+      { emoji: "🫐", quantity: 5, grams: 5 },
+      { emoji: "🥣", quantity: 1, grams: 50 },
     ],
     steps: [
       { emoji: "🥛", ingredientEmojis: ["🥛"], actionIcon: "scoop" },
@@ -181,9 +181,9 @@ export const recipes: Recipe[] = [
     category: "meals",
     difficulty: 2,
     ingredients: [
-      { emoji: "🍘", quantity: 4 },
-      { emoji: "🍅", quantity: 1 },
-      { emoji: "🧀", quantity: 1 },
+      { emoji: "🍘", quantity: 4, grams: 200 },
+      { emoji: "🍅", quantity: 1, grams: 80 },
+      { emoji: "🧀", quantity: 1, grams: 25 },
     ],
     steps: [
       { emoji: "🍘", ingredientEmojis: ["🍘"], actionIcon: "place" },
@@ -199,10 +199,10 @@ export const recipes: Recipe[] = [
     category: "meals",
     difficulty: 2,
     ingredients: [
-      { emoji: "🫓", quantity: 1 },
-      { emoji: "🥬", quantity: 2 },
-      { emoji: "🍅", quantity: 1 },
-      { emoji: "🧀", quantity: 1 },
+      { emoji: "🫓", quantity: 1, grams: 60 },
+      { emoji: "🥬", quantity: 2, grams: 40 },
+      { emoji: "🍅", quantity: 1, grams: 80 },
+      { emoji: "🧀", quantity: 1, grams: 25 },
     ],
     steps: [
       { emoji: "🥬", ingredientEmojis: ["🥬"], actionIcon: "wash" },
@@ -220,9 +220,9 @@ export const recipes: Recipe[] = [
     category: "desserts",
     difficulty: 2,
     ingredients: [
-      { emoji: "🍌", quantity: 2 },
-      { emoji: "🍫", quantity: 1 },
-      { emoji: "🍬", quantity: 1 },
+      { emoji: "🍌", quantity: 2, grams: 240 },
+      { emoji: "🍫", quantity: 1, grams: 30 },
+      { emoji: "🍬", quantity: 1, grams: 5 },
     ],
     steps: [
       { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "peel" },
@@ -240,10 +240,10 @@ export const recipes: Recipe[] = [
     category: "snacks",
     difficulty: 1,
     ingredients: [
-      { emoji: "🥜", quantity: 1 },
-      { emoji: "🍫", quantity: 1 },
-      { emoji: "🥣", quantity: 1 },
-      { emoji: "🍇", quantity: 5 },
+      { emoji: "🥜", quantity: 1, grams: 15 },
+      { emoji: "🍫", quantity: 1, grams: 30 },
+      { emoji: "🥣", quantity: 1, grams: 50 },
+      { emoji: "🍇", quantity: 5, grams: 25 },
     ],
     steps: [
       { emoji: "🥣", ingredientEmojis: ["🥣"], actionIcon: "scoop" },
@@ -261,9 +261,9 @@ export const recipes: Recipe[] = [
     category: "meals",
     difficulty: 2,
     ingredients: [
-      { emoji: "🍚", quantity: 1 },
-      { emoji: "🧂", quantity: 1 },
-      { emoji: "🥬", quantity: 1 },
+      { emoji: "🍚", quantity: 1, grams: 80 },
+      { emoji: "🧂", quantity: 1, grams: 2 },
+      { emoji: "🥬", quantity: 1, grams: 20 },
     ],
     steps: [
       { emoji: "🍚", ingredientEmojis: ["🍚"], actionIcon: "scoop" },
@@ -280,10 +280,10 @@ export const recipes: Recipe[] = [
     category: "fruits",
     difficulty: 1,
     ingredients: [
-      { emoji: "🍓", quantity: 3 },
-      { emoji: "🍇", quantity: 3 },
-      { emoji: "🍈", quantity: 2 },
-      { emoji: "🫐", quantity: 3 },
+      { emoji: "🍓", quantity: 3, grams: 45 },
+      { emoji: "🍇", quantity: 3, grams: 15 },
+      { emoji: "🍈", quantity: 2, grams: 200 },
+      { emoji: "🫐", quantity: 3, grams: 3 },
     ],
     steps: [
       { emoji: "🍓", ingredientEmojis: ["🍓"], actionIcon: "wash" },
@@ -300,11 +300,11 @@ export const recipes: Recipe[] = [
     category: "snacks",
     difficulty: 2,
     ingredients: [
-      { emoji: "🥣", quantity: 1 },
-      { emoji: "🥛", quantity: 1 },
-      { emoji: "🍌", quantity: 1 },
-      { emoji: "🥝", quantity: 1 },
-      { emoji: "🥜", quantity: 1 },
+      { emoji: "🥣", quantity: 1, grams: 50 },
+      { emoji: "🥛", quantity: 1, grams: 240 },
+      { emoji: "🍌", quantity: 1, grams: 120 },
+      { emoji: "🥝", quantity: 1, grams: 70 },
+      { emoji: "🥜", quantity: 1, grams: 15 },
     ],
     steps: [
       { emoji: "🥣", ingredientEmojis: ["🥣", "🥜"], actionIcon: "mix" },
@@ -322,9 +322,9 @@ export const recipes: Recipe[] = [
     category: "snacks",
     difficulty: 1,
     ingredients: [
-      { emoji: "🧀", quantity: 2 },
-      { emoji: "🍅", quantity: 5 },
-      { emoji: "🍓", quantity: 3 },
+      { emoji: "🧀", quantity: 2, grams: 50 },
+      { emoji: "🍅", quantity: 5, grams: 400 },
+      { emoji: "🍓", quantity: 3, grams: 45 },
     ],
     steps: [
       { emoji: "🧀", ingredientEmojis: ["🧀"], actionIcon: "cut" },
@@ -341,11 +341,11 @@ export const recipes: Recipe[] = [
     category: "meals",
     difficulty: 3,
     ingredients: [
-      { emoji: "🥦", quantity: 1 },
-      { emoji: "🥚", quantity: 1 },
-      { emoji: "🥣", quantity: 1 },
-      { emoji: "🍌", quantity: 1 },
-      { emoji: "🥛", quantity: 1 },
+      { emoji: "🥦", quantity: 1, grams: 80 },
+      { emoji: "🥚", quantity: 1, grams: 55 },
+      { emoji: "🥣", quantity: 1, grams: 50 },
+      { emoji: "🍌", quantity: 1, grams: 120 },
+      { emoji: "🥛", quantity: 1, grams: 240 },
     ],
     steps: [
       { emoji: "🥦", ingredientEmojis: ["🥦"], actionIcon: "wash" },
@@ -363,10 +363,10 @@ export const recipes: Recipe[] = [
     category: "meals",
     difficulty: 2,
     ingredients: [
-      { emoji: "🌾", quantity: 1 },
-      { emoji: "🌱", quantity: 1 },
-      { emoji: "🥚", quantity: 1 },
-      { emoji: "🍐", quantity: 1 },
+      { emoji: "🌾", quantity: 1, grams: 50 },
+      { emoji: "🌱", quantity: 1, grams: 5 },
+      { emoji: "🥚", quantity: 1, grams: 55 },
+      { emoji: "🍐", quantity: 1, grams: 150 },
     ],
     steps: [
       { emoji: "🌾", ingredientEmojis: ["🌾", "🌱"], actionIcon: "mix" },
@@ -384,10 +384,10 @@ export const recipes: Recipe[] = [
     category: "meals",
     difficulty: 3,
     ingredients: [
-      { emoji: "🌾", quantity: 1 },
-      { emoji: "🥩", quantity: 1 },
-      { emoji: "🥔", quantity: 1 },
-      { emoji: "🍅", quantity: 1 },
+      { emoji: "🌾", quantity: 1, grams: 50 },
+      { emoji: "🥩", quantity: 1, grams: 80 },
+      { emoji: "🥔", quantity: 1, grams: 150 },
+      { emoji: "🍅", quantity: 1, grams: 80 },
     ],
     steps: [
       { emoji: "🥩", ingredientEmojis: ["🥩"], actionIcon: "cut" },
@@ -405,11 +405,11 @@ export const recipes: Recipe[] = [
     category: "meals",
     difficulty: 2,
     ingredients: [
-      { emoji: "🫓", quantity: 1 },
-      { emoji: "🧀", quantity: 1 },
-      { emoji: "🍅", quantity: 4 },
-      { emoji: "🥬", quantity: 2 },
-      { emoji: "🍄", quantity: 4 },
+      { emoji: "🫓", quantity: 1, grams: 60 },
+      { emoji: "🧀", quantity: 1, grams: 25 },
+      { emoji: "🍅", quantity: 4, grams: 320 },
+      { emoji: "🥬", quantity: 2, grams: 40 },
+      { emoji: "🍄", quantity: 4, grams: 60 },
     ],
     steps: [
       { emoji: "🫓", ingredientEmojis: ["🫓"], actionIcon: "place" },
@@ -427,10 +427,10 @@ export const recipes: Recipe[] = [
     category: "desserts",
     difficulty: 2,
     ingredients: [
-      { emoji: "🥣", quantity: 1 },
-      { emoji: "🍫", quantity: 1 },
-      { emoji: "🍌", quantity: 1 },
-      { emoji: "🥚", quantity: 1 },
+      { emoji: "🥣", quantity: 1, grams: 50 },
+      { emoji: "🍫", quantity: 1, grams: 30 },
+      { emoji: "🍌", quantity: 1, grams: 120 },
+      { emoji: "🥚", quantity: 1, grams: 55 },
     ],
     steps: [
       { emoji: "🥣", ingredientEmojis: ["🥣", "🥚"], actionIcon: "mix" },
@@ -448,9 +448,9 @@ export const recipes: Recipe[] = [
     category: "desserts",
     difficulty: 2,
     ingredients: [
-      { emoji: "🌾", quantity: 1 },
-      { emoji: "🧂", quantity: 1 },
-      { emoji: "🌱", quantity: 1 },
+      { emoji: "🌾", quantity: 1, grams: 50 },
+      { emoji: "🧂", quantity: 1, grams: 2 },
+      { emoji: "🌱", quantity: 1, grams: 5 },
     ],
     steps: [
       { emoji: "🌾", ingredientEmojis: ["🌾", "🧂"], actionIcon: "mix" },
