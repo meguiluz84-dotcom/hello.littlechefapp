@@ -22,23 +22,28 @@ export default function RecipeIngredients({ recipe, onStart, onBack }: Props) {
       />
 
       {/* Ingredients grid */}
-      <div className="mx-auto mb-8 grid max-w-sm grid-cols-3 gap-5">
+      <div className="mx-auto mb-8 grid max-w-sm grid-cols-3 gap-4">
         {recipe.ingredients.map((ing, i) => (
           <motion.div
             key={i}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.1 + i * 0.1, type: "spring", bounce: 0.5 }}
-            className="flex flex-col items-center gap-1"
+            className="relative flex flex-col items-center"
           >
-            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-card kids-shadow">
+            <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-card kids-shadow">
               <span className="text-4xl">{ing.emoji}</span>
+              {ing.quantity && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.3 + i * 0.1, type: "spring", bounce: 0.6 }}
+                  className="absolute -bottom-2 -right-2 flex h-9 min-w-9 items-center justify-center rounded-full bg-primary px-2 text-base font-extrabold text-primary-foreground kids-shadow"
+                >
+                  ×{ing.quantity}
+                </motion.div>
+              )}
             </div>
-            {ing.quantity && (
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
-                {ing.quantity}
-              </div>
-            )}
           </motion.div>
         ))}
       </div>
