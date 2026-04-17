@@ -28,14 +28,14 @@ export default function RecipeIngredients({ recipe, onStart, onBack }: Props) {
       />
 
       {/* Ingredients grid */}
-      <div className="mx-auto mb-8 grid max-w-sm grid-cols-3 gap-4">
+      <div className="mx-auto mb-8 grid max-w-sm grid-cols-3 gap-5">
         {recipe.ingredients.map((ing, i) => (
           <motion.div
             key={i}
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.1 + i * 0.1, type: "spring", bounce: 0.5 }}
-            className="relative flex flex-col items-center"
+            className="relative flex flex-col items-center gap-1"
           >
             <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-card kids-shadow">
               <span className="text-4xl">{ing.emoji}</span>
@@ -50,6 +50,11 @@ export default function RecipeIngredients({ recipe, onStart, onBack }: Props) {
                 </motion.div>
               )}
             </div>
+            {ing.grams && (
+              <div className="rounded-full bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground kids-shadow">
+                {ing.grams}g
+              </div>
+            )}
           </motion.div>
         ))}
       </div>
