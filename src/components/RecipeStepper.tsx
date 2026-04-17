@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Recipe, RecipeStep } from "@/data/recipes";
+import type { Recipe } from "@/data/recipes";
 import Celebration from "./Celebration";
+import DinoBubble from "./DinoBubble";
 
 const actionIcons: Record<string, string> = {
   cut: "🔪",
