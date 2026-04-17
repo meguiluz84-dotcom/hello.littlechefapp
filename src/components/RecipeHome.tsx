@@ -15,14 +15,19 @@ const colorMap: Record<string, string> = {
 
 interface RecipeHomeProps {
   onSelectRecipe: (recipe: Recipe) => void;
+  isCompleted?: (id: string) => boolean;
 }
 
-export default function RecipeHome({ onSelectRecipe }: RecipeHomeProps) {
+export default function RecipeHome({ onSelectRecipe, isCompleted }: RecipeHomeProps) {
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
 
   const filtered = activeCategory
     ? recipes.filter((r) => r.category === activeCategory)
     : recipes;
+
+  const completedCount = isCompleted
+    ? recipes.filter((r) => isCompleted(r.id)).length
+    : 0;
 
   return (
     <div className="min-h-screen bg-background px-4 pb-8 pt-6">
@@ -37,6 +42,19 @@ export default function RecipeHome({ onSelectRecipe }: RecipeHomeProps) {
           👨‍🍳
         </div>
       </motion.div>
+
+      {/* Stars trophy counter */}
+      {completedCount > 0 && (
+        <motion.div
+          initial={{ scale: 0, y: -10 }}
+          animate={{ scale: 1, y: 0 }}
+          transition={{ type: "spring", bounce: 0.5 }}
+          className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full bg-kids-yellow px-4 py-2 kids-shadow"
+        >
+          <span className="text-2xl">⭐</span>
+          <span className="text-xl font-extrabold text-foreground">×{completedCount}</span>
+        </motion.div>
+      )}
 
       {/* Category filter bar */}
       <div className="mx-auto mb-5 flex max-w-xl justify-center gap-2">
@@ -96,6 +114,16 @@ export default function RecipeHome({ onSelectRecipe }: RecipeHomeProps) {
                   width={256}
                   height={256}
                 />
+                {isCompleted?.(recipe.id) && (
+                  <motion.div
+                    initial={{ scale: 0, rotate: -45 }}
+                    animate={{ scale: 1, rotate: -15 }}
+                    transition={{ type: "spring", bounce: 0.6 }}
+                    className="absolute -right-1 -top-1 flex h-12 w-12 items-center justify-center rounded-full bg-kids-yellow text-3xl kids-shadow-lg ring-4 ring-background"
+                  >
+                    ⭐
+                  </motion.div>
+                )}
               </div>
               <div className="flex items-center gap-1 py-3">
                 <span className="text-3xl">{recipe.emoji}</span>
