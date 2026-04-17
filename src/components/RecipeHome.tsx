@@ -114,6 +114,16 @@ export default function RecipeHome({ onSelectRecipe, isCompleted }: RecipeHomePr
                   width={256}
                   height={256}
                 />
+                {isCompleted?.(recipe.id) && (
+                  <motion.div
+                    initial={{ scale: 0, rotate: -45 }}
+                    animate={{ scale: 1, rotate: -15 }}
+                    transition={{ type: "spring", bounce: 0.6 }}
+                    className="absolute -right-1 -top-1 flex h-12 w-12 items-center justify-center rounded-full bg-kids-yellow text-3xl kids-shadow-lg ring-4 ring-background"
+                  >
+                    ⭐
+                  </motion.div>
+                )}
               </div>
               <div className="flex items-center gap-1 py-3">
                 <span className="text-3xl">{recipe.emoji}</span>
