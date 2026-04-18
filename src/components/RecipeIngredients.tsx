@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
+import { getIngredientName } from "@/data/ingredientNames";
 import DinoBubble from "./DinoBubble";
 
 interface Props {
@@ -50,6 +51,11 @@ export default function RecipeIngredients({ recipe, onStart, onBack }: Props) {
                 </motion.div>
               )}
             </div>
+            {getIngredientName(ing.emoji) && (
+              <div className="text-center text-xs font-bold leading-tight text-foreground">
+                {getIngredientName(ing.emoji)}
+              </div>
+            )}
             {ing.grams && (
               <div className="rounded-full bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground kids-shadow">
                 {ing.grams}g
