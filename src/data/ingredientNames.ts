@@ -1,0 +1,37 @@
+// Spanish names for ingredient emojis used across recipes
+export const ingredientNames: Record<string, string> = {
+  "🍓": "Fresa",
+  "🍌": "Plátano",
+  "🫐": "Arándanos",
+  "🍇": "Uvas",
+  "🍞": "Pan",
+  "🥜": "Mantequilla de cacahuete",
+  "🥛": "Leche",
+  "🍯": "Miel",
+  "🥣": "Avena",
+  "🍫": "Chocolate",
+  "🥬": "Apio",
+  "🍅": "Tomate",
+  "🧀": "Queso",
+  "🍘": "Galleta de arroz",
+  "🫓": "Tortilla",
+  "🍙": "Bola de arroz",
+  "🍚": "Arroz",
+  "🧂": "Sal",
+  "🍈": "Melón",
+  "🥝": "Kiwi",
+  "🥦": "Brócoli",
+  "🥚": "Huevo",
+  "🌾": "Harina",
+  "🌱": "Chía",
+  "🍐": "Pera",
+  "🥩": "Carne",
+  "🥔": "Patata",
+  "🍄": "Champiñón",
+  "🍬": "Chispas",
+  "💧": "Agua",
+};
+
+export function getIngredientName(emoji: string): string {
+  return ingredientNames[emoji] ?? "";
+}
