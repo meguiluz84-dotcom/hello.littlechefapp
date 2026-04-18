@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
+import { getStepImage } from "@/data/stepImages";
 import Celebration from "./Celebration";
 import DinoBubble from "./DinoBubble";
 
@@ -211,14 +212,22 @@ export default function RecipeStepper({ recipe, onFinish, onBack }: Props) {
           transition={{ type: "spring", bounce: 0.25, duration: 0.5 }}
           className="flex flex-col items-center gap-5"
         >
-          {/* Main emoji card with action-specific animation */}
+          {/* Main infographic card (image if available, else emoji) */}
           <motion.div
-            className="relative flex h-40 w-40 items-center justify-center rounded-3xl bg-card kids-shadow-lg"
+            className="relative flex h-48 w-48 items-center justify-center overflow-hidden rounded-3xl bg-card kids-shadow-lg"
             initial={{ rotateY: 90 }}
             animate={{ rotateY: 0 }}
             transition={{ type: "spring", bounce: 0.4, delay: 0.1 }}
           >
-            <span className="text-8xl">{current.emoji}</span>
+            {getStepImage(recipe.id, step) ? (
+              <img
+                src={getStepImage(recipe.id, step)}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <span className="text-8xl">{current.emoji}</span>
+            )}
 
             {/* Sparkle particles on step change */}
             {[...Array(4)].map((_, i) => (
