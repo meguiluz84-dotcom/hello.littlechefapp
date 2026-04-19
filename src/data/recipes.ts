@@ -43,6 +43,7 @@ export const categories: { id: RecipeCategory; emoji: string }[] = [
 
 export interface Recipe {
   id: string;
+  name: string;
   image: string;
   emoji: string;
   color: string;
@@ -55,6 +56,7 @@ export interface Recipe {
 export const recipes: Recipe[] = [
   {
     id: "fruit-salad",
+    name: "🌈 Arcoíris Frutal",
     image: imgFruitSalad,
     emoji: "🥗",
     color: "kids-green",
@@ -75,6 +77,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "sandwich",
+    name: "🥪 Sándwich Súper Pegajoso",
     image: imgSandwich,
     emoji: "🥪",
     color: "kids-orange",
@@ -94,6 +97,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "smoothie",
+    name: "🌪️ Tornado Rosa",
     image: imgSmoothie,
     emoji: "🥤",
     color: "kids-pink",
@@ -115,6 +119,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "cookies",
+    name: "🍪 Galletas Mágicas",
     image: imgCookies,
     emoji: "🍪",
     color: "kids-purple",
@@ -136,6 +141,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "ants-on-log",
+    name: "🐜 Hormigas en el Tronco",
     image: imgAntsOnLog,
     emoji: "🐜",
     color: "kids-teal",
@@ -154,6 +160,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "parfait",
+    name: "🏰 Castillo de Yogur",
     image: imgParfait,
     emoji: "🍨",
     color: "kids-blue",
@@ -175,6 +182,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "mini-pizza",
+    name: "🍕 Mini Pizzas Volcán",
     image: imgMiniPizza,
     emoji: "🍕",
     color: "kids-red",
@@ -193,6 +201,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "veggie-wrap",
+    name: "🌯 Burrito Dragón Verde",
     image: imgVeggieWrap,
     emoji: "🌯",
     color: "kids-green",
@@ -214,6 +223,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "banana-pops",
+    name: "🍫 Plátanos Polo Choco",
     image: imgBananaPops,
     emoji: "🍫",
     color: "kids-purple",
@@ -234,6 +244,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "trail-mix",
+    name: "🌟 Mezcla del Aventurero",
     image: imgTrailMix,
     emoji: "🥜",
     color: "kids-orange",
@@ -255,6 +266,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "rice-balls",
+    name: "🍙 Bolitas Ninja",
     image: imgRiceBalls,
     emoji: "🍙",
     color: "kids-teal",
@@ -274,6 +286,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "fruit-kabobs",
+    name: "🍡 Brochetas Arcoíris",
     image: imgFruitKabobs,
     emoji: "🍡",
     color: "kids-pink",
@@ -294,6 +307,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "granola-yogur",
+    name: "🥣 Bol Crujiente Feliz",
     image: imgGranolaYogur,
     emoji: "🥣",
     color: "kids-yellow",
@@ -316,6 +330,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "pinchos-queso",
+    name: "🍢 Pinchos Sonrisa",
     image: imgPinchos,
     emoji: "🍢",
     color: "kids-red",
@@ -335,6 +350,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "pancakes-brocoli",
+    name: "🥞 Tortitas Dino Verdes",
     image: imgPancakesBrocoli,
     emoji: "🥞",
     color: "kids-green",
@@ -357,6 +373,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "arepas-chia",
+    name: "🫓 Arepitas Mágicas",
     image: imgArepas,
     emoji: "🫓",
     color: "kids-orange",
@@ -378,6 +395,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "empanadas",
+    name: "🥟 Empanadas del Tesoro",
     image: imgEmpanadas,
     emoji: "🥟",
     color: "kids-purple",
@@ -399,6 +417,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "pizza-vegetal",
+    name: "🍕 Pizza Jardín Encantado",
     image: imgPizzaVegetal,
     emoji: "🍕",
     color: "kids-red",
@@ -421,6 +440,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "galletas-cacao",
+    name: "🍪 Galletas Plátano Cacao",
     image: imgGalletasCacao,
     emoji: "🍪",
     color: "kids-teal",
@@ -442,6 +462,7 @@ export const recipes: Recipe[] = [
   },
   {
     id: "rosquitas",
+    name: "🍩 Rosquitas Pompón",
     image: imgRosquitas,
     emoji: "🍩",
     color: "kids-pink",
