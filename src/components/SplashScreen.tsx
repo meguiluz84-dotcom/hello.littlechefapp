@@ -23,9 +23,9 @@ export default function SplashScreen({ onStart }: Props) {
         transition={{ repeat: Infinity, duration: 1.6 }}
         onClick={onStart}
         aria-label="Empezar"
-        className="relative z-10 mb-4 w-full max-w-xs flex-shrink-0 cursor-pointer rounded-full bg-kids-yellow px-8 py-5 text-3xl font-extrabold text-foreground kids-shadow-lg"
+        className="relative z-10 mb-4 w-full max-w-xs flex-shrink-0 cursor-pointer rounded-full bg-kids-yellow px-8 py-5 text-2xl font-extrabold text-foreground kids-shadow-lg"
       >
-        ✨
+        Empezar ✨
       </motion.button>
     </div>
   );
