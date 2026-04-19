@@ -43,6 +43,7 @@ export const categories: { id: RecipeCategory; emoji: string }[] = [
 
 export interface Recipe {
   id: string;
+  name: string;
   image: string;
   emoji: string;
   color: string;
