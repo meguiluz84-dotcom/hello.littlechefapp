@@ -124,11 +124,13 @@ export default function RecipeHome({ onSelectRecipe, isCompleted }: RecipeHomePr
                   </motion.div>
                 )}
               </div>
-              <div className="flex items-center gap-1 py-3">
-                <span className="text-3xl">{recipe.emoji}</span>
+              <div className="flex flex-col items-center gap-1 px-2 py-3">
+                <div className="text-center text-sm font-extrabold leading-tight text-foreground">
+                  {recipe.name}
+                </div>
                 <div className="flex">
                   {Array.from({ length: recipe.difficulty }).map((_, s) => (
-                    <span key={s} className="text-lg">
+                    <span key={s} className="text-base">
                       ⭐
                     </span>
                   ))}
