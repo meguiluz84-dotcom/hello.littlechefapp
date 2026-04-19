@@ -17,16 +17,19 @@ export default function RecipeIngredients({ recipe, onStart, onBack }: Props) {
         <DinoBubble emojis={`🧺${recipe.emoji}`} size="md" />
       </div>
 
-      {/* Recipe image */}
+      {/* Recipe image + name */}
       <motion.img
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         src={recipe.image}
         alt=""
-        className="mb-6 h-32 w-32 rounded-3xl object-cover kids-shadow-lg"
+        className="mb-3 h-32 w-32 rounded-3xl object-cover kids-shadow-lg"
         width={128}
         height={128}
       />
+      <h1 className="mb-6 text-center text-2xl font-extrabold text-foreground">
+        {recipe.name}
+      </h1>
 
       {/* Ingredients grid */}
       <div className="mx-auto mb-8 grid max-w-sm grid-cols-3 gap-5">
