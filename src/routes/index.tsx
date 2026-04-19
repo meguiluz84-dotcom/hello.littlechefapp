@@ -4,6 +4,7 @@ import type { Recipe } from "@/data/recipes";
 import RecipeHome from "@/components/RecipeHome";
 import RecipeIngredients from "@/components/RecipeIngredients";
 import RecipeStepper from "@/components/RecipeStepper";
+import SplashScreen from "@/components/SplashScreen";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
 
 export const Route = createFileRoute("/")({
@@ -16,10 +17,10 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-type Screen = "home" | "ingredients" | "cooking";
+type Screen = "splash" | "home" | "ingredients" | "cooking";
 
 function Index() {
-  const [screen, setScreen] = useState<Screen>("home");
+  const [screen, setScreen] = useState<Screen>("splash");
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const { markCompleted, isCompleted } = useCompletedRecipes();
 
@@ -40,6 +41,10 @@ function Index() {
     setSelectedRecipe(null);
   };
 
+  if (screen === "splash") {
+    return <SplashScreen onStart={() => setScreen("home")} />;
+  }
+
   if (screen === "ingredients" && selectedRecipe) {
     return <RecipeIngredients recipe={selectedRecipe} onStart={handleStart} onBack={handleBack} />;
   }
@@ -50,3 +55,4 @@ function Index() {
 
   return <RecipeHome onSelectRecipe={handleSelectRecipe} isCompleted={isCompleted} />;
 }
+
