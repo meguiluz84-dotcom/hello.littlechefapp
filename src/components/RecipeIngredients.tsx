@@ -7,9 +7,10 @@ interface Props {
   recipe: Recipe;
   onStart: () => void;
   onBack: () => void;
+  displayName?: string;
 }
 
-export default function RecipeIngredients({ recipe, onStart, onBack }: Props) {
+export default function RecipeIngredients({ recipe, onStart, onBack, displayName }: Props) {
   return (
     <div className="flex min-h-screen flex-col items-center bg-background px-4 pb-8 pt-6">
       {/* Dino guide */}
@@ -28,7 +29,7 @@ export default function RecipeIngredients({ recipe, onStart, onBack }: Props) {
         height={128}
       />
       <h1 className="mb-6 text-center text-2xl font-extrabold text-foreground">
-        {recipe.name}
+        {displayName ?? recipe.name}
       </h1>
 
       {/* Ingredients grid */}
