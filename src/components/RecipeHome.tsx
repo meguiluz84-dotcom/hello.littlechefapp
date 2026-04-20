@@ -28,11 +28,18 @@ export default function RecipeHome({ onSelectRecipe, isCompleted, avatarId, onCh
 
   const filtered = activeCategory
     ? recipes.filter((r) => r.category === activeCategory)
-    : recipes;
+    : [];
 
   const completedCount = isCompleted
     ? recipes.filter((r) => isCompleted(r.id)).length
     : 0;
+
+  const countByCategory = (cat: RecipeCategory) =>
+    recipes.filter((r) => r.category === cat).length;
+  const completedByCategory = (cat: RecipeCategory) =>
+    isCompleted ? recipes.filter((r) => r.category === cat && isCompleted(r.id)).length : 0;
+
+  const activeCat = activeCategory ? categories.find((c) => c.id === activeCategory) : null;
 
   return (
     <div className="min-h-screen bg-background px-4 pb-8 pt-6">
@@ -74,91 +81,117 @@ export default function RecipeHome({ onSelectRecipe, isCompleted, avatarId, onCh
         </motion.div>
       )}
 
-      {/* Category filter bar */}
-      <div className="mx-auto mb-5 flex max-w-xl justify-center gap-2">
-        {/* All button */}
-        <motion.button
-          whileTap={{ scale: 0.9 }}
-          onClick={() => setActiveCategory(null)}
-          className={`flex h-14 w-14 items-center justify-center rounded-2xl text-2xl transition-all kids-shadow ${
-            activeCategory === null
-              ? "bg-primary ring-4 ring-primary/40 scale-110"
-              : "bg-card"
-          }`}
-        >
-          🌟
-        </motion.button>
-        {categories.map((cat) => (
-          <motion.button
-            key={cat.id}
-            whileTap={{ scale: 0.9 }}
-            onClick={() =>
-              setActiveCategory(activeCategory === cat.id ? null : cat.id)
-            }
-            className={`flex h-14 w-14 items-center justify-center rounded-2xl text-2xl transition-all kids-shadow ${
-              activeCategory === cat.id
-                ? "bg-primary ring-4 ring-primary/40 scale-110"
-                : "bg-card"
-            }`}
+      <AnimatePresence mode="wait">
+        {!activeCategory ? (
+          /* Category cards grid */
+          <motion.div
+            key="categories"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="mx-auto grid max-w-xl grid-cols-2 gap-4"
           >
-            {cat.emoji}
-          </motion.button>
-        ))}
-      </div>
-
-      {/* Recipe grid */}
-      <div className="mx-auto grid max-w-xl grid-cols-2 gap-4">
-        <AnimatePresence mode="popLayout">
-          {filtered.map((recipe, i) => (
-            <motion.button
-              key={recipe.id}
-              layout
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ delay: i * 0.04, type: "spring", bounce: 0.3 }}
-              whileTap={{ scale: 0.92 }}
-              onClick={() => onSelectRecipe(recipe)}
-              className="group flex flex-col items-center overflow-hidden rounded-3xl bg-card kids-shadow-lg transition-shadow hover:shadow-2xl"
-            >
-              <div
-                className={`relative w-full overflow-hidden ${colorMap[recipe.color] ?? "bg-primary"} p-2`}
+            {categories.map((cat, i) => {
+              const total = countByCategory(cat.id);
+              const done = completedByCategory(cat.id);
+              return (
+                <motion.button
+                  key={cat.id}
+                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: i * 0.06, type: "spring", bounce: 0.4 }}
+                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ y: -4 }}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`flex flex-col items-center justify-center gap-2 rounded-3xl ${colorMap[cat.color] ?? "bg-primary"} p-6 kids-shadow-lg`}
+                >
+                  <span className="text-6xl">{cat.emoji}</span>
+                  <span className="text-xl font-extrabold text-foreground">{cat.label}</span>
+                  <span className="rounded-full bg-card/80 px-3 py-1 text-sm font-extrabold text-foreground">
+                    {done}/{total} ⭐
+                  </span>
+                </motion.button>
+              );
+            })}
+          </motion.div>
+        ) : (
+          /* Recipe grid for selected category */
+          <motion.div
+            key="recipes"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="mx-auto max-w-xl"
+          >
+            {/* Back + category title */}
+            <div className="mb-5 flex items-center gap-3">
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setActiveCategory(null)}
+                aria-label="Volver"
+                className="flex h-12 w-12 items-center justify-center rounded-2xl bg-card text-2xl kids-shadow"
               >
-                <img
-                  src={recipe.image}
-                  alt=""
-                  className="aspect-square w-full rounded-2xl object-cover"
-                  loading="lazy"
-                  width={256}
-                  height={256}
-                />
-                {isCompleted?.(recipe.id) && (
-                  <motion.div
-                    initial={{ scale: 0, rotate: -45 }}
-                    animate={{ scale: 1, rotate: -15 }}
-                    transition={{ type: "spring", bounce: 0.6 }}
-                    className="absolute -right-1 -top-1 flex h-12 w-12 items-center justify-center rounded-full bg-kids-yellow text-3xl kids-shadow-lg ring-4 ring-background"
+                ⬅️
+              </motion.button>
+              <div
+                className={`flex flex-1 items-center gap-2 rounded-2xl ${colorMap[activeCat?.color ?? ""] ?? "bg-primary"} px-4 py-3 kids-shadow`}
+              >
+                <span className="text-3xl">{activeCat?.emoji}</span>
+                <span className="text-xl font-extrabold text-foreground">{activeCat?.label}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              {filtered.map((recipe, i) => (
+                <motion.button
+                  key={recipe.id}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: i * 0.04, type: "spring", bounce: 0.3 }}
+                  whileTap={{ scale: 0.92 }}
+                  onClick={() => onSelectRecipe(recipe)}
+                  className="group flex flex-col items-center overflow-hidden rounded-3xl bg-card kids-shadow-lg transition-shadow hover:shadow-2xl"
+                >
+                  <div
+                    className={`relative w-full overflow-hidden ${colorMap[recipe.color] ?? "bg-primary"} p-2`}
                   >
-                    ⭐
-                  </motion.div>
-                )}
-              </div>
-              <div className="flex flex-col items-center gap-1 px-2 py-3">
-                <div className="text-center text-sm font-extrabold leading-tight text-foreground">
-                  {getRecipeName(recipe)}
-                </div>
-                <div className="flex">
-                  {Array.from({ length: recipe.difficulty }).map((_, s) => (
-                    <span key={s} className="text-base">
-                      ⭐
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.button>
-          ))}
-        </AnimatePresence>
-      </div>
+                    <img
+                      src={recipe.image}
+                      alt=""
+                      className="aspect-square w-full rounded-2xl object-cover"
+                      loading="lazy"
+                      width={256}
+                      height={256}
+                    />
+                    {isCompleted?.(recipe.id) && (
+                      <motion.div
+                        initial={{ scale: 0, rotate: -45 }}
+                        animate={{ scale: 1, rotate: -15 }}
+                        transition={{ type: "spring", bounce: 0.6 }}
+                        className="absolute -right-1 -top-1 flex h-12 w-12 items-center justify-center rounded-full bg-kids-yellow text-3xl kids-shadow-lg ring-4 ring-background"
+                      >
+                        ⭐
+                      </motion.div>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-center gap-1 px-2 py-3">
+                    <div className="text-center text-sm font-extrabold leading-tight text-foreground">
+                      {getRecipeName(recipe)}
+                    </div>
+                    <div className="flex">
+                      {Array.from({ length: recipe.difficulty }).map((_, s) => (
+                        <span key={s} className="text-base">
+                          ⭐
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
