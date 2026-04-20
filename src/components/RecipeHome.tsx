@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { recipes, categories, type Recipe, type RecipeCategory } from "@/data/recipes";
-import DinoBubble from "./DinoBubble";
+import { avatarById, type AvatarId } from "@/data/avatars";
 
 const colorMap: Record<string, string> = {
   "kids-pink": "bg-kids-pink",
@@ -17,9 +17,13 @@ const colorMap: Record<string, string> = {
 interface RecipeHomeProps {
   onSelectRecipe: (recipe: Recipe) => void;
   isCompleted?: (id: string) => boolean;
+  avatarId: AvatarId;
+  onChangeAvatar: () => void;
+  getRecipeName: (recipe: Recipe) => string;
 }
 
-export default function RecipeHome({ onSelectRecipe, isCompleted }: RecipeHomeProps) {
+export default function RecipeHome({ onSelectRecipe, isCompleted, avatarId, onChangeAvatar, getRecipeName }: RecipeHomeProps) {
+  const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
 
   const filtered = activeCategory
@@ -32,15 +36,30 @@ export default function RecipeHome({ onSelectRecipe, isCompleted }: RecipeHomePr
 
   return (
     <div className="min-h-screen bg-background px-4 pb-8 pt-6">
-      {/* Header - dino chef mascot with greeting bubble */}
-      <motion.div
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", bounce: 0.5 }}
-        className="mb-4 flex justify-center"
-      >
-        <DinoBubble emojis="👋✨" size="lg" />
-      </motion.div>
+      {/* Header - avatar mascot + change button */}
+      <div className="mb-4 flex items-center justify-center gap-3">
+        <motion.button
+          type="button"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", bounce: 0.5 }}
+          whileTap={{ scale: 0.9 }}
+          onClick={onChangeAvatar}
+          aria-label="Cambiar avatar"
+          className={`relative flex h-24 w-24 items-center justify-center rounded-full ${avatar.color} kids-shadow-lg`}
+        >
+          <img
+            src={avatar.image}
+            alt={avatar.label}
+            width={96}
+            height={96}
+            className="h-20 w-20 object-contain"
+          />
+          <span className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-card text-base kids-shadow ring-2 ring-background">
+            🔄
+          </span>
+        </motion.button>
+      </div>
 
       {/* Stars trophy counter */}
       {completedCount > 0 && (
@@ -126,7 +145,7 @@ export default function RecipeHome({ onSelectRecipe, isCompleted }: RecipeHomePr
               </div>
               <div className="flex flex-col items-center gap-1 px-2 py-3">
                 <div className="text-center text-sm font-extrabold leading-tight text-foreground">
-                  {recipe.name}
+                  {getRecipeName(recipe)}
                 </div>
                 <div className="flex">
                   {Array.from({ length: recipe.difficulty }).map((_, s) => (
