@@ -5,7 +5,7 @@ import imgPrincess from "@/assets/avatar-princess.png";
 import imgHero from "@/assets/avatar-hero.png";
 import imgCar from "@/assets/avatar-car.png";
 import imgRobot from "@/assets/avatar-robot.png";
-import imgStar from "@/assets/avatar-star.png";
+import imgUnicorn from "@/assets/avatar-unicorn.png";
 
 export type AvatarId =
   | "dino"
@@ -15,7 +15,7 @@ export type AvatarId =
   | "hero"
   | "car"
   | "robot"
-  | "star";
+  | "unicorn";
 
 export interface Avatar {
   id: AvatarId;
@@ -33,7 +33,7 @@ export const avatars: Avatar[] = [
   { id: "hero", label: "Súper", image: imgHero, emoji: "🦸", color: "bg-kids-red" },
   { id: "car", label: "Coche", image: imgCar, emoji: "🏎️", color: "bg-kids-yellow" },
   { id: "robot", label: "Robot", image: imgRobot, emoji: "🤖", color: "bg-kids-teal" },
-  { id: "star", label: "Estrella", image: imgStar, emoji: "⭐", color: "bg-kids-yellow" },
+  { id: "unicorn", label: "Unicornio", image: imgUnicorn, emoji: "🦄", color: "bg-kids-pink" },
 ];
 
 export const avatarById = (id: AvatarId): Avatar =>
