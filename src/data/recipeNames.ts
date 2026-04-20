@@ -157,6 +157,28 @@ export const recipeNamesByAvatar: Record<AvatarId, Record<string, string>> = {
     "galletas-cacao": "🍪 Galletas Mega Bit",
     rosquitas: "🍩 Rosquitas Loop",
   },
+  star: {
+    "fruit-salad": "⭐ Ensalada Estelar",
+    sandwich: "✨ Sandwich Cometa",
+    smoothie: "🌟 Batido Galaxia",
+    cookies: "💫 Galletas Lunares",
+    "ants-on-log": "🌠 Troncos Estrellados",
+    parfait: "✨ Postre Vía Láctea",
+    "mini-pizza": "🌟 Pizzas Supernova",
+    "veggie-wrap": "🌌 Wrap Cósmico",
+    "banana-pops": "🌠 Cometas de Plátano",
+    "trail-mix": "✨ Mix Estelar",
+    "rice-balls": "🌕 Lunitas de Arroz",
+    "fruit-kabobs": "💫 Brochetas Cometa",
+    "granola-yogur": "🥣 Bol Constelación",
+    "pinchos-queso": "⭐ Pinchos Estrella",
+    "pancakes-brocoli": "🥞 Tortitas Galaxia",
+    "arepas-chia": "✨ Arepitas Estelares",
+    empanadas: "🌟 Empanadas Cometa",
+    "pizza-vegetal": "🌌 Pizza Universo",
+    "galletas-cacao": "🌑 Galletas Eclipse",
+    rosquitas: "💫 Rosquitas Órbita",
+  },
 };
 
 export function getRecipeName(
