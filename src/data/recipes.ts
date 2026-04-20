@@ -33,12 +33,12 @@ export interface RecipeStep {
 
 export type RecipeCategory = "fruits" | "snacks" | "drinks" | "meals" | "desserts";
 
-export const categories: { id: RecipeCategory; emoji: string }[] = [
-  { id: "fruits", emoji: "🍎" },
-  { id: "snacks", emoji: "🥪" },
-  { id: "drinks", emoji: "🥤" },
-  { id: "meals", emoji: "🍳" },
-  { id: "desserts", emoji: "🍪" },
+export const categories: { id: RecipeCategory; emoji: string; label: string; color: string }[] = [
+  { id: "fruits", emoji: "🍎", label: "Frutas", color: "kids-red" },
+  { id: "snacks", emoji: "🥪", label: "Snacks", color: "kids-orange" },
+  { id: "drinks", emoji: "🥤", label: "Bebidas", color: "kids-blue" },
+  { id: "meals", emoji: "🍳", label: "Comidas", color: "kids-green" },
+  { id: "desserts", emoji: "🍪", label: "Postres", color: "kids-purple" },
 ];
 
 export interface Recipe {
