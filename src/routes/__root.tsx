@@ -32,11 +32,15 @@ export const Route = createRootRoute({
       { title: "Little Chef 👨‍🍳" },
       { name: "description", content: "App de recetas visual para niños pequeños. Sin texto, solo imágenes y animaciones." },
       { name: "author", content: "Little Chef" },
-      { property: "og:title", content: "Little Chef - Recetas para Niños" },
-      { property: "og:description", content: "Recetas visuales paso a paso para niños que aún no saben leer." },
+      { property: "og:title", content: "Little Chef 👨‍🍳" },
+      { property: "og:description", content: "App de recetas visual para niños pequeños. Sin texto, solo imágenes y animaciones." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Little Chef 👨‍🍳" },
+      { name: "twitter:description", content: "App de recetas visual para niños pequeños. Sin texto, solo imágenes y animaciones." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9050da4d-f39e-4120-878b-bf87a84d5722/id-preview-289dd0b2--4e698b21-1254-4edb-ad1c-73fb74dfec89.lovable.app-1776670557985.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9050da4d-f39e-4120-878b-bf87a84d5722/id-preview-289dd0b2--4e698b21-1254-4edb-ad1c-73fb74dfec89.lovable.app-1776670557985.png" },
     ],
     links: [
       {
