@@ -8,7 +8,7 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "deploy": "npm exec --no -- wrangler publish --config dist/server/wrangler.json",
+    "deploy": "npm exec --no -- wrangler deploy --config dist/server/wrangler.json",
     "wrangler:login": "npm exec --no -- wrangler login",
     "lint": "eslint .",
     "format": "prettier --write ."
