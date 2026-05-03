@@ -195,7 +195,7 @@ export default function RecipeStepper({ recipe, onFinish, onBack }: Props) {
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ type: "spring", bounce: 0.5 }}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground kids-shadow"
+        className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground kids-shadow md:h-20 md:w-20 md:text-4xl lg:h-24 lg:w-24 lg:text-5xl"
       >
         {step + 1}
       </motion.div>
@@ -286,7 +286,7 @@ export default function RecipeStepper({ recipe, onFinish, onBack }: Props) {
           whileTap={{ scale: 0.85 }}
           whileHover={{ scale: 1.05 }}
           onClick={prev}
-          className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-3xl kids-shadow"
+          className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-3xl kids-shadow md:h-24 md:w-24 md:text-5xl lg:h-28 lg:w-28 lg:text-6xl"
           aria-label="Previous"
         >
           ⬅️
@@ -305,7 +305,7 @@ export default function RecipeStepper({ recipe, onFinish, onBack }: Props) {
           }}
           transition={{ repeat: Infinity, duration: 2 }}
           onClick={next}
-          className="flex h-20 w-20 items-center justify-center rounded-full bg-accent text-4xl kids-shadow-lg"
+          className="flex h-20 w-20 items-center justify-center rounded-full bg-accent text-4xl kids-shadow-lg md:h-32 md:w-32 md:text-6xl lg:h-36 lg:w-36 lg:text-7xl"
           aria-label="Next"
         >
           {step < total - 1 ? "➡️" : "🎉"}
