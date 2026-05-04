@@ -128,9 +128,10 @@ interface Props {
   recipe: Recipe;
   onFinish: () => void;
   onBack: () => void;
+  onHome?: () => void;
 }
 
-export default function RecipeStepper({ recipe, onFinish, onBack }: Props) {
+export default function RecipeStepper({ recipe, onFinish, onBack, onHome }: Props) {
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [showCelebration, setShowCelebration] = useState(false);
