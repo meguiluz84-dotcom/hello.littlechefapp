@@ -102,7 +102,11 @@ function Index() {
   }
 
   if (screen === "cooking" && selectedRecipe) {
-    return <RecipeStepper recipe={selectedRecipe} onFinish={handleFinish} onBack={handleBack} />;
+    const handleHome = () => {
+      setSelectedRecipe(null);
+      setScreen("home");
+    };
+    return <RecipeStepper recipe={selectedRecipe} onFinish={handleFinish} onBack={handleBack} onHome={handleHome} />;
   }
 
   return (
