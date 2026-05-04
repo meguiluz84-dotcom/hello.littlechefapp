@@ -361,7 +361,7 @@ export const recipes: Recipe[] = [
       { emoji: "🥚", quantity: 1, grams: 55 },
       { emoji: "🥣", quantity: 1, grams: 50 },
       { emoji: "🍌", quantity: 1, grams: 120 },
-      { emoji: "🥛", quantity: 1, grams: 240 },
+      { emoji: "🥛", quantity: 1, grams: 180 },
     ],
     steps: [
       { emoji: "🥦", ingredientEmojis: ["🥦"], actionIcon: "wash" },
