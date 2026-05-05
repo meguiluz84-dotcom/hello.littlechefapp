@@ -90,22 +90,24 @@ function Index() {
     );
   }
 
+  const handleHome = () => {
+    setSelectedRecipe(null);
+    setScreen("home");
+  };
+
   if (screen === "ingredients" && selectedRecipe) {
     return (
       <RecipeIngredients
         recipe={selectedRecipe}
         onStart={handleStart}
         onBack={handleBack}
+        onHome={handleHome}
         displayName={nameFor(selectedRecipe)}
       />
     );
   }
 
   if (screen === "cooking" && selectedRecipe) {
-    const handleHome = () => {
-      setSelectedRecipe(null);
-      setScreen("home");
-    };
     return <RecipeStepper recipe={selectedRecipe} onFinish={handleFinish} onBack={handleBack} onHome={handleHome} />;
   }
 

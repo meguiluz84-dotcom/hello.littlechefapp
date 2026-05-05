@@ -7,12 +7,24 @@ interface Props {
   recipe: Recipe;
   onStart: () => void;
   onBack: () => void;
+  onHome?: () => void;
   displayName?: string;
 }
 
-export default function RecipeIngredients({ recipe, onStart, onBack, displayName }: Props) {
+export default function RecipeIngredients({ recipe, onStart, onBack, onHome, displayName }: Props) {
   return (
-    <div className="flex min-h-screen flex-col items-center bg-background px-4 pb-8 pt-6">
+    <div className="relative flex min-h-screen flex-col items-center bg-background px-4 pb-8 pt-6">
+      {onHome && (
+        <motion.button
+          whileTap={{ scale: 0.85 }}
+          whileHover={{ scale: 1.05 }}
+          onClick={onHome}
+          className="absolute right-3 top-3 z-10 flex h-14 w-14 items-center justify-center rounded-full bg-card text-3xl kids-shadow md:h-20 md:w-20 md:text-5xl"
+          aria-label="Inicio"
+        >
+          🏠
+        </motion.button>
+      )}
       {/* Dino guide */}
       <div className="mb-4 self-start">
         <DinoBubble emojis={`🧺${recipe.emoji}`} size="md" />
