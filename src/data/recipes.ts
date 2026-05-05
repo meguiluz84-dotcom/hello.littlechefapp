@@ -126,17 +126,19 @@ export const recipes: Recipe[] = [
     category: "desserts",
     difficulty: 2,
     ingredients: [
-      { emoji: "🥣", quantity: 2, grams: 100 },
-      { emoji: "🥜", quantity: 1, grams: 15 },
-      { emoji: "🍯", quantity: 1, grams: 20 },
+      { emoji: "🥣", quantity: 1, grams: 100 },
+      { emoji: "🥜", quantity: 1, grams: 30 },
+      { emoji: "🍯", quantity: 1, grams: 30 },
+      { emoji: "🥚", quantity: 1 },
       { emoji: "🍫", quantity: 1, grams: 30 },
     ],
     steps: [
       { emoji: "🥜", ingredientEmojis: ["🥜", "🍯"], actionIcon: "mix" },
+      { emoji: "🥚", ingredientEmojis: ["🥚"], actionIcon: "mix" },
       { emoji: "🥣", ingredientEmojis: ["🥣"], actionIcon: "pour" },
       { emoji: "🍫", ingredientEmojis: ["🍫"], actionIcon: "mix" },
       { emoji: "🖐️", ingredientEmojis: [], actionIcon: "scoop" },
-      { emoji: "❄️", ingredientEmojis: [], actionIcon: "place" },
+      { emoji: "🔥", ingredientEmojis: [], actionIcon: "place" },
     ],
   },
   {
