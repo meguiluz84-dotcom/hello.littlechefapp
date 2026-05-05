@@ -4,6 +4,7 @@ import type { Recipe } from "@/data/recipes";
 import RecipeHome from "@/components/RecipeHome";
 import RecipeIngredients from "@/components/RecipeIngredients";
 import RecipeStepper from "@/components/RecipeStepper";
+import HomeButton from "@/components/HomeButton";
 import SplashScreen from "@/components/SplashScreen";
 import AvatarPicker from "@/components/AvatarPicker";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
@@ -95,29 +96,34 @@ function Index() {
     setScreen("home");
   };
 
+  let content;
   if (screen === "ingredients" && selectedRecipe) {
-    return (
+    content = (
       <RecipeIngredients
         recipe={selectedRecipe}
         onStart={handleStart}
         onBack={handleBack}
-        onHome={handleHome}
         displayName={nameFor(selectedRecipe)}
+      />
+    );
+  } else if (screen === "cooking" && selectedRecipe) {
+    content = <RecipeStepper recipe={selectedRecipe} onFinish={handleFinish} onBack={handleBack} />;
+  } else {
+    content = (
+      <RecipeHome
+        onSelectRecipe={handleSelectRecipe}
+        isCompleted={isCompleted}
+        avatarId={avatarId ?? "dino"}
+        onChangeAvatar={() => setPickerOpen(true)}
+        getRecipeName={nameFor}
       />
     );
   }
 
-  if (screen === "cooking" && selectedRecipe) {
-    return <RecipeStepper recipe={selectedRecipe} onFinish={handleFinish} onBack={handleBack} onHome={handleHome} />;
-  }
-
   return (
-    <RecipeHome
-      onSelectRecipe={handleSelectRecipe}
-      isCompleted={isCompleted}
-      avatarId={avatarId ?? "dino"}
-      onChangeAvatar={() => setPickerOpen(true)}
-      getRecipeName={nameFor}
-    />
+    <>
+      {content}
+      <HomeButton onClick={handleHome} />
+    </>
   );
 }
