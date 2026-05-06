@@ -18,6 +18,7 @@ import imgEmpanadas from "@/assets/recipe-empanadas.jpg";
 import imgPizzaVegetal from "@/assets/recipe-pizza-vegetal.jpg";
 import imgGalletasCacao from "@/assets/recipe-galletas-cacao.jpg";
 import imgRosquitas from "@/assets/recipe-rosquitas.jpg";
+import imgPolosFresa from "@/assets/recipe-polos-fresa.jpg";
 
 export interface Ingredient {
   emoji: string;
@@ -489,6 +490,27 @@ export const recipes: Recipe[] = [
       { emoji: "🖐️", ingredientEmojis: [], actionIcon: "mix" },
       { emoji: "🍩", ingredientEmojis: [], actionIcon: "scoop" },
       { emoji: "🔥", ingredientEmojis: [], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "polos-fresa",
+    name: "🍓 Polos de Fresa y Yogur",
+    image: imgPolosFresa,
+    emoji: "🍡",
+    color: "kids-pink",
+    category: "fruits",
+    difficulty: 1,
+    ingredients: [
+      { emoji: "🍓", quantity: 1, grams: 150 },
+      { emoji: "🥛", quantity: 1, grams: 200 },
+    ],
+    steps: [
+      { emoji: "🍓", ingredientEmojis: ["🍓"], actionIcon: "wash" },
+      { emoji: "🔪", ingredientEmojis: ["🍓"], actionIcon: "cut" },
+      { emoji: "🌀", ingredientEmojis: ["🍓"], actionIcon: "mix" },
+      { emoji: "🥛", ingredientEmojis: ["🥛", "🍓"], actionIcon: "mix" },
+      { emoji: "🍡", ingredientEmojis: [], actionIcon: "pour" },
+      { emoji: "❄️", ingredientEmojis: [], actionIcon: "place" },
     ],
   },
 ];
