@@ -113,6 +113,28 @@ export const recipeNamesByAvatar: Record<AvatarId, Record<string, string>> = {
     "galletas-cacao": "🍪 Galletas Patita Choco",
     rosquitas: "🍩 Rosquitas Guau",
   },
+  lion: {
+    "fruit-salad": "🦁 Ensalada Melena",
+    sandwich: "🦁 Sandwich Rugido",
+    smoothie: "🥛 Batido Sabana",
+    cookies: "🍪 Galletas Garra",
+    "ants-on-log": "🌿 Troncos Salvajes",
+    parfait: "🦁 Postre Rey",
+    "mini-pizza": "🍕 Pizzas Melena",
+    "veggie-wrap": "🌯 Wrap Sabana",
+    "banana-pops": "🍭 Palitos Rugido",
+    "trail-mix": "🦁 Mix del Cazador",
+    "rice-balls": "🍙 Bolitas Melena",
+    "fruit-kabobs": "🌈 Brochetas Salvajes",
+    "granola-yogur": "🥣 Bol del León",
+    "pinchos-queso": "🧀 Pinchos Garra",
+    "pancakes-brocoli": "🥞 Tortitas Rugido",
+    "arepas-chia": "🦁 Arepitas León",
+    empanadas: "🥟 Empanadas Sabana",
+    "pizza-vegetal": "🌿 Pizza Jungla",
+    "galletas-cacao": "🍪 Galletas Melena",
+    rosquitas: "🍩 Rosquitas Rey",
+  },
 };
 
 export function getRecipeName(
