@@ -24,6 +24,7 @@ export const recipeNamesByAvatar: Record<AvatarId, Record<string, string>> = {
     "pizza-vegetal": "🌿 Pizza Selva Jurásica",
     "galletas-cacao": "🦕 Galletas Mini-Rex",
     rosquitas: "🦴 Rosquitas Dino",
+    "polos-fresa": "🦕 Polos Jurásicos",
   },
   cat: {
     "fruit-salad": "🐱 Ensalada Michi",
@@ -46,6 +47,7 @@ export const recipeNamesByAvatar: Record<AvatarId, Record<string, string>> = {
     "pizza-vegetal": "🍕 Pizza Jardín Gato",
     "galletas-cacao": "🍪 Galletas Patita",
     rosquitas: "🍩 Rosquitas Michi",
+    "polos-fresa": "🐱 Polos Bigotitos",
   },
   bunny: {
     "fruit-salad": "🐰 Ensalada Saltarina",
@@ -68,6 +70,7 @@ export const recipeNamesByAvatar: Record<AvatarId, Record<string, string>> = {
     "pizza-vegetal": "🌿 Pizza Pradera",
     "galletas-cacao": "🍪 Galletas Cola Blanca",
     rosquitas: "🍩 Rosquitas Brinco",
+    "polos-fresa": "🐰 Polos Saltarines",
   },
   unicorn: {
     "fruit-salad": "🦄 Ensalada Arcoíris",
@@ -90,6 +93,7 @@ export const recipeNamesByAvatar: Record<AvatarId, Record<string, string>> = {
     "pizza-vegetal": "🌈 Pizza Pradera Mágica",
     "galletas-cacao": "🦄 Galletas Cuernito",
     rosquitas: "🍩 Rosquitas Arcoíris",
+    "polos-fresa": "🦄 Polos Mágicos Rosa",
   },
   dog: {
     "fruit-salad": "🐶 Ensalada Guau",
@@ -112,6 +116,7 @@ export const recipeNamesByAvatar: Record<AvatarId, Record<string, string>> = {
     "pizza-vegetal": "🌿 Pizza Jardín Perruno",
     "galletas-cacao": "🍪 Galletas Patita Choco",
     rosquitas: "🍩 Rosquitas Guau",
+    "polos-fresa": "🐶 Polos Cachorrito",
   },
   lion: {
     "fruit-salad": "🦁 Ensalada Melena",
@@ -134,6 +139,7 @@ export const recipeNamesByAvatar: Record<AvatarId, Record<string, string>> = {
     "pizza-vegetal": "🌿 Pizza Jungla",
     "galletas-cacao": "🍪 Galletas Melena",
     rosquitas: "🍩 Rosquitas Rey",
+    "polos-fresa": "🦁 Polos Sabana Rosa",
   },
 };
 
