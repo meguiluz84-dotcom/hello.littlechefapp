@@ -1,7 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useReducer } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
-import { getStepImage } from "@/data/stepImages";
+import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import Celebration from "./Celebration";
 import DinoBubble from "./DinoBubble";
 
@@ -135,6 +135,11 @@ export default function RecipeStepper({ recipe, onFinish, onBack, onHome }: Prop
   const [step, setStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
+  useEffect(() => {
+    const unsub = subscribeStepImages(forceUpdate);
+    return () => { unsub(); };
+  }, []);
   const total = recipe.steps.length;
   const current = recipe.steps[step];
 
