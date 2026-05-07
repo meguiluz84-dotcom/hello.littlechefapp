@@ -136,7 +136,10 @@ export default function RecipeStepper({ recipe, onFinish, onBack, onHome }: Prop
   const [direction, setDirection] = useState(1);
   const [showCelebration, setShowCelebration] = useState(false);
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
-  useEffect(() => subscribeStepImages(forceUpdate), []);
+  useEffect(() => {
+    const unsub = subscribeStepImages(forceUpdate);
+    return () => { unsub(); };
+  }, []);
   const total = recipe.steps.length;
   const current = recipe.steps[step];
 
