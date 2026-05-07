@@ -1,7 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useReducer } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
-import { getStepImage } from "@/data/stepImages";
+import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import Celebration from "./Celebration";
 import DinoBubble from "./DinoBubble";
 
