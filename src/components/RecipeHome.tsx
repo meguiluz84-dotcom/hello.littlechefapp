@@ -1,7 +1,17 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { recipes, categories, type Recipe, type RecipeCategory } from "@/data/recipes";
 import { avatarById, type AvatarId } from "@/data/avatars";
+import {
+  getRecipeMeta,
+  recipeMatchesRestrictions,
+  type FoodTag,
+  type Restrictions,
+} from "@/data/recipeMeta";
+import RecipeOfTheDay from "./RecipeOfTheDay";
+import CategoryFilters from "./CategoryFilters";
+import EmptyState from "./EmptyState";
+import { useLongPress } from "@/hooks/use-long-press";
 
 const colorMap: Record<string, string> = {
   "kids-pink": "bg-kids-pink",
@@ -20,29 +30,61 @@ interface RecipeHomeProps {
   avatarId: AvatarId;
   onChangeAvatar: () => void;
   getRecipeName: (recipe: Recipe) => string;
+  restrictions: Restrictions;
+  lastRecipeId: string | null;
+  onOpenAdult: () => void;
+  isFavorite: (id: string) => boolean;
 }
 
-export default function RecipeHome({ onSelectRecipe, isCompleted, avatarId, onChangeAvatar, getRecipeName }: RecipeHomeProps) {
+export default function RecipeHome({
+  onSelectRecipe, isCompleted, avatarId, onChangeAvatar, getRecipeName,
+  restrictions, lastRecipeId, onOpenAdult, isFavorite,
+}: RecipeHomeProps) {
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
+  const [tag, setTag] = useState<FoodTag | null>(null);
 
-  const filtered = activeCategory
-    ? recipes.filter((r) => r.category === activeCategory)
-    : [];
+  // Filter recipes by restrictions globally
+  const allowed = useMemo(
+    () => recipes.filter((r) => recipeMatchesRestrictions(getRecipeMeta(r.id), restrictions)),
+    [restrictions]
+  );
 
-  const completedCount = isCompleted
-    ? recipes.filter((r) => isCompleted(r.id)).length
-    : 0;
+  const recipeOfDay = useMemo(() => {
+    if (allowed.length === 0) return null;
+    const day = Math.floor(Date.now() / 86400000);
+    return allowed[day % allowed.length];
+  }, [allowed]);
+
+  const lastRecipe = useMemo(
+    () => (lastRecipeId ? recipes.find((r) => r.id === lastRecipeId) ?? null : null),
+    [lastRecipeId]
+  );
+
+  const filteredByTag = useMemo(() => {
+    if (!tag) return null;
+    return allowed.filter((r) => getRecipeMeta(r.id).tags.includes(tag));
+  }, [allowed, tag]);
+
+  const filteredByCategory = useMemo(() => {
+    if (!activeCategory) return null;
+    return allowed.filter((r) => r.category === activeCategory);
+  }, [allowed, activeCategory]);
+
+  const completedCount = isCompleted ? allowed.filter((r) => isCompleted(r.id)).length : 0;
 
   const countByCategory = (cat: RecipeCategory) =>
-    recipes.filter((r) => r.category === cat).length;
+    allowed.filter((r) => r.category === cat).length;
   const completedByCategory = (cat: RecipeCategory) =>
-    isCompleted ? recipes.filter((r) => r.category === cat && isCompleted(r.id)).length : 0;
+    isCompleted ? allowed.filter((r) => r.category === cat && isCompleted(r.id)).length : 0;
 
   const activeCat = activeCategory ? categories.find((c) => c.id === activeCategory) : null;
 
+  // Long-press star counter to open adult mode
+  const longPress = useLongPress(onOpenAdult, 800);
+
   return (
-    <div className="min-h-screen bg-background px-4 pb-8 pt-6">
+    <div className="min-h-screen bg-background px-4 pb-24 pt-6">
       {/* Header - avatar mascot + change button */}
       <div className="mb-4 flex items-center justify-center gap-3">
         <motion.button
@@ -68,13 +110,15 @@ export default function RecipeHome({ onSelectRecipe, isCompleted, avatarId, onCh
         </motion.button>
       </div>
 
-      {/* Stars trophy counter */}
+      {/* Stars trophy counter (long-press to open adult mode) */}
       {completedCount > 0 && (
         <motion.div
+          {...longPress}
           initial={{ scale: 0, y: -10 }}
           animate={{ scale: 1, y: 0 }}
           transition={{ type: "spring", bounce: 0.5 }}
-          className="mx-auto mb-4 flex w-fit items-center gap-2 rounded-full bg-kids-yellow px-4 py-2 kids-shadow"
+          className="mx-auto mb-5 flex w-fit cursor-pointer select-none items-center gap-2 rounded-full bg-kids-yellow px-4 py-2 kids-shadow"
+          aria-label={`${completedCount} estrellas (mantén pulsado para modo adulto)`}
         >
           <span className="text-2xl">⭐</span>
           <span className="text-xl font-extrabold text-foreground">×{completedCount}</span>
@@ -82,113 +126,194 @@ export default function RecipeHome({ onSelectRecipe, isCompleted, avatarId, onCh
       )}
 
       <AnimatePresence mode="wait">
-        {!activeCategory ? (
-          /* Category cards grid */
+        {!activeCategory && !tag ? (
           <motion.div
-            key="categories"
+            key="home"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="mx-auto grid max-w-xl grid-cols-2 gap-4"
+            className="mx-auto max-w-xl"
           >
-            {categories.map((cat, i) => {
-              const total = countByCategory(cat.id);
-              const done = completedByCategory(cat.id);
-              return (
-                <motion.button
-                  key={cat.id}
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ delay: i * 0.06, type: "spring", bounce: 0.4 }}
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ y: -4 }}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`flex flex-col items-center justify-center gap-2 rounded-3xl ${colorMap[cat.color] ?? "bg-primary"} p-6 kids-shadow-lg`}
-                >
-                  <span className="text-6xl">{cat.emoji}</span>
-                  <span className="text-xl font-extrabold text-foreground">{cat.label}</span>
-                  <span className="rounded-full bg-card/80 px-3 py-1 text-sm font-extrabold text-foreground">
-                    {done}/{total} ⭐
+            {allowed.length === 0 && (
+              <EmptyState
+                emoji="🍳"
+                message="No hay recetas con esas restricciones. Prueba a cambiarlas."
+                cta={{ label: "Ajustes", onClick: onOpenAdult }}
+              />
+            )}
+
+            {/* Recipe of the day */}
+            {recipeOfDay && (
+              <RecipeOfTheDay
+                recipe={recipeOfDay}
+                displayName={getRecipeName(recipeOfDay)}
+                onOpen={onSelectRecipe}
+              />
+            )}
+
+            {/* Continue last */}
+            {lastRecipe && (
+              <motion.button
+                type="button"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => onSelectRecipe(lastRecipe)}
+                className="mb-5 flex w-full items-center gap-3 rounded-2xl bg-card p-3 kids-shadow"
+                aria-label={`Continuar ${getRecipeName(lastRecipe)}`}
+              >
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl">
+                  <img src={lastRecipe.image} alt="" className="h-full w-full object-cover" />
+                </div>
+                <div className="flex flex-1 flex-col items-start text-left">
+                  <span className="text-xs font-extrabold text-muted-foreground">▶️ Continuar</span>
+                  <span className="text-base font-extrabold text-foreground line-clamp-2">
+                    {getRecipeName(lastRecipe)}
                   </span>
-                </motion.button>
-              );
-            })}
+                </div>
+                <span className="text-3xl">➡️</span>
+              </motion.button>
+            )}
+
+            {/* Tag filters */}
+            <CategoryFilters active={tag} onChange={setTag} />
+
+            {/* Categories grid */}
+            <div className="grid grid-cols-2 gap-4">
+              {categories.map((cat, i) => {
+                const total = countByCategory(cat.id);
+                if (total === 0) return null;
+                const done = completedByCategory(cat.id);
+                return (
+                  <motion.button
+                    key={cat.id}
+                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ delay: i * 0.06, type: "spring", bounce: 0.4 }}
+                    whileTap={{ scale: 0.95 }}
+                    whileHover={{ y: -4 }}
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={`flex min-h-32 flex-col items-center justify-center gap-2 rounded-3xl ${colorMap[cat.color] ?? "bg-primary"} p-4 kids-shadow-lg`}
+                  >
+                    <span className="text-6xl">{cat.emoji}</span>
+                    <span className="text-xl font-extrabold text-foreground">{cat.label}</span>
+                    <span className="rounded-full bg-card/80 px-3 py-1 text-sm font-extrabold text-foreground">
+                      {done}/{total} ⭐
+                    </span>
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {/* Discrete adult mode button */}
+            <div className="mt-8 flex justify-center">
+              <button
+                type="button"
+                onClick={onOpenAdult}
+                aria-label="Modo adulto"
+                className="flex h-12 min-h-12 items-center gap-2 rounded-full bg-card px-4 text-sm font-bold text-muted-foreground kids-shadow"
+              >
+                ⚙️ Adultos
+              </button>
+            </div>
           </motion.div>
         ) : (
-          /* Recipe grid for selected category */
           <motion.div
-            key="recipes"
+            key="filtered"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             className="mx-auto max-w-xl"
           >
-            {/* Back + category title */}
+            {/* Back + title */}
             <div className="mb-5 flex items-center gap-3">
               <motion.button
                 whileTap={{ scale: 0.9 }}
-                onClick={() => setActiveCategory(null)}
+                onClick={() => { setActiveCategory(null); setTag(null); }}
                 aria-label="Volver"
-                className="flex h-12 w-12 items-center justify-center rounded-2xl bg-card text-2xl kids-shadow"
+                className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-2xl bg-card text-2xl kids-shadow"
               >
                 ⬅️
               </motion.button>
               <div
-                className={`flex flex-1 items-center gap-2 rounded-2xl ${colorMap[activeCat?.color ?? ""] ?? "bg-primary"} px-4 py-3 kids-shadow`}
+                className={`flex flex-1 items-center gap-2 rounded-2xl ${
+                  activeCat ? colorMap[activeCat.color] ?? "bg-primary" : "bg-primary"
+                } px-4 py-3 kids-shadow`}
               >
-                <span className="text-3xl">{activeCat?.emoji}</span>
-                <span className="text-xl font-extrabold text-foreground">{activeCat?.label}</span>
+                <span className="text-3xl">{activeCat?.emoji ?? "🔍"}</span>
+                <span className="text-xl font-extrabold text-foreground">
+                  {activeCat?.label ?? (tag ? tag : "")}
+                </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              {filtered.map((recipe, i) => (
-                <motion.button
-                  key={recipe.id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: i * 0.04, type: "spring", bounce: 0.3 }}
-                  whileTap={{ scale: 0.92 }}
-                  onClick={() => onSelectRecipe(recipe)}
-                  className="group flex flex-col items-center overflow-hidden rounded-3xl bg-card kids-shadow-lg transition-shadow hover:shadow-2xl"
-                >
-                  <div
-                    className={`relative w-full overflow-hidden ${colorMap[recipe.color] ?? "bg-primary"} p-2`}
-                  >
-                    <img
-                      src={recipe.image}
-                      alt=""
-                      className="aspect-square w-full rounded-2xl object-cover"
-                      loading="lazy"
-                      width={256}
-                      height={256}
-                    />
-                    {isCompleted?.(recipe.id) && (
-                      <motion.div
-                        initial={{ scale: 0, rotate: -45 }}
-                        animate={{ scale: 1, rotate: -15 }}
-                        transition={{ type: "spring", bounce: 0.6 }}
-                        className="absolute -right-1 -top-1 flex h-12 w-12 items-center justify-center rounded-full bg-kids-yellow text-3xl kids-shadow-lg ring-4 ring-background"
+            {((filteredByCategory ?? filteredByTag) ?? []).length === 0 ? (
+              <EmptyState emoji="🍽️" message="No hay recetas aquí todavía." />
+            ) : (
+              <div className="grid grid-cols-2 gap-4">
+                {((filteredByCategory ?? filteredByTag) ?? []).map((recipe, i) => {
+                  const meta = getRecipeMeta(recipe.id);
+                  return (
+                    <motion.button
+                      key={recipe.id}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: i * 0.04, type: "spring", bounce: 0.3 }}
+                      whileTap={{ scale: 0.92 }}
+                      onClick={() => onSelectRecipe(recipe)}
+                      className="group flex flex-col items-center overflow-hidden rounded-3xl bg-card kids-shadow-lg transition-shadow hover:shadow-2xl"
+                    >
+                      <div
+                        className={`relative w-full overflow-hidden ${colorMap[recipe.color] ?? "bg-primary"} p-2`}
                       >
-                        ⭐
-                      </motion.div>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-center gap-1 px-2 py-3">
-                    <div className="text-center text-sm font-extrabold leading-tight text-foreground">
-                      {getRecipeName(recipe)}
-                    </div>
-                    <div className="flex">
-                      {Array.from({ length: recipe.difficulty }).map((_, s) => (
-                        <span key={s} className="text-base">
-                          ⭐
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.button>
-              ))}
-            </div>
+                        <img
+                          src={recipe.image}
+                          alt=""
+                          className="aspect-square w-full rounded-2xl object-cover"
+                          loading="lazy"
+                          width={256}
+                          height={256}
+                        />
+                        {isCompleted?.(recipe.id) && (
+                          <motion.div
+                            initial={{ scale: 0, rotate: -45 }}
+                            animate={{ scale: 1, rotate: -15 }}
+                            transition={{ type: "spring", bounce: 0.6 }}
+                            className="absolute -right-1 -top-1 flex h-12 w-12 items-center justify-center rounded-full bg-kids-yellow text-3xl kids-shadow-lg ring-4 ring-background"
+                          >
+                            ⭐
+                          </motion.div>
+                        )}
+                        {isFavorite(recipe.id) && (
+                          <div className="absolute left-1 top-1 flex h-9 w-9 items-center justify-center rounded-full bg-card text-xl kids-shadow">
+                            ❤️
+                          </div>
+                        )}
+                        {meta.adultHelp !== "low" && (
+                          <div
+                            className="absolute bottom-1 right-1 flex h-9 w-9 items-center justify-center rounded-full bg-card text-xl kids-shadow"
+                            aria-label="Necesita ayuda de adulto"
+                            title="Necesita ayuda de adulto"
+                          >
+                            🧑
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col items-center gap-1 px-2 py-3">
+                        <div className="text-balance text-center text-sm font-extrabold leading-tight text-foreground line-clamp-2">
+                          {getRecipeName(recipe)}
+                        </div>
+                        <div className="flex">
+                          {Array.from({ length: recipe.difficulty }).map((_, s) => (
+                            <span key={s} className="text-base">⭐</span>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
