@@ -7,8 +7,11 @@ import RecipeStepper from "@/components/RecipeStepper";
 import HomeButton from "@/components/HomeButton";
 import SplashScreen from "@/components/SplashScreen";
 import AvatarPicker from "@/components/AvatarPicker";
+import Onboarding from "@/components/Onboarding";
+import AdultMode from "@/components/AdultMode";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
 import { useAvatar } from "@/hooks/use-avatar";
+import { usePreferences } from "@/hooks/use-preferences";
 import { getRecipeName } from "@/data/recipeNames";
 
 export const Route = createFileRoute("/")({
@@ -27,11 +30,18 @@ function Index() {
   const [screen, setScreen] = useState<Screen>("splash");
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
-  const { markCompleted, isCompleted } = useCompletedRecipes();
+  const [adultOpen, setAdultOpen] = useState(false);
+  const [resumeFrom, setResumeFrom] = useState(0);
+  const { markCompleted, isCompleted, completed } = useCompletedRecipes();
   const { avatarId, setAvatarId, hydrated } = useAvatar();
+  const prefs = usePreferences();
+
+  const needsOnboarding = prefs.hydrated && (!avatarId || !prefs.onboarding);
 
   const handleSelectRecipe = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
+    prefs.setLastRecipe(recipe.id);
+    setResumeFrom(0);
     setScreen("ingredients");
   };
 
@@ -40,16 +50,22 @@ function Index() {
     else setScreen("home");
   };
 
-  const handleStart = () => setScreen("cooking");
+  const handleStart = (fromStep = 0) => {
+    setResumeFrom(fromStep);
+    setScreen("cooking");
+  };
+
   const handleFinish = () => {
-    if (selectedRecipe) markCompleted(selectedRecipe.id);
+    if (selectedRecipe) {
+      markCompleted(selectedRecipe.id);
+      prefs.clearResume(selectedRecipe.id);
+    }
     setScreen("home");
     setSelectedRecipe(null);
   };
 
   const handleSplashStart = () => {
     setScreen("home");
-    if (!avatarId) setPickerOpen(true);
   };
 
   const nameFor = (r: Recipe) => getRecipeName(avatarId, r.id, r.name);
@@ -58,25 +74,24 @@ function Index() {
     return <SplashScreen onStart={handleSplashStart} />;
   }
 
-  // Wait for hydration before rendering name-dependent UI to avoid flash
-  if (!hydrated) {
+  if (!hydrated || !prefs.hydrated) {
     return <div className="min-h-screen bg-background" />;
   }
 
-  // First-time avatar selection (no close button)
-  if (pickerOpen && !avatarId) {
+  // First-time onboarding
+  if (needsOnboarding) {
     return (
-      <AvatarPicker
-        onSelect={(id) => {
-          setAvatarId(id);
-          setPickerOpen(false);
+      <Onboarding
+        initialAvatar={avatarId}
+        onComplete={(av, p) => {
+          setAvatarId(av);
+          prefs.setOnboarding(p);
         }}
-        currentId={avatarId}
       />
     );
   }
 
-  // Re-pick avatar from home (with close button)
+  // Re-pick avatar (from adult mode)
   if (pickerOpen && avatarId) {
     return (
       <AvatarPicker
@@ -91,23 +106,68 @@ function Index() {
     );
   }
 
+  // Adult mode panel
+  if (adultOpen) {
+    return (
+      <AdultMode
+        onClose={() => setAdultOpen(false)}
+        onChangeAvatar={() => { setAdultOpen(false); setPickerOpen(true); }}
+        onResetProgress={() => {
+          try { localStorage.removeItem("little-chef-completed"); } catch { /* ignore */ }
+          completed.forEach(() => { /* visual state will reload on refresh */ });
+          window.location.reload();
+        }}
+        onResetOnboarding={() => {
+          prefs.resetOnboarding();
+          setAdultOpen(false);
+        }}
+        prefs={prefs.onboarding}
+        onSavePrefs={prefs.setOnboarding}
+        soundOn={prefs.soundOn}
+        onToggleSound={prefs.setSoundOn}
+      />
+    );
+  }
+
   const handleHome = () => {
     setSelectedRecipe(null);
     setScreen("home");
   };
 
+  const restrictions = prefs.onboarding?.restrictions ?? prefs.DEFAULT_RESTR;
+
   let content;
   if (screen === "ingredients" && selectedRecipe) {
+    const resume = prefs.getResume(selectedRecipe.id);
     content = (
       <RecipeIngredients
         recipe={selectedRecipe}
-        onStart={handleStart}
+        onStart={() => handleStart(0)}
         onBack={handleBack}
         displayName={nameFor(selectedRecipe)}
+        hasResume={resume !== null && resume > 0}
+        onResume={() => handleStart(resume ?? 0)}
+        onResumeClear={() => {
+          prefs.clearResume(selectedRecipe.id);
+          handleStart(0);
+        }}
+        isFavorite={prefs.isFavorite(selectedRecipe.id)}
+        onToggleFavorite={() => prefs.toggleFavorite(selectedRecipe.id)}
       />
     );
   } else if (screen === "cooking" && selectedRecipe) {
-    content = <RecipeStepper recipe={selectedRecipe} onFinish={handleFinish} onBack={handleBack} />;
+    content = (
+      <RecipeStepper
+        recipe={selectedRecipe}
+        onFinish={handleFinish}
+        onBack={handleBack}
+        onHome={handleHome}
+        startAt={resumeFrom}
+        soundOn={prefs.soundOn}
+        onPause={(step) => prefs.saveResume(selectedRecipe.id, step)}
+        onClearResume={() => prefs.clearResume(selectedRecipe.id)}
+      />
+    );
   } else {
     content = (
       <RecipeHome
@@ -116,6 +176,10 @@ function Index() {
         avatarId={avatarId ?? "dino"}
         onChangeAvatar={() => setPickerOpen(true)}
         getRecipeName={nameFor}
+        restrictions={restrictions}
+        lastRecipeId={prefs.lastRecipe}
+        onOpenAdult={() => setAdultOpen(true)}
+        isFavorite={prefs.isFavorite}
       />
     );
   }
@@ -123,7 +187,7 @@ function Index() {
   return (
     <>
       {content}
-      <HomeButton onClick={handleHome} />
+      {screen !== "cooking" && <HomeButton onClick={handleHome} />}
     </>
   );
 }
