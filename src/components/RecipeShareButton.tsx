@@ -26,12 +26,12 @@ export default function RecipeShareButton({ recipe, displayName }: Props) {
     const text = buildText();
     const url = `${window.location.origin}/imprimir/${recipe.id}`;
     try {
-      if (typeof navigator !== "undefined" && "share" in navigator) {
-        await (navigator as Navigator & { share: (d: ShareData) => Promise<void> })
-          .share({ title: displayName ?? recipe.name, text, url });
+      const nav = navigator as Navigator & { share?: (d: ShareData) => Promise<void> };
+      if (typeof nav.share === "function") {
+        await nav.share({ title: displayName ?? recipe.name, text, url });
         setDone("shared");
       } else {
-        await navigator.clipboard.writeText(`${text}\n\n${url}`);
+        await nav.clipboard.writeText(`${text}\n\n${url}`);
         setDone("copied");
       }
       setTimeout(() => setDone(null), 1800);

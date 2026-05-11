@@ -19,7 +19,7 @@ function PrintRecipe() {
   const { recipeId } = useParams({ from: "/imprimir/$recipeId" });
   const recipe = recipes.find((r) => r.id === recipeId);
   const [, force] = useReducer((x: number) => x + 1, 0);
-  useEffect(() => subscribeStepImages(force), []);
+  useEffect(() => { const u = subscribeStepImages(force); return () => { u(); }; }, []);
 
   if (!recipe) {
     return (

@@ -18,7 +18,7 @@ function WorkshopMode() {
   const { recipeId } = useParams({ from: "/taller/$recipeId" });
   const recipe = recipes.find((r) => r.id === recipeId);
   const [, force] = useReducer((x: number) => x + 1, 0);
-  useEffect(() => subscribeStepImages(force), []);
+  useEffect(() => { const u = subscribeStepImages(force); return () => { u(); }; }, []);
 
   const [groupSize, setGroupSize] = useState(8);
   const [view, setView] = useState<"setup" | "project">("setup");
