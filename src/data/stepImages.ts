@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 // Locally bundled step images (generated previously)
-const localModules = import.meta.glob("../assets/steps/*.png", {
+const localModules = import.meta.glob("../assets/steps/*.{png,jpg,jpeg,webp}", {
   eager: true,
   query: "?url",
   import: "default",
@@ -9,7 +9,7 @@ const localModules = import.meta.glob("../assets/steps/*.png", {
 
 const localMap: Record<string, string> = {};
 for (const [path, url] of Object.entries(localModules)) {
-  const name = path.split("/").pop()!.replace(/\.png$/, "");
+  const name = path.split("/").pop()!.replace(/\.(png|jpe?g|webp)$/i, "");
   localMap[name] = url;
 }
 
