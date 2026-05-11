@@ -12,6 +12,7 @@ import {
 import RecipeOfTheDay from "./RecipeOfTheDay";
 import CategoryFilters from "./CategoryFilters";
 import EmptyState from "./EmptyState";
+import DifficultyBadges from "./DifficultyBadges";
 import ChallengeBanner from "./ChallengeBanner";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
