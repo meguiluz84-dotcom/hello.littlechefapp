@@ -196,7 +196,7 @@ export default function RecipeStepper({
   }
 
   if (!hygieneDone) {
-    return <HygieneStep soundOn={soundOn} onDone={() => setHygieneDone(true)} />;
+    return <HygieneStep soundOn={soundOn} onDone={markHygieneDone} />;
   }
 
   const actionAnim = reduced
