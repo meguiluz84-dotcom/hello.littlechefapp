@@ -105,6 +105,8 @@ export default function RecipeStepper({
   const [direction, setDirection] = useState(1);
   const [showCelebration, setShowCelebration] = useState(false);
   const [replayKey, setReplayKey] = useState(0);
+  const [hygieneDone, setHygieneDone] = useState(startAt > 0);
+  const [adultConfirmedStep, setAdultConfirmedStep] = useState<number | null>(null);
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
   useEffect(() => {
     const unsub = subscribeStepImages(forceUpdate);
@@ -116,6 +118,7 @@ export default function RecipeStepper({
     () => stepNeedsAdult(current.actionIcon, current.emoji),
     [current]
   );
+  const adultBlocking = needsAdult && adultConfirmedStep !== step;
 
   const next = useCallback(() => {
     setDirection(1);
