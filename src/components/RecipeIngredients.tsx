@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 import type { Recipe } from "@/data/recipes";
 import { getIngredientName } from "@/data/ingredientNames";
-import { getRecipeMeta, RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
+import { getRecipeMeta, RESTRICTION_INFO, LEVEL_INFO, type Restrictions } from "@/data/recipeMeta";
 import { findSwap } from "@/data/ingredientSwaps";
 import { usePlayers } from "@/hooks/use-players";
+import { isInSeason, currentSeason, SEASON_INFO } from "@/data/seasons";
 import DinoBubble from "./DinoBubble";
 import VisualQuantity from "./VisualQuantity";
 import DifficultyBadges from "./DifficultyBadges";
 import IngredientSwap from "./IngredientSwap";
+import RecipeShareButton from "./RecipeShareButton";
 
 interface Props {
   recipe: Recipe;
@@ -89,8 +92,24 @@ export default function RecipeIngredients({
         {displayName ?? recipe.name}
       </h1>
 
-      <div className="mb-3">
+      <div className="mb-3 flex items-center gap-2">
         <DifficultyBadges recipe={recipe} />
+        <div
+          className="flex items-center gap-1 rounded-full bg-card px-3 py-1 text-xs font-extrabold text-foreground kids-shadow"
+          title={`Autonomía: ${LEVEL_INFO[meta.level].label}`}
+        >
+          <span>{LEVEL_INFO[meta.level].emoji}</span>
+          <span>{LEVEL_INFO[meta.level].label}</span>
+        </div>
+        {isInSeason(recipe.id) && (
+          <div
+            className="flex items-center gap-1 rounded-full bg-kids-green/40 px-3 py-1 text-xs font-extrabold text-foreground kids-shadow"
+            title={`De temporada: ${SEASON_INFO[currentSeason()].label}`}
+          >
+            <span>{SEASON_INFO[currentSeason()].emoji}</span>
+            <span>De temporada</span>
+          </div>
+        )}
       </div>
 
       {/* Allergen badges (concise, visual) */}
@@ -107,6 +126,26 @@ export default function RecipeIngredients({
           ))}
         </div>
       )}
+
+      {/* Adult actions: print, workshop, share */}
+      <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+        <Link
+          to="/imprimir/$recipeId" params={{ recipeId: recipe.id }}
+          target="_blank" rel="noopener"
+          className="flex min-h-14 items-center gap-2 rounded-2xl bg-card px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
+        >
+          <span className="text-2xl" aria-hidden>🖨️</span>
+          <span>Imprimir</span>
+        </Link>
+        <Link
+          to="/taller/$recipeId" params={{ recipeId: recipe.id }}
+          className="flex min-h-14 items-center gap-2 rounded-2xl bg-card px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
+        >
+          <span className="text-2xl" aria-hidden>🏫</span>
+          <span>Taller</span>
+        </Link>
+        <RecipeShareButton recipe={recipe} displayName={displayName} />
+      </div>
 
       {/* Resume banner */}
       {hasResume && onResume && (

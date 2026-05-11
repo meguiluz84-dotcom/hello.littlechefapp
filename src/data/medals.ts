@@ -61,6 +61,31 @@ export const MEDALS: Medal[] = [
     description: "Completaste una receta de nivel 3",
     earned: (c) => c.recipes.some((r) => c.completed.includes(r.id) && getRecipeMeta(r.id).level === 3),
   },
+  // Family medals — celebrate cooking together, not just kid progress.
+  {
+    id: "family-trio",
+    emoji: "👨‍👩‍👧",
+    label: "Equipo familia",
+    description: "3 recetas cocinadas en familia",
+    earned: (c) => c.completed.length >= 3,
+  },
+  {
+    id: "family-week",
+    emoji: "🗓️",
+    label: "Semana en familia",
+    description: "7 recetas completadas",
+    earned: (c) => c.completed.length >= 7,
+  },
+  {
+    id: "family-variety",
+    emoji: "🌈",
+    label: "Variedad familiar",
+    description: "Recetas de 3 categorías distintas",
+    earned: (c) => {
+      const cats = new Set(c.recipes.filter((r) => c.completed.includes(r.id)).map((r) => r.category));
+      return cats.size >= 3;
+    },
+  },
 ];
 
 export function earnedMedalIds(ctx: MedalCtx): string[] {

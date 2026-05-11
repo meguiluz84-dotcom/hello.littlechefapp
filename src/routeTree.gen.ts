@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProximamenteRouteImport } from './routes/proximamente'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TallerRecipeIdRouteImport } from './routes/taller.$recipeId'
+import { Route as ImprimirRecipeIdRouteImport } from './routes/imprimir.$recipeId'
 import { Route as AdminStepsRouteImport } from './routes/admin/steps'
 
 const ProximamenteRoute = ProximamenteRouteImport.update({
@@ -23,6 +25,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TallerRecipeIdRoute = TallerRecipeIdRouteImport.update({
+  id: '/taller/$recipeId',
+  path: '/taller/$recipeId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImprimirRecipeIdRoute = ImprimirRecipeIdRouteImport.update({
+  id: '/imprimir/$recipeId',
+  path: '/imprimir/$recipeId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminStepsRoute = AdminStepsRouteImport.update({
   id: '/admin/steps',
   path: '/admin/steps',
@@ -33,30 +45,54 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/proximamente': typeof ProximamenteRoute
   '/admin/steps': typeof AdminStepsRoute
+  '/imprimir/$recipeId': typeof ImprimirRecipeIdRoute
+  '/taller/$recipeId': typeof TallerRecipeIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/proximamente': typeof ProximamenteRoute
   '/admin/steps': typeof AdminStepsRoute
+  '/imprimir/$recipeId': typeof ImprimirRecipeIdRoute
+  '/taller/$recipeId': typeof TallerRecipeIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/proximamente': typeof ProximamenteRoute
   '/admin/steps': typeof AdminStepsRoute
+  '/imprimir/$recipeId': typeof ImprimirRecipeIdRoute
+  '/taller/$recipeId': typeof TallerRecipeIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/proximamente' | '/admin/steps'
+  fullPaths:
+    | '/'
+    | '/proximamente'
+    | '/admin/steps'
+    | '/imprimir/$recipeId'
+    | '/taller/$recipeId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/proximamente' | '/admin/steps'
-  id: '__root__' | '/' | '/proximamente' | '/admin/steps'
+  to:
+    | '/'
+    | '/proximamente'
+    | '/admin/steps'
+    | '/imprimir/$recipeId'
+    | '/taller/$recipeId'
+  id:
+    | '__root__'
+    | '/'
+    | '/proximamente'
+    | '/admin/steps'
+    | '/imprimir/$recipeId'
+    | '/taller/$recipeId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ProximamenteRoute: typeof ProximamenteRoute
   AdminStepsRoute: typeof AdminStepsRoute
+  ImprimirRecipeIdRoute: typeof ImprimirRecipeIdRoute
+  TallerRecipeIdRoute: typeof TallerRecipeIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,6 +111,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/taller/$recipeId': {
+      id: '/taller/$recipeId'
+      path: '/taller/$recipeId'
+      fullPath: '/taller/$recipeId'
+      preLoaderRoute: typeof TallerRecipeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/imprimir/$recipeId': {
+      id: '/imprimir/$recipeId'
+      path: '/imprimir/$recipeId'
+      fullPath: '/imprimir/$recipeId'
+      preLoaderRoute: typeof ImprimirRecipeIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/steps': {
       id: '/admin/steps'
       path: '/admin/steps'
@@ -89,6 +139,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ProximamenteRoute: ProximamenteRoute,
   AdminStepsRoute: AdminStepsRoute,
+  ImprimirRecipeIdRoute: ImprimirRecipeIdRoute,
+  TallerRecipeIdRoute: TallerRecipeIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
