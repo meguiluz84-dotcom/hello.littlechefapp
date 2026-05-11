@@ -29,6 +29,26 @@ import imgRiceEggs from "@/assets/recipe-rice-eggs.jpg";
 import imgBananaIcecream from "@/assets/recipe-banana-icecream.jpg";
 import imgOatBalls from "@/assets/recipe-oat-balls.jpg";
 import imgSnakeWrap from "@/assets/recipe-snake-wrap.jpg";
+import imgStarSandwich from "@/assets/recipe-star-sandwich.jpg";
+import imgBananaRolls from "@/assets/recipe-banana-rolls.jpg";
+import imgTomatoLadybugs from "@/assets/recipe-tomato-ladybugs.jpg";
+import imgBroccoliForest from "@/assets/recipe-broccoli-forest.jpg";
+import imgEggBoats from "@/assets/recipe-egg-boats.jpg";
+import imgSnailRolls from "@/assets/recipe-snail-rolls.jpg";
+import imgButterflyPizza from "@/assets/recipe-butterfly-pizza.jpg";
+import imgFruitWorm from "@/assets/recipe-fruit-worm.jpg";
+import imgRiceClouds from "@/assets/recipe-rice-clouds.jpg";
+import imgGardenToast from "@/assets/recipe-garden-toast.jpg";
+import imgBananaSushi from "@/assets/recipe-banana-sushi.jpg";
+import imgChickpeaBurgers from "@/assets/recipe-chickpea-burgers.jpg";
+import imgRainbowSticks from "@/assets/recipe-rainbow-sticks.jpg";
+import imgGreenPancakes from "@/assets/recipe-green-pancakes.jpg";
+import imgMoonBowl from "@/assets/recipe-moon-bowl.jpg";
+import imgSmileEmpanadas from "@/assets/recipe-smile-empanadas.jpg";
+import imgMiniTacos from "@/assets/recipe-mini-tacos.jpg";
+import imgAppleDonut from "@/assets/recipe-apple-donut.jpg";
+import imgWatermelonPops from "@/assets/recipe-watermelon-pops.jpg";
+import imgVeggieTrain from "@/assets/recipe-veggie-train.jpg";
 
 export interface Ingredient {
   emoji: string;
