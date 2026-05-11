@@ -8,6 +8,9 @@ import Celebration from "./Celebration";
 import DinoBubble from "./DinoBubble";
 import HygieneStep from "./HygieneStep";
 import AdultGate from "./AdultGate";
+import RoleHeader from "./RoleHeader";
+import { useVoice } from "@/hooks/use-voice";
+import { lineForAction } from "@/data/voiceLines";
 
 const actionIcons: Record<string, string> = {
   cut: "🔪",
@@ -100,14 +103,16 @@ interface Props {
   onAnother?: () => void;
   newMedalId?: string | null;
   onComplete?: () => void;
+  onTaste?: () => void;
 }
 
 export default function RecipeStepper({
   recipe, onFinish, onBack, onHome,
   startAt = 0, soundOn = true, onPause, onClearResume,
-  displayName, isFavorite, onToggleFavorite, onAnother, newMedalId, onComplete,
+  displayName, isFavorite, onToggleFavorite, onAnother, newMedalId, onComplete, onTaste,
 }: Props) {
   const reduced = usePrefersReducedMotion();
+  const voice = useVoice();
   const [step, setStep] = useState(Math.min(startAt, recipe.steps.length - 1));
   const [direction, setDirection] = useState(1);
   const [showCelebration, setShowCelebration] = useState(false);
@@ -126,6 +131,12 @@ export default function RecipeStepper({
     [current]
   );
   const adultBlocking = needsAdult && adultConfirmedStep !== step;
+
+  // Speak the line for the current step when voice is enabled.
+  useEffect(() => {
+    if (!voice.enabled || adultBlocking) return;
+    voice.speak(lineForAction(current.actionIcon));
+  }, [step, voice.enabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const next = useCallback(() => {
     setDirection(1);
@@ -166,6 +177,7 @@ export default function RecipeStepper({
         isFavorite={isFavorite}
         onToggleFavorite={onToggleFavorite}
         newMedalId={newMedalId ?? null}
+        onTaste={onTaste}
       />
     );
   }
@@ -227,8 +239,13 @@ export default function RecipeStepper({
         </motion.div>
       )}
 
+      {/* Role indicator (kid vs adult) */}
+      <div className="mt-12 mb-1 w-full max-w-xs">
+        <RoleHeader needsAdult={needsAdult} />
+      </div>
+
       {/* Progress bar with dots */}
-      <div className="mt-12 flex w-full max-w-xs items-center gap-1.5">
+      <div className="flex w-full max-w-xs items-center gap-1.5">
         {recipe.steps.map((_, i) => (
           <motion.div
             key={i}
@@ -335,6 +352,17 @@ export default function RecipeStepper({
         >
           🔁
         </motion.button>
+
+        {voice.supported && voice.enabled && (
+          <motion.button
+            whileTap={{ scale: 0.85 }}
+            onClick={() => voice.speak(lineForAction(current.actionIcon))}
+            aria-label="Escuchar"
+            className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-card text-3xl kids-shadow"
+          >
+            🗣️
+          </motion.button>
+        )}
 
         <motion.button
           whileTap={{ scale: 0.85 }}

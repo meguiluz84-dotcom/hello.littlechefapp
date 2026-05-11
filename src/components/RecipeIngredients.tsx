@@ -3,9 +3,12 @@ import { motion } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
 import { getIngredientName } from "@/data/ingredientNames";
 import { getRecipeMeta, RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
+import { findSwap } from "@/data/ingredientSwaps";
+import { usePlayers } from "@/hooks/use-players";
 import DinoBubble from "./DinoBubble";
 import VisualQuantity from "./VisualQuantity";
 import DifficultyBadges from "./DifficultyBadges";
+import IngredientSwap from "./IngredientSwap";
 
 interface Props {
   recipe: Recipe;
@@ -26,6 +29,8 @@ export default function RecipeIngredients({
 }: Props) {
   const [checked, setChecked] = useState<Set<number>>(new Set());
   const meta = getRecipeMeta(recipe.id);
+  const { active } = usePlayers();
+  const restrictions = active?.restrictions ?? { nuts: false, dairy: false, gluten: false, vegetarian: false };
 
   const toggle = (i: number) =>
     setChecked((prev) => {
@@ -170,6 +175,10 @@ export default function RecipeIngredients({
                 </div>
               )}
               <VisualQuantity ingredient={ing} />
+              {(() => {
+                const swap = findSwap(ing.emoji, restrictions);
+                return swap ? <IngredientSwap swap={swap} /> : null;
+              })()}
             </motion.button>
           );
         })}

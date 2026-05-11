@@ -15,10 +15,13 @@ import MedalsScreen from "@/components/MedalsScreen";
 import FavoritesScreen from "@/components/FavoritesScreen";
 import WeekPlanScreen from "@/components/WeekPlanScreen";
 import ShoppingListScreen from "@/components/ShoppingListScreen";
+import PantryScreen from "@/components/PantryScreen";
+import MissionsScreen from "@/components/MissionsScreen";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
 import { usePreferences } from "@/hooks/use-preferences";
 import { usePlayers } from "@/hooks/use-players";
 import { useMedals } from "@/hooks/use-medals";
+import { useMissions } from "@/hooks/use-missions";
 import { getRecipeName } from "@/data/recipeNames";
 import { getRecipeMeta, recipeAllowedForAge, recipeMatchesRestrictions } from "@/data/recipeMeta";
 
@@ -34,7 +37,7 @@ export const Route = createFileRoute("/")({
 
 type Screen =
   | "splash" | "home" | "ingredients" | "cooking"
-  | "medals" | "favorites" | "weekplan" | "shopping";
+  | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions";
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -51,6 +54,7 @@ function Index() {
   const { markCompleted, isCompleted, completed, reset: resetCompleted } = useCompletedRecipes();
   const prefs = usePreferences();
   const medals = useMedals();
+  const missions = useMissions();
   const earnedBeforeRef = medals.earned;
 
   const active = players.active;
@@ -96,7 +100,8 @@ function Index() {
   const handleRecipeFinished = (recipe: Recipe, asChallenge: boolean) => {
     markCompleted(recipe.id);
     prefs.clearResume(recipe.id);
-    if (asChallenge) medals.completeChallenge(recipe.id);
+    missions.onCompleteRecipe();
+    if (asChallenge) { medals.completeChallenge(recipe.id); missions.onChallenge(); }
     // Detect newly earned medal by re-running the rule with the next state.
     const completedNext = completed.includes(recipe.id) ? completed : [...completed, recipe.id];
     const challengesNext = asChallenge ? medals.challengesDone + 1 : medals.challengesDone;
@@ -212,9 +217,23 @@ function Index() {
     return (
       <ShoppingListScreen
         recipes={ALL_RECIPES}
+        favorites={prefs.favorites}
         onClose={() => setScreen("home")}
       />
     );
+  }
+  if (screen === "pantry") {
+    return (
+      <PantryScreen
+        recipes={allowedRecipes}
+        getName={nameFor}
+        onPick={(r) => handleSelectRecipe(r)}
+        onClose={() => setScreen("home")}
+      />
+    );
+  }
+  if (screen === "missions") {
+    return <MissionsScreen onClose={() => setScreen("home")} />;
   }
 
   const handleHome = () => { setSelectedRecipe(null); setScreen("home"); };
@@ -252,6 +271,7 @@ function Index() {
         onAnother={handleAnother}
         newMedalId={newMedalId}
         onComplete={() => handleRecipeFinished(selectedRecipe, isChallenge)}
+        onTaste={() => missions.onTaste()}
       />
     );
   } else {
@@ -273,6 +293,8 @@ function Index() {
         onOpenFavorites={() => setScreen("favorites")}
         onOpenWeekPlan={() => setScreen("weekplan")}
         onOpenShopping={() => setScreen("shopping")}
+        onOpenPantry={() => setScreen("pantry")}
+        onOpenMissions={() => setScreen("missions")}
         playerName={active?.name ?? "Chef"}
       />
     );
