@@ -60,7 +60,7 @@ export const recipeMeta: Record<string, RecipeMeta> = {
   "pinchos-queso":    { tags: ["merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "medium", ageMin: 4, level: 2 },
   "pancakes-brocoli": { tags: ["desayuno", "salado"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 6, level: 3 },
   "arepas-chia":      { tags: ["desayuno", "salado"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 3 },
-  "empanadas":        { tags: ["salado"], restrictions: { nuts: false, dairy: false, gluten: true, vegetarian: false }, adultHelp: "high", ageMin: 6, level: 3 },
+  "empanadas":        { tags: ["salado"], restrictions: { ...EMPTY_RESTR, gluten: true, eggs: true }, adultHelp: "high", ageMin: 6, level: 3 },
   "pizza-vegetal":    { tags: ["salado", "sin-coccion"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "low", ageMin: 4, level: 2 },
   "galletas-cacao":   { tags: ["merienda"], restrictions: veg(), adultHelp: "high", ageMin: 4, level: 3 },
   "rosquitas":        { tags: ["merienda"], restrictions: veg({ gluten: true }), adultHelp: "high", ageMin: 6, level: 3 },
@@ -91,7 +91,7 @@ export const recipeMeta: Record<string, RecipeMeta> = {
   "green-pancakes":   { tags: ["salado", "desayuno"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 6, level: 3 },
   "moon-bowl":        { tags: ["desayuno", "merienda", "sin-coccion"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "low", ageMin: 2, level: 1 },
   "smile-empanadas":  { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "high", ageMin: 6, level: 3 },
-  "mini-tacos":       { tags: ["salado"], restrictions: { nuts: false, dairy: true, gluten: true, vegetarian: false }, adultHelp: "medium", ageMin: 4, level: 2 },
+  "mini-tacos":       { tags: ["salado"], restrictions: { ...EMPTY_RESTR, dairy: true, gluten: true }, adultHelp: "medium", ageMin: 4, level: 2 },
   "apple-donut":      { tags: ["fruta", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
   "watermelon-pops":  { tags: ["fruta", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
   "veggie-train":     { tags: ["salado", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
@@ -125,10 +125,21 @@ export const TAG_INFO: Record<FoodTag, { emoji: string; label: string }> = {
 };
 
 export const RESTRICTION_INFO: Record<keyof Restrictions, { emoji: string; label: string }> = {
-  nuts: { emoji: "🥜", label: "Sin frutos secos" },
-  dairy: { emoji: "🥛", label: "Sin lácteos" },
-  gluten: { emoji: "🌾", label: "Sin gluten" },
-  vegetarian: { emoji: "🥬", label: "Vegetariano" },
+  gluten:      { emoji: "🌾", label: "Sin gluten" },
+  dairy:       { emoji: "🥛", label: "Sin lácteos" },
+  nuts:        { emoji: "🥜", label: "Sin frutos secos" },
+  peanuts:     { emoji: "🥜", label: "Sin cacahuetes" },
+  eggs:        { emoji: "🥚", label: "Sin huevo" },
+  soy:         { emoji: "🌱", label: "Sin soja" },
+  fish:        { emoji: "🐟", label: "Sin pescado" },
+  crustaceans: { emoji: "🦐", label: "Sin crustáceos" },
+  molluscs:    { emoji: "🦑", label: "Sin moluscos" },
+  sesame:      { emoji: "⚪", label: "Sin sésamo" },
+  mustard:     { emoji: "🌭", label: "Sin mostaza" },
+  celery:      { emoji: "🥬", label: "Sin apio" },
+  sulphites:   { emoji: "🍷", label: "Sin sulfitos" },
+  lupin:       { emoji: "🫛", label: "Sin altramuces" },
+  vegetarian:  { emoji: "🥗", label: "Vegetariano" },
 };
 
 export const LEVEL_INFO: Record<RecipeLevel, { emoji: string; label: string }> = {
@@ -141,9 +152,13 @@ export function recipeMatchesRestrictions(
   meta: RecipeMeta,
   active: Partial<Restrictions>,
 ): boolean {
-  if (active.nuts && meta.restrictions.nuts) return false;
-  if (active.dairy && meta.restrictions.dairy) return false;
-  if (active.gluten && meta.restrictions.gluten) return false;
+  const allergens: (keyof Restrictions)[] = [
+    "gluten", "dairy", "nuts", "peanuts", "eggs", "soy", "fish",
+    "crustaceans", "molluscs", "sesame", "mustard", "celery", "sulphites", "lupin",
+  ];
+  for (const k of allergens) {
+    if (active[k] && meta.restrictions[k]) return false;
+  }
   if (active.vegetarian && !meta.restrictions.vegetarian) return false;
   return true;
 }

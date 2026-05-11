@@ -8,14 +8,6 @@ export interface Swap {
 
 // Map each restriction to a list of safe substitutions.
 const SWAPS_BY_RESTRICTION: Record<keyof Restrictions, Swap[]> = {
-  nuts: [
-    { from: "🥜", to: "🌻", label: "Semillas" },
-  ],
-  dairy: [
-    { from: "🥛", to: "🌾", label: "Bebida de avena" },
-    { from: "🧀", to: "🥑", label: "Aguacate" },
-    { from: "🍨", to: "🍌", label: "Plátano helado" },
-  ],
   gluten: [
     { from: "🍞", to: "🌽", label: "Pan de maíz" },
     { from: "🥞", to: "🥥", label: "Tortita de coco" },
@@ -24,6 +16,33 @@ const SWAPS_BY_RESTRICTION: Record<keyof Restrictions, Swap[]> = {
     { from: "🫓", to: "🥬", label: "Hoja de lechuga" },
     { from: "🥣", to: "🍚", label: "Arroz inflado" },
   ],
+  dairy: [
+    { from: "🥛", to: "🌾", label: "Bebida de avena" },
+    { from: "🧀", to: "🥑", label: "Aguacate" },
+    { from: "🍨", to: "🍌", label: "Plátano helado" },
+  ],
+  nuts: [
+    { from: "🥜", to: "🌻", label: "Semillas" },
+  ],
+  peanuts: [
+    { from: "🥜", to: "🌻", label: "Semillas" },
+  ],
+  eggs: [
+    { from: "🥚", to: "🌱", label: "Lino + agua" },
+  ],
+  soy: [
+    { from: "🥛", to: "🥥", label: "Bebida de coco" },
+  ],
+  fish: [],
+  crustaceans: [],
+  molluscs: [],
+  sesame: [
+    { from: "⚪", to: "🌻", label: "Pipas" },
+  ],
+  mustard: [],
+  celery: [],
+  sulphites: [],
+  lupin: [],
   vegetarian: [
     { from: "🥩", to: "🫘", label: "Legumbres" },
   ],
