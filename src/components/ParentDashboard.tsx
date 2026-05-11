@@ -321,6 +321,100 @@ export default function ParentDashboard({
                 })}
               </div>
             </section>
+
+            {(() => {
+              const swaps = activeSwaps(restr);
+              if (swaps.length === 0) return null;
+              return (
+                <section>
+                  <h2 className="mb-2 text-base font-extrabold text-foreground">🔄 Sustituciones automáticas</h2>
+                  <div className="rounded-2xl bg-card p-3 kids-shadow">
+                    <p className="mb-2 text-[11px] font-bold text-muted-foreground">Se aplican en las recetas según los alérgenos activos.</p>
+                    <ul className="space-y-1.5">
+                      {swaps.map((s, i) => (
+                        <li key={i} className="flex items-center gap-2 rounded-lg bg-background px-2 py-1.5 text-sm font-extrabold text-foreground">
+                          <span className="text-xl">{s.from}</span>
+                          <span className="text-muted-foreground">→</span>
+                          <span className="text-xl">{s.to}</span>
+                          <span className="ml-1 text-xs font-bold text-muted-foreground">{s.label}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </section>
+              );
+            })()}
+          </div>
+        )}
+
+        {/* FOTOS */}
+        {tab === "fotos" && (
+          <div className="space-y-3">
+            {photos.recipeIds.length === 0 ? (
+              <div className="rounded-2xl bg-card p-6 text-center kids-shadow">
+                <div className="mb-2 text-4xl">📸</div>
+                <p className="text-sm font-bold text-muted-foreground">Aún no hay fotos guardadas. Al terminar una receta puedes guardar la foto del plato.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2">
+                {photos.recipeIds.map((rid) => {
+                  const src = photos.get(rid);
+                  if (!src) return null;
+                  return (
+                    <div key={rid} className="overflow-hidden rounded-2xl bg-card kids-shadow">
+                      <img src={src} alt={recipeNameFor(rid)} className="aspect-square w-full object-cover" />
+                      <div className="flex items-center justify-between gap-1 p-2">
+                        <span className="line-clamp-1 text-[11px] font-extrabold text-foreground">{recipeNameFor(rid)}</span>
+                        <button
+                          type="button"
+                          onClick={() => { if (confirm("¿Borrar foto?")) photos.remove(rid); }}
+                          aria-label="Borrar foto"
+                          className="flex h-8 w-8 items-center justify-center rounded-full bg-background text-base"
+                        >🗑️</button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* PROBADOS */}
+        {tab === "probados" && (
+          <div className="space-y-3">
+            <div className="rounded-2xl bg-card p-4 kids-shadow">
+              <div className="text-sm font-bold text-muted-foreground">Reacciones del peque</div>
+              <div className="mt-2 grid grid-cols-3 gap-2 text-center">
+                {(["😋","🙂","😖"] as const).map((r) => {
+                  const n = tastings.items.filter((t) => t.reaction === r).length;
+                  return (
+                    <div key={r} className="rounded-xl bg-background p-3">
+                      <div className="text-3xl">{r}</div>
+                      <div className="mt-1 text-base font-extrabold text-foreground">{n}</div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="rounded-2xl bg-card p-4 kids-shadow">
+              <div className="mb-2 text-sm font-extrabold text-foreground">🍽️ Historial probados</div>
+              {tastings.items.length === 0 ? (
+                <p className="text-sm font-bold text-muted-foreground">Aún no hay reacciones registradas.</p>
+              ) : (
+                <ul className="max-h-64 space-y-1 overflow-y-auto pr-1">
+                  {[...tastings.items].sort((a,b) => b.date - a.date).map((t) => (
+                    <li key={t.recipeId + t.date} className="flex items-center gap-2 rounded-lg bg-background px-2 py-1.5 text-sm font-extrabold text-foreground">
+                      <span className="text-xl">{t.reaction}</span>
+                      <span className="line-clamp-1 flex-1">{recipeNameFor(t.recipeId)}</span>
+                      <span className="text-[10px] font-bold text-muted-foreground">
+                        {new Date(t.date).toLocaleDateString()}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         )}
 
