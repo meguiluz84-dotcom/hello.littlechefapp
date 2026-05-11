@@ -19,6 +19,16 @@ import imgPizzaVegetal from "@/assets/recipe-pizza-vegetal.jpg";
 import imgGalletasCacao from "@/assets/recipe-galletas-cacao.jpg";
 import imgRosquitas from "@/assets/recipe-rosquitas.jpg";
 import imgPolosFresa from "@/assets/recipe-polos-fresa.jpg";
+import imgFruitFaces from "@/assets/recipe-fruit-faces.jpg";
+import imgRainbowToast from "@/assets/recipe-rainbow-toast.jpg";
+import imgCloudCup from "@/assets/recipe-cloud-cup.jpg";
+import imgCucumberBoats from "@/assets/recipe-cucumber-boats.jpg";
+import imgHappyPizza from "@/assets/recipe-happy-pizza.jpg";
+import imgBananaPancakes from "@/assets/recipe-banana-pancakes.jpg";
+import imgRiceEggs from "@/assets/recipe-rice-eggs.jpg";
+import imgBananaIcecream from "@/assets/recipe-banana-icecream.jpg";
+import imgOatBalls from "@/assets/recipe-oat-balls.jpg";
+import imgSnakeWrap from "@/assets/recipe-snake-wrap.jpg";
 
 export interface Ingredient {
   emoji: string;
