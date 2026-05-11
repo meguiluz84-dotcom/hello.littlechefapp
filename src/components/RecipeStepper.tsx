@@ -6,6 +6,8 @@ import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import Celebration from "./Celebration";
 import DinoBubble from "./DinoBubble";
+import HygieneStep from "./HygieneStep";
+import AdultGate from "./AdultGate";
 
 const actionIcons: Record<string, string> = {
   cut: "🔪",
