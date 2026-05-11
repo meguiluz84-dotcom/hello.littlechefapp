@@ -105,7 +105,7 @@ export default function ParentDashboard({
         )}
 
         {/* Tabs */}
-        <div className="mb-4 grid grid-cols-4 gap-1">
+        <div className="mb-4 grid grid-cols-3 gap-1">
           {TABS.map((t) => (
             <button
               key={t.id} type="button" onClick={() => setTab(t.id)}
