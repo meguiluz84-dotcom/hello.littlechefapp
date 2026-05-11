@@ -94,11 +94,17 @@ interface Props {
   soundOn?: boolean;
   onPause?: (step: number) => void;
   onClearResume?: () => void;
+  displayName?: string;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
+  onAnother?: () => void;
+  newMedalId?: string | null;
 }
 
 export default function RecipeStepper({
   recipe, onFinish, onBack, onHome,
   startAt = 0, soundOn = true, onPause, onClearResume,
+  displayName, isFavorite, onToggleFavorite, onAnother, newMedalId,
 }: Props) {
   const reduced = usePrefersReducedMotion();
   const [step, setStep] = useState(Math.min(startAt, recipe.steps.length - 1));
