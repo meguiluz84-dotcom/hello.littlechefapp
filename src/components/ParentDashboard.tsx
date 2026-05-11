@@ -8,8 +8,12 @@ import { MEDALS } from "@/data/medals";
 import { avatarById } from "@/data/avatars";
 import { recipes as ALL_RECIPES } from "@/data/recipes";
 import { getRecipeName } from "@/data/recipeNames";
+import { useVoice } from "@/hooks/use-voice";
+import { usePhotos } from "@/hooks/use-photos";
+import { useTastings } from "@/hooks/use-tastings";
+import { activeSwaps } from "@/data/ingredientSwaps";
 
-type Tab = "ajustes" | "perfiles" | "progreso" | "seguridad" | "extras";
+type Tab = "ajustes" | "perfiles" | "progreso" | "seguridad" | "extras" | "fotos" | "probados";
 
 interface Props {
   onClose: () => void;
