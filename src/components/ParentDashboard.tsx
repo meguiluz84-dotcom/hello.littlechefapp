@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
 import { usePlayers, type AgeBucket } from "@/hooks/use-players";
@@ -6,6 +6,8 @@ import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
 import { useMedals } from "@/hooks/use-medals";
 import { MEDALS } from "@/data/medals";
 import { avatarById } from "@/data/avatars";
+import { recipes as ALL_RECIPES } from "@/data/recipes";
+import { getRecipeName } from "@/data/recipeNames";
 
 type Tab = "ajustes" | "perfiles" | "progreso" | "seguridad" | "extras";
 
