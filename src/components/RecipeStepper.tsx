@@ -152,6 +152,10 @@ export default function RecipeStepper({
     return <Celebration onDone={onFinish} recipeEmoji={recipe.emoji} />;
   }
 
+  if (!hygieneDone) {
+    return <HygieneStep soundOn={soundOn} onDone={() => setHygieneDone(true)} />;
+  }
+
   const actionAnim = reduced
     ? { animate: {}, transition: {} }
     : (actionAnimations[current.actionIcon] ?? actionAnimations.place);
