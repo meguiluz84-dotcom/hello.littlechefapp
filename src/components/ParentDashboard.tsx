@@ -52,6 +52,9 @@ export default function ParentDashboard({
   const { completed } = useCompletedRecipes();
   const { earned, challengesDone } = useMedals();
   const [tab, setTab] = useState<Tab>("ajustes");
+  const voice = useVoice();
+  const photos = usePhotos();
+  const tastings = useTastings();
 
   // Per-player parent notes (private to parents).
   const notesKey = active ? `lc:p:${active.id}:parent-notes` : null;
