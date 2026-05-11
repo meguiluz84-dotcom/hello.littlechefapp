@@ -12,6 +12,7 @@ import {
 import RecipeOfTheDay from "./RecipeOfTheDay";
 import CategoryFilters from "./CategoryFilters";
 import EmptyState from "./EmptyState";
+import DifficultyBadges from "./DifficultyBadges";
 import ChallengeBanner from "./ChallengeBanner";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
@@ -289,7 +290,6 @@ export default function RecipeHome({
             ) : (
               <div className="grid grid-cols-2 gap-4">
                 {((filteredByCategory ?? filteredByTag) ?? []).map((recipe, i) => {
-                  const meta = getRecipeMeta(recipe.id);
                   return (
                     <motion.button
                       key={recipe.id}
@@ -311,15 +311,10 @@ export default function RecipeHome({
                         {isFavorite(recipe.id) && (
                           <div className="absolute left-1 top-1 flex h-9 w-9 items-center justify-center rounded-full bg-card text-xl kids-shadow">❤️</div>
                         )}
-                        <div className="absolute bottom-1 left-1 flex h-9 items-center gap-0.5 rounded-full bg-card/95 px-2 text-base kids-shadow">
-                          {Array.from({ length: meta.level }).map((_, k) => (<span key={k}>👶</span>))}
-                        </div>
-                        {meta.adultHelp !== "low" && (
-                          <div className="absolute bottom-1 right-1 flex h-9 w-9 items-center justify-center rounded-full bg-card text-xl kids-shadow" title="Necesita ayuda de adulto">🧑</div>
-                        )}
                       </div>
-                      <div className="flex flex-col items-center gap-1 px-2 py-3">
+                      <div className="flex flex-col items-center gap-2 px-2 py-3">
                         <div className="text-balance text-center text-sm font-extrabold leading-tight text-foreground line-clamp-2">{getRecipeName(recipe)}</div>
+                        <DifficultyBadges recipe={recipe} size="sm" compact />
                       </div>
                     </motion.button>
                   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
 import { usePlayers, type AgeBucket } from "@/hooks/use-players";
@@ -6,6 +6,8 @@ import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
 import { useMedals } from "@/hooks/use-medals";
 import { MEDALS } from "@/data/medals";
 import { avatarById } from "@/data/avatars";
+import { recipes as ALL_RECIPES } from "@/data/recipes";
+import { getRecipeName } from "@/data/recipeNames";
 
 type Tab = "ajustes" | "perfiles" | "progreso" | "seguridad" | "extras";
 
@@ -44,6 +46,24 @@ export default function ParentDashboard({
   const { completed } = useCompletedRecipes();
   const { earned, challengesDone } = useMedals();
   const [tab, setTab] = useState<Tab>("ajustes");
+
+  // Per-player parent notes (private to parents).
+  const notesKey = active ? `lc:p:${active.id}:parent-notes` : null;
+  const [notes, setNotes] = useState("");
+  useEffect(() => {
+    if (!notesKey) { setNotes(""); return; }
+    try { setNotes(localStorage.getItem(notesKey) ?? ""); } catch { setNotes(""); }
+  }, [notesKey]);
+  const saveNotes = (v: string) => {
+    setNotes(v);
+    if (notesKey) { try { localStorage.setItem(notesKey, v); } catch { /* ignore */ } }
+  };
+
+  const recipeNameFor = (id: string) => {
+    const r = ALL_RECIPES.find((x) => x.id === id);
+    if (!r) return id;
+    return getRecipeName(active?.avatarId ?? "dino", r.id, r.name);
+  };
 
   const restr: Restrictions = active?.restrictions ?? { nuts: false, dairy: false, gluten: false, vegetarian: false };
   const setRestr = (next: Restrictions) => active && update(active.id, { restrictions: next });
@@ -201,6 +221,36 @@ export default function ParentDashboard({
                   <span className="text-sm font-bold text-muted-foreground">Aún no hay medallas</span>
                 )}
               </div>
+            </div>
+
+            <div className="rounded-2xl bg-card p-4 kids-shadow">
+              <div className="mb-2 text-sm font-extrabold text-foreground">📜 Historial de recetas</div>
+              {completed.length === 0 ? (
+                <p className="text-sm font-bold text-muted-foreground">Aún no hay recetas completadas.</p>
+              ) : (
+                <ul className="max-h-48 space-y-1 overflow-y-auto pr-1">
+                  {[...completed].reverse().map((id) => (
+                    <li key={id} className="flex items-center gap-2 rounded-lg bg-background px-2 py-1.5 text-sm font-extrabold text-foreground">
+                      <span>✅</span>
+                      <span className="line-clamp-1">{recipeNameFor(id)}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="rounded-2xl bg-card p-4 kids-shadow">
+              <label className="mb-2 block text-sm font-extrabold text-foreground" htmlFor="parent-notes">
+                📝 Notas (privadas)
+              </label>
+              <textarea
+                id="parent-notes"
+                value={notes}
+                onChange={(e) => saveNotes(e.target.value)}
+                placeholder="Alergias, gustos, observaciones del peque…"
+                className="min-h-28 w-full resize-y rounded-xl border border-muted bg-background p-3 text-sm font-medium text-foreground outline-none focus:border-primary"
+              />
+              <p className="mt-1 text-[11px] font-bold text-muted-foreground">Solo se guardan en este dispositivo.</p>
             </div>
           </div>
         )}

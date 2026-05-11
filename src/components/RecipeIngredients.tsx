@@ -5,6 +5,7 @@ import { getIngredientName } from "@/data/ingredientNames";
 import { getRecipeMeta, RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
 import DinoBubble from "./DinoBubble";
 import VisualQuantity from "./VisualQuantity";
+import DifficultyBadges from "./DifficultyBadges";
 
 interface Props {
   recipe: Recipe;
@@ -82,6 +83,10 @@ export default function RecipeIngredients({
       <h1 className="mb-2 text-balance text-center text-2xl font-extrabold text-foreground">
         {displayName ?? recipe.name}
       </h1>
+
+      <div className="mb-3">
+        <DifficultyBadges recipe={recipe} />
+      </div>
 
       {/* Allergen badges (concise, visual) */}
       {allergenBadges.length > 0 && (

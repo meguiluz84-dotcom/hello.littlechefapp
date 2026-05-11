@@ -94,11 +94,18 @@ interface Props {
   soundOn?: boolean;
   onPause?: (step: number) => void;
   onClearResume?: () => void;
+  displayName?: string;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
+  onAnother?: () => void;
+  newMedalId?: string | null;
+  onComplete?: () => void;
 }
 
 export default function RecipeStepper({
   recipe, onFinish, onBack, onHome,
   startAt = 0, soundOn = true, onPause, onClearResume,
+  displayName, isFavorite, onToggleFavorite, onAnother, newMedalId, onComplete,
 }: Props) {
   const reduced = usePrefersReducedMotion();
   const [step, setStep] = useState(Math.min(startAt, recipe.steps.length - 1));
@@ -128,9 +135,10 @@ export default function RecipeStepper({
     } else {
       playDoneSound(soundOn);
       onClearResume?.();
+      onComplete?.();
       setShowCelebration(true);
     }
-  }, [step, total, current.actionIcon, soundOn, onClearResume]);
+  }, [step, total, current.actionIcon, soundOn, onClearResume, onComplete]);
 
   const prev = useCallback(() => {
     setDirection(-1);
@@ -149,7 +157,17 @@ export default function RecipeStepper({
   }, [step, onPause, onBack]);
 
   if (showCelebration) {
-    return <Celebration onDone={onFinish} recipeEmoji={recipe.emoji} />;
+    return (
+      <Celebration
+        recipe={recipe}
+        displayName={displayName}
+        onHome={onFinish}
+        onAnother={onAnother ? () => { onAnother(); } : undefined}
+        isFavorite={isFavorite}
+        onToggleFavorite={onToggleFavorite}
+        newMedalId={newMedalId ?? null}
+      />
+    );
   }
 
   if (!hygieneDone) {
