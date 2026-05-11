@@ -135,9 +135,10 @@ export default function RecipeStepper({
     } else {
       playDoneSound(soundOn);
       onClearResume?.();
+      onComplete?.();
       setShowCelebration(true);
     }
-  }, [step, total, current.actionIcon, soundOn, onClearResume]);
+  }, [step, total, current.actionIcon, soundOn, onClearResume, onComplete]);
 
   const prev = useCallback(() => {
     setDirection(-1);
