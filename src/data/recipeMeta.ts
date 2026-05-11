@@ -3,12 +3,31 @@
 
 export type FoodTag = "desayuno" | "merienda" | "fruta" | "salado" | "sin-coccion";
 
+// 14 alérgenos oficiales UE + vegetariano (preferencia)
 export interface Restrictions {
-  nuts: boolean;
-  dairy: boolean;
   gluten: boolean;
+  dairy: boolean;       // lácteos
+  nuts: boolean;        // frutos de cáscara
+  peanuts: boolean;     // cacahuetes
+  eggs: boolean;        // huevo
+  soy: boolean;         // soja
+  fish: boolean;        // pescado
+  crustaceans: boolean; // crustáceos
+  molluscs: boolean;    // moluscos
+  sesame: boolean;      // sésamo
+  mustard: boolean;     // mostaza
+  celery: boolean;      // apio
+  sulphites: boolean;   // sulfitos
+  lupin: boolean;       // altramuces
   vegetarian: boolean;
 }
+
+export const EMPTY_RESTR: Restrictions = {
+  gluten: false, dairy: false, nuts: false, peanuts: false, eggs: false,
+  soy: false, fish: false, crustaceans: false, molluscs: false, sesame: false,
+  mustard: false, celery: false, sulphites: false, lupin: false,
+  vegetarian: false,
+};
 
 export type RecipeLevel = 1 | 2 | 3;
 
@@ -21,7 +40,7 @@ export interface RecipeMeta {
 }
 
 const veg = (extra: Partial<Restrictions> = {}): Restrictions => ({
-  nuts: false, dairy: false, gluten: false, vegetarian: true, ...extra,
+  ...EMPTY_RESTR, vegetarian: true, ...extra,
 });
 
 export const recipeMeta: Record<string, RecipeMeta> = {
