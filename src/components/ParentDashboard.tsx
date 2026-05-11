@@ -433,19 +433,22 @@ export default function ParentDashboard({
 
         {/* EXTRAS */}
         {tab === "extras" && (
-          <div className="space-y-3">
-            <button
-              type="button" onClick={onOpenWeekPlan}
-              className="w-full min-h-16 rounded-2xl bg-card px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
-            >📅 Plan semanal</button>
-            <button
-              type="button" onClick={onOpenShopping}
-              className="w-full min-h-16 rounded-2xl bg-card px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
-            >🛒 Lista de compra</button>
-            <button
-              type="button" onClick={onOpenComingSoon}
-              className="w-full min-h-16 rounded-2xl bg-card px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
-            >🚀 Próximamente</button>
+          <div className="space-y-4">
+            <RoutinesConfig />
+            <div className="space-y-2">
+              <button
+                type="button" onClick={onOpenWeekPlan}
+                className="w-full min-h-16 rounded-2xl bg-card px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
+              >📅 Plan semanal</button>
+              <button
+                type="button" onClick={onOpenShopping}
+                className="w-full min-h-16 rounded-2xl bg-card px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
+              >🛒 Lista de compra</button>
+              <button
+                type="button" onClick={onOpenComingSoon}
+                className="w-full min-h-16 rounded-2xl bg-card px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
+              >🚀 Próximamente</button>
+            </div>
           </div>
         )}
       </div>
