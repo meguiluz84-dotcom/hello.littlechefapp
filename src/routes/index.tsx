@@ -246,6 +246,12 @@ function Index() {
         soundOn={prefs.soundOn}
         onPause={(step) => prefs.saveResume(selectedRecipe.id, step)}
         onClearResume={() => prefs.clearResume(selectedRecipe.id)}
+        displayName={nameFor(selectedRecipe)}
+        isFavorite={prefs.isFavorite(selectedRecipe.id)}
+        onToggleFavorite={() => prefs.toggleFavorite(selectedRecipe.id)}
+        onAnother={handleAnother}
+        newMedalId={newMedalId}
+        onComplete={() => handleRecipeFinished(selectedRecipe, isChallenge)}
       />
     );
   } else {
