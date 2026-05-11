@@ -9,8 +9,10 @@ import DinoBubble from "./DinoBubble";
 import HygieneStep from "./HygieneStep";
 import AdultGate from "./AdultGate";
 import RoleHeader from "./RoleHeader";
+import VisualTimer from "./VisualTimer";
 import { useVoice } from "@/hooks/use-voice";
 import { lineForAction } from "@/data/voiceLines";
+import { getStepTimer } from "@/hooks/use-step-timers";
 
 const actionIcons: Record<string, string> = {
   cut: "🔪",
@@ -330,6 +332,20 @@ export default function RecipeStepper({
               ))}
             </div>
           )}
+
+          {(() => {
+            const wait = getStepTimer(recipe.id, step);
+            if (wait <= 0) return null;
+            return (
+              <VisualTimer
+                key={`timer-${step}-${replayKey}`}
+                seconds={wait}
+                emoji={current.emoji}
+                soundOn={soundOn}
+                onDone={() => { /* timer rings; user advances manually */ }}
+              />
+            );
+          })()}
         </motion.div>
       </AnimatePresence>
 

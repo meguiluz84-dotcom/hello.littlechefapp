@@ -12,8 +12,10 @@ import { useVoice } from "@/hooks/use-voice";
 import { usePhotos } from "@/hooks/use-photos";
 import { useTastings } from "@/hooks/use-tastings";
 import { activeSwaps } from "@/data/ingredientSwaps";
+import ParentLibrary from "./ParentLibrary";
+import StepTimersConfig from "./StepTimersConfig";
 
-type Tab = "ajustes" | "perfiles" | "progreso" | "seguridad" | "extras" | "fotos" | "probados";
+type Tab = "ajustes" | "perfiles" | "progreso" | "seguridad" | "guias" | "timers" | "extras" | "fotos" | "probados";
 
 interface Props {
   onClose: () => void;
@@ -38,6 +40,8 @@ const TABS: { id: Tab; emoji: string; label: string }[] = [
   { id: "perfiles",  emoji: "👥", label: "Perfiles" },
   { id: "progreso",  emoji: "📈", label: "Progreso" },
   { id: "seguridad", emoji: "🛡️", label: "Seguridad" },
+  { id: "guias",     emoji: "📚", label: "Guías" },
+  { id: "timers",    emoji: "⏱️", label: "Timers" },
   { id: "fotos",     emoji: "📸", label: "Fotos" },
   { id: "probados",  emoji: "🍽️", label: "Probados" },
   { id: "extras",    emoji: "✨", label: "Extras" },
@@ -101,7 +105,7 @@ export default function ParentDashboard({
         )}
 
         {/* Tabs */}
-        <div className="mb-4 grid grid-cols-4 gap-1">
+        <div className="mb-4 grid grid-cols-3 gap-1">
           {TABS.map((t) => (
             <button
               key={t.id} type="button" onClick={() => setTab(t.id)}
@@ -345,6 +349,14 @@ export default function ParentDashboard({
               );
             })()}
           </div>
+        )}
+
+        {/* GUIAS */}
+        {tab === "guias" && <ParentLibrary />}
+
+        {/* TIMERS */}
+        {tab === "timers" && (
+          <StepTimersConfig avatarId={active?.avatarId ?? "dino"} />
         )}
 
         {/* FOTOS */}
