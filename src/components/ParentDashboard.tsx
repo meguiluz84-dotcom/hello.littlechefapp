@@ -137,6 +137,29 @@ export default function ParentDashboard({
               </button>
             </section>
 
+            {voice.supported && (
+              <section className="flex items-center justify-between rounded-2xl bg-card p-4 kids-shadow">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">{voice.enabled ? "🗣️" : "🤐"}</span>
+                  <div>
+                    <div className="text-base font-extrabold text-foreground">Voz por paso</div>
+                    <div className="text-[11px] font-bold text-muted-foreground">Lee cada paso en voz alta.</div>
+                  </div>
+                </div>
+                <button
+                  type="button" onClick={() => voice.setEnabled(!voice.enabled)}
+                  aria-pressed={voice.enabled} aria-label="Activar o desactivar voz"
+                  className={`relative h-10 w-20 rounded-full ${voice.enabled ? "bg-accent" : "bg-muted"}`}
+                >
+                  <motion.span
+                    animate={{ x: voice.enabled ? 40 : 0 }}
+                    transition={{ type: "spring", bounce: 0.4 }}
+                    className="absolute left-1 top-1 h-8 w-8 rounded-full bg-card kids-shadow"
+                  />
+                </button>
+              </section>
+            )}
+
             <section>
               <h2 className="mb-2 text-base font-extrabold text-foreground">Edad del niño</h2>
               <div className="grid grid-cols-3 gap-2">
