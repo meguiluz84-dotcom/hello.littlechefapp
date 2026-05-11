@@ -101,12 +101,12 @@ export default function ParentDashboard({
         )}
 
         {/* Tabs */}
-        <div className="mb-4 grid grid-cols-5 gap-1">
+        <div className="mb-4 grid grid-cols-4 gap-1">
           {TABS.map((t) => (
             <button
               key={t.id} type="button" onClick={() => setTab(t.id)}
               aria-pressed={tab === t.id}
-              className={`flex min-h-14 flex-col items-center justify-center rounded-xl text-xs font-extrabold kids-shadow ${
+              className={`flex min-h-14 flex-col items-center justify-center rounded-xl text-[11px] font-extrabold kids-shadow ${
                 tab === t.id ? "bg-primary text-primary-foreground" : "bg-card text-foreground"
               }`}
             >
