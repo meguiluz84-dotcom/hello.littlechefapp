@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
+import { RESTRICTION_INFO, TAG_INFO, getRecipeMeta, type Restrictions } from "@/data/recipeMeta";
+import { ingredientNames } from "@/data/ingredientNames";
+import { isInSeason } from "@/data/seasons";
 import { usePlayers, type AgeBucket } from "@/hooks/use-players";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
 import { useMedals } from "@/hooks/use-medals";
