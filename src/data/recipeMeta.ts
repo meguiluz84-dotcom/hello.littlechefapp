@@ -46,6 +46,16 @@ export const recipeMeta: Record<string, RecipeMeta> = {
   "galletas-cacao":   { tags: ["merienda"], restrictions: veg(), adultHelp: "high", ageMin: 4, level: 3 },
   "rosquitas":        { tags: ["merienda"], restrictions: veg({ gluten: true }), adultHelp: "high", ageMin: 6, level: 3 },
   "polos-fresa":      { tags: ["fruta", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "low", ageMin: 2, level: 1 },
+  "fruit-faces":      { tags: ["fruta", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "low", ageMin: 2, level: 1 },
+  "rainbow-toast":    { tags: ["merienda", "salado", "sin-coccion"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "medium", ageMin: 2, level: 2 },
+  "cloud-cup":        { tags: ["desayuno", "merienda", "sin-coccion"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "low", ageMin: 2, level: 1 },
+  "cucumber-boats":   { tags: ["salado", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
+  "happy-pizza":      { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "high", ageMin: 4, level: 2 },
+  "banana-pancakes":  { tags: ["desayuno"], restrictions: veg({ gluten: true }), adultHelp: "high", ageMin: 4, level: 2 },
+  "rice-eggs":        { tags: ["salado", "merienda"], restrictions: veg({ dairy: true }), adultHelp: "low", ageMin: 2, level: 1 },
+  "banana-icecream":  { tags: ["merienda"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
+  "oat-balls":        { tags: ["merienda", "sin-coccion"], restrictions: veg({ nuts: true, gluten: true }), adultHelp: "low", ageMin: 2, level: 1 },
+  "snake-wrap":       { tags: ["salado", "sin-coccion"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "high", ageMin: 4, level: 2 },
 };
 
 const DEFAULT_META: RecipeMeta = {
