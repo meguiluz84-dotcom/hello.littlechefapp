@@ -30,6 +30,16 @@ const RECIPE_SEASONS: Record<string, Season[]> = {
   "mini-pizza":     ["otono"],
   "ants-on-log":    ["otono"],
   "trail-mix":      ["otono", "invierno"],
+  "fruit-faces":    ["primavera", "verano"],
+  "rainbow-toast":  ["primavera", "verano"],
+  "cloud-cup":      ["primavera", "verano"],
+  "cucumber-boats": ["verano"],
+  "happy-pizza":    ["otono", "invierno"],
+  "banana-pancakes": ["otono", "invierno"],
+  "rice-eggs":      ["otono"],
+  "banana-icecream": ["verano"],
+  "oat-balls":      ["otono", "invierno"],
+  "snake-wrap":     ["primavera", "verano"],
 };
 
 export function recipeSeasons(id: string): Season[] {
