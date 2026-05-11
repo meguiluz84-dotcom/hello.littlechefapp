@@ -6,6 +6,8 @@ import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import Celebration from "./Celebration";
 import DinoBubble from "./DinoBubble";
+import HygieneStep from "./HygieneStep";
+import AdultGate from "./AdultGate";
 
 const actionIcons: Record<string, string> = {
   cut: "🔪",
@@ -103,6 +105,8 @@ export default function RecipeStepper({
   const [direction, setDirection] = useState(1);
   const [showCelebration, setShowCelebration] = useState(false);
   const [replayKey, setReplayKey] = useState(0);
+  const [hygieneDone, setHygieneDone] = useState(startAt > 0);
+  const [adultConfirmedStep, setAdultConfirmedStep] = useState<number | null>(null);
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
   useEffect(() => {
     const unsub = subscribeStepImages(forceUpdate);
@@ -114,6 +118,7 @@ export default function RecipeStepper({
     () => stepNeedsAdult(current.actionIcon, current.emoji),
     [current]
   );
+  const adultBlocking = needsAdult && adultConfirmedStep !== step;
 
   const next = useCallback(() => {
     setDirection(1);
@@ -145,6 +150,10 @@ export default function RecipeStepper({
 
   if (showCelebration) {
     return <Celebration onDone={onFinish} recipeEmoji={recipe.emoji} />;
+  }
+
+  if (!hygieneDone) {
+    return <HygieneStep soundOn={soundOn} onDone={() => setHygieneDone(true)} />;
   }
 
   const actionAnim = reduced
@@ -320,6 +329,13 @@ export default function RecipeStepper({
           {step < total - 1 ? "➡️" : "🎉"}
         </motion.button>
       </div>
+
+      {adultBlocking && (
+        <AdultGate
+          onConfirm={() => setAdultConfirmedStep(step)}
+          onCancel={pauseAndExit}
+        />
+      )}
     </div>
   );
 }
