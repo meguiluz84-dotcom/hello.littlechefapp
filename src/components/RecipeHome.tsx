@@ -46,6 +46,8 @@ interface RecipeHomeProps {
   onOpenFavorites: () => void;
   onOpenWeekPlan: () => void;
   onOpenShopping: () => void;
+  onOpenPantry?: () => void;
+  onOpenMissions?: () => void;
   playerName: string;
 }
 
@@ -53,7 +55,8 @@ export default function RecipeHome({
   onSelectRecipe, isCompleted, avatarId, onChangeAvatar, getRecipeName,
   restrictions, lastRecipeId, onOpenAdult, isFavorite,
   ageBucket, challengeRecipe, onPickChallenge,
-  onOpenMedals, onOpenFavorites, onOpenWeekPlan, onOpenShopping, playerName,
+  onOpenMedals, onOpenFavorites, onOpenWeekPlan, onOpenShopping,
+  onOpenPantry, onOpenMissions, playerName,
 }: RecipeHomeProps) {
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
@@ -248,21 +251,35 @@ export default function RecipeHome({
             </div>
 
             {/* Quick access bar */}
-            <div className="mt-6 grid grid-cols-3 gap-3">
+            <div className="mt-6 grid grid-cols-5 gap-2">
               <button type="button" onClick={onOpenWeekPlan}
                 className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
                 <span className="text-2xl">📅</span>
-                <span className="text-xs font-extrabold text-foreground">Plan</span>
+                <span className="text-[10px] font-extrabold text-foreground">Plan</span>
               </button>
               <button type="button" onClick={onOpenShopping}
                 className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
                 <span className="text-2xl">🛒</span>
-                <span className="text-xs font-extrabold text-foreground">Lista</span>
+                <span className="text-[10px] font-extrabold text-foreground">Lista</span>
               </button>
+              {onOpenPantry && (
+                <button type="button" onClick={onOpenPantry}
+                  className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
+                  <span className="text-2xl">🧺</span>
+                  <span className="text-[10px] font-extrabold text-foreground">Nevera</span>
+                </button>
+              )}
+              {onOpenMissions && (
+                <button type="button" onClick={onOpenMissions}
+                  className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
+                  <span className="text-2xl">🎯</span>
+                  <span className="text-[10px] font-extrabold text-foreground">Misión</span>
+                </button>
+              )}
               <button type="button" onClick={onOpenAdult}
                 className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
                 <span className="text-2xl">⚙️</span>
-                <span className="text-xs font-extrabold text-foreground">Padres</span>
+                <span className="text-[10px] font-extrabold text-foreground">Padres</span>
               </button>
             </div>
           </motion.div>

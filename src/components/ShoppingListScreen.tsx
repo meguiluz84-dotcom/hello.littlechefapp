@@ -78,15 +78,21 @@ export default function ShoppingListScreen({ recipes, favorites = [], onClose }:
           </ul>
         )}
 
-        {items.length > 0 && (
-          <div className="mt-6 flex justify-center">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          {favorites.length > 0 && (
+            <button
+              type="button" onClick={addFromFavorites}
+              className="min-h-12 rounded-full bg-kids-pink px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
+            >❤️ Añadir favoritos</button>
+          )}
+          {items.length > 0 && (
             <button
               type="button"
               onClick={() => { if (confirm("¿Vaciar lista?")) clear(); }}
               className="min-h-12 rounded-full bg-card px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
             >🧹 Vaciar</button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
