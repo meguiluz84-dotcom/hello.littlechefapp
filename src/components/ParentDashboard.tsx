@@ -40,6 +40,7 @@ const TABS: { id: Tab; emoji: string; label: string }[] = [
   { id: "ajustes",   emoji: "⚙️", label: "Ajustes" },
   { id: "perfiles",  emoji: "👥", label: "Perfiles" },
   { id: "progreso",  emoji: "📈", label: "Progreso" },
+  { id: "recetas",   emoji: "🔍", label: "Recetas" },
   { id: "seguridad", emoji: "🛡️", label: "Seguridad" },
   { id: "guias",     emoji: "📚", label: "Guías" },
   { id: "timers",    emoji: "⏱️", label: "Timers" },
