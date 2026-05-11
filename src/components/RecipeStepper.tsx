@@ -332,6 +332,20 @@ export default function RecipeStepper({
               ))}
             </div>
           )}
+
+          {(() => {
+            const wait = getStepTimer(recipe.id, step);
+            if (wait <= 0) return null;
+            return (
+              <VisualTimer
+                key={`timer-${step}-${replayKey}`}
+                seconds={wait}
+                emoji={current.emoji}
+                soundOn={soundOn}
+                onDone={() => { /* timer rings; user advances manually */ }}
+              />
+            );
+          })()}
         </motion.div>
       </AnimatePresence>
 
