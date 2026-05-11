@@ -9,8 +9,10 @@ import DinoBubble from "./DinoBubble";
 import HygieneStep from "./HygieneStep";
 import AdultGate from "./AdultGate";
 import RoleHeader from "./RoleHeader";
+import VisualTimer from "./VisualTimer";
 import { useVoice } from "@/hooks/use-voice";
 import { lineForAction } from "@/data/voiceLines";
+import { getStepTimer } from "@/hooks/use-step-timers";
 
 const actionIcons: Record<string, string> = {
   cut: "🔪",
