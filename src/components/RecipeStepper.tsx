@@ -155,7 +155,17 @@ export default function RecipeStepper({
   }, [step, onPause, onBack]);
 
   if (showCelebration) {
-    return <Celebration onDone={onFinish} recipeEmoji={recipe.emoji} />;
+    return (
+      <Celebration
+        recipe={recipe}
+        displayName={displayName}
+        onHome={onFinish}
+        onAnother={onAnother ? () => { onAnother(); } : undefined}
+        isFavorite={isFavorite}
+        onToggleFavorite={onToggleFavorite}
+        newMedalId={newMedalId ?? null}
+      />
+    );
   }
 
   if (!hygieneDone) {
