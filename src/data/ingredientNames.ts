@@ -35,6 +35,11 @@ export const ingredientNames: Record<string, string> = {
   "🌽": "Maíz",
   "🫑": "Pimiento",
   "🫒": "Aceitunas",
+  "🫘": "Garbanzos",
+  "🍗": "Pollo",
+  "🍎": "Manzana",
+  "🍉": "Sandía",
+  "🥥": "Coco",
 };
 
 export function getIngredientName(emoji: string): string {
