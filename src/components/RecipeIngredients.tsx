@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 import type { Recipe } from "@/data/recipes";
 import { getIngredientName } from "@/data/ingredientNames";
-import { getRecipeMeta, RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
+import { getRecipeMeta, RESTRICTION_INFO, LEVEL_INFO, type Restrictions } from "@/data/recipeMeta";
 import { findSwap } from "@/data/ingredientSwaps";
 import { usePlayers } from "@/hooks/use-players";
+import { isInSeason, currentSeason, SEASON_INFO } from "@/data/seasons";
 import DinoBubble from "./DinoBubble";
 import VisualQuantity from "./VisualQuantity";
 import DifficultyBadges from "./DifficultyBadges";
 import IngredientSwap from "./IngredientSwap";
+import RecipeShareButton from "./RecipeShareButton";
 
 interface Props {
   recipe: Recipe;
