@@ -18,6 +18,9 @@ import ShoppingListScreen from "@/components/ShoppingListScreen";
 import PantryScreen from "@/components/PantryScreen";
 import MissionsScreen from "@/components/MissionsScreen";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
+import { useDiplomas } from "@/hooks/use-diplomas";
+import CategoryDiploma from "@/components/CategoryDiploma";
+import type { RecipeCategory } from "@/data/recipes";
 import { usePreferences } from "@/hooks/use-preferences";
 import { usePlayers } from "@/hooks/use-players";
 import { useMedals } from "@/hooks/use-medals";
@@ -49,9 +52,11 @@ function Index() {
   const [resumeFrom, setResumeFrom] = useState(0);
   const [isChallenge, setIsChallenge] = useState(false);
   const [newMedalId, setNewMedalId] = useState<string | null>(null);
+  const [pendingDiploma, setPendingDiploma] = useState<RecipeCategory | null>(null);
 
   const players = usePlayers();
   const { markCompleted, isCompleted, completed, reset: resetCompleted } = useCompletedRecipes();
+  const diplomas = useDiplomas();
   const prefs = usePreferences();
   const medals = useMedals();
   const missions = useMissions();
@@ -104,6 +109,12 @@ function Index() {
     if (asChallenge) { medals.completeChallenge(recipe.id); missions.onChallenge(); }
     // Detect newly earned medal by re-running the rule with the next state.
     const completedNext = completed.includes(recipe.id) ? completed : [...completed, recipe.id];
+    // Diploma: all recipes of this sector completed (within allowed for player) and not yet awarded.
+    const sectorRecipes = allowedRecipes.filter((r) => r.category === recipe.category);
+    const sectorDone = sectorRecipes.every((r) => completedNext.includes(r.id));
+    if (sectorDone && sectorRecipes.length > 0 && !diplomas.has(recipe.category)) {
+      setPendingDiploma(recipe.category);
+    }
     const challengesNext = asChallenge ? medals.challengesDone + 1 : medals.challengesDone;
     import("@/data/medals").then(({ earnedMedalIds }) => {
       const after = earnedMedalIds({ completed: completedNext, challengesDone: challengesNext, recipes: ALL_RECIPES });
@@ -304,6 +315,16 @@ function Index() {
     <>
       {content}
       {screen !== "cooking" && <HomeButton onClick={handleHome} />}
+      {pendingDiploma && (
+        <CategoryDiploma
+          category={pendingDiploma}
+          playerName={active?.name ?? "Chef"}
+          onClose={() => {
+            diplomas.award(pendingDiploma);
+            setPendingDiploma(null);
+          }}
+        />
+      )}
     </>
   );
 }
