@@ -1,3 +1,4 @@
+import { EMPTY_RESTR } from "@/data/recipeMeta";
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import type { AvatarId } from "@/data/avatars";
 import type { Restrictions } from "@/data/recipeMeta";
@@ -16,7 +17,7 @@ export interface Player {
 const PLAYERS_KEY = "lc:players-v3";
 const ACTIVE_KEY = "lc:active-player-v3";
 
-const DEFAULT_RESTR: Restrictions = { nuts: false, dairy: false, gluten: false, vegetarian: false };
+const DEFAULT_RESTR: Restrictions = { ...EMPTY_RESTR };
 
 interface Ctx {
   players: Player[];

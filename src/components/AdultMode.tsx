@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
+import { RESTRICTION_INFO, type Restrictions, EMPTY_RESTR } from "@/data/recipeMeta";
 import type { OnboardingPrefs, AgeBucket } from "@/hooks/use-preferences";
 
 interface Props {
@@ -26,7 +26,7 @@ export default function AdultMode({
 }: Props) {
   const [age, setAge] = useState<AgeBucket>(prefs?.age ?? "4-5");
   const [restr, setRestr] = useState<Restrictions>(
-    prefs?.restrictions ?? { nuts: false, dairy: false, gluten: false, vegetarian: false }
+    prefs?.restrictions ?? EMPTY_RESTR
   );
 
   const save = () => {

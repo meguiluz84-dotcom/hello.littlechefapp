@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AvatarPicker from "./AvatarPicker";
 import type { AvatarId } from "@/data/avatars";
 import type { OnboardingPrefs, AgeBucket } from "@/hooks/use-preferences";
-import { RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
+import { RESTRICTION_INFO, type Restrictions, EMPTY_RESTR } from "@/data/recipeMeta";
 
 interface Props {
   initialAvatar: AvatarId | null;
@@ -24,7 +24,7 @@ export default function Onboarding({ initialAvatar, onComplete, showName = true 
   const [avatar, setAvatar] = useState<AvatarId | null>(initialAvatar);
   const [age, setAge] = useState<AgeBucket | null>(null);
   const [restr, setRestr] = useState<Restrictions>({
-    nuts: false, dairy: false, gluten: false, vegetarian: false,
+    ...EMPTY_RESTR,
   });
   const [name, setName] = useState("");
 
