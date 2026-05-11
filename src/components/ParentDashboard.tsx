@@ -47,6 +47,24 @@ export default function ParentDashboard({
   const { earned, challengesDone } = useMedals();
   const [tab, setTab] = useState<Tab>("ajustes");
 
+  // Per-player parent notes (private to parents).
+  const notesKey = active ? `lc:p:${active.id}:parent-notes` : null;
+  const [notes, setNotes] = useState("");
+  useEffect(() => {
+    if (!notesKey) { setNotes(""); return; }
+    try { setNotes(localStorage.getItem(notesKey) ?? ""); } catch { setNotes(""); }
+  }, [notesKey]);
+  const saveNotes = (v: string) => {
+    setNotes(v);
+    if (notesKey) { try { localStorage.setItem(notesKey, v); } catch { /* ignore */ } }
+  };
+
+  const recipeNameFor = (id: string) => {
+    const r = ALL_RECIPES.find((x) => x.id === id);
+    if (!r) return id;
+    return getRecipeName(active?.avatarId ?? "dino", r.id, r.name);
+  };
+
   const restr: Restrictions = active?.restrictions ?? { nuts: false, dairy: false, gluten: false, vegetarian: false };
   const setRestr = (next: Restrictions) => active && update(active.id, { restrictions: next });
   const setAge = (a: AgeBucket) => active && update(active.id, { age: a });
