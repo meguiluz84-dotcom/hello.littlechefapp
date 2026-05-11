@@ -30,10 +30,14 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "Little Chef 👨‍🍳" },
       { name: "description", content: "App de recetas visual para niños pequeños. Sin texto, solo imágenes y animaciones." },
       { name: "author", content: "Little Chef" },
+      { name: "theme-color", content: "#ffb84d" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Little Chef" },
       { property: "og:title", content: "Little Chef 👨‍🍳" },
       { property: "og:description", content: "App de recetas visual para niños pequeños. Sin texto, solo imágenes y animaciones." },
       { property: "og:type", content: "website" },
@@ -45,10 +49,10 @@ export const Route = createRootRoute({
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9050da4d-f39e-4120-878b-bf87a84d5722/id-preview-289dd0b2--4e698b21-1254-4edb-ad1c-73fb74dfec89.lovable.app-1776670557985.png" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "icon", href: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
   shellComponent: RootShell,
