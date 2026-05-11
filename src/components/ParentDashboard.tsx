@@ -14,6 +14,7 @@ import { useTastings } from "@/hooks/use-tastings";
 import { activeSwaps } from "@/data/ingredientSwaps";
 import ParentLibrary from "./ParentLibrary";
 import StepTimersConfig from "./StepTimersConfig";
+import RoutinesConfig from "./RoutinesConfig";
 
 type Tab = "ajustes" | "perfiles" | "progreso" | "seguridad" | "guias" | "timers" | "extras" | "fotos" | "probados";
 
