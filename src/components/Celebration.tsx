@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import dinoChef from "@/assets/dino-chef.png";
 import type { Recipe } from "@/data/recipes";
 import { MEDALS } from "@/data/medals";
+import TastingPicker from "./TastingPicker";
+import PhotoCapture from "./PhotoCapture";
+import { useTastings } from "@/hooks/use-tastings";
 
 interface Props {
   recipe?: Recipe;
@@ -11,6 +14,7 @@ interface Props {
   isFavorite?: boolean;
   onToggleFavorite?: () => void;
   newMedalId?: string | null;
+  onTaste?: () => void; // notifies missions when a tasting is logged
   // Back-compat with older callers
   onDone?: () => void;
   recipeEmoji?: string;
@@ -20,11 +24,15 @@ const confetti = ["🎉", "⭐", "🌟", "✨", "🎈", "🎊", "💖", "🥳"];
 
 export default function Celebration({
   recipe, displayName, onHome, onAnother, isFavorite, onToggleFavorite,
-  newMedalId, onDone, recipeEmoji,
+  newMedalId, onTaste, onDone, recipeEmoji,
 }: Props) {
   const finishHome = onHome ?? onDone ?? (() => {});
   const dishEmoji = recipe?.emoji ?? recipeEmoji ?? "🍽️";
   const newMedal = newMedalId ? MEDALS.find((m) => m.id === newMedalId) ?? null : null;
+
+  const { reactionFor, log } = useTastings();
+  const recipeId = recipe?.id ?? "";
+  const currentReaction = recipeId ? reactionFor(recipeId) : null;
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-background px-4 pb-8 pt-8">
@@ -69,7 +77,7 @@ export default function Celebration({
           initial={{ scale: 0, rotate: -10 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ delay: 0.4, type: "spring", bounce: 0.5 }}
-          className="relative mt-3 flex h-48 w-48 items-center justify-center overflow-hidden rounded-full bg-card kids-shadow-lg ring-8 ring-kids-yellow/60"
+          className="relative mt-3 flex h-44 w-44 items-center justify-center overflow-hidden rounded-full bg-card kids-shadow-lg ring-8 ring-kids-yellow/60"
           aria-label={displayName ?? "Plato terminado"}
         >
           {recipe ? (
@@ -83,25 +91,36 @@ export default function Celebration({
           <motion.h1
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="mt-3 text-balance text-center text-2xl font-extrabold text-foreground"
+            className="mt-2 text-balance text-center text-xl font-extrabold text-foreground"
           >
             ¡{displayName} listo!
           </motion.h1>
         )}
       </div>
 
+      {/* Tasting + photo row */}
+      {recipe && (
+        <div className="flex w-full max-w-sm items-center justify-around gap-3">
+          <TastingPicker
+            current={currentReaction}
+            onPick={(r) => { log(recipe.id, r); onTaste?.(); }}
+          />
+          <PhotoCapture recipeId={recipe.id} />
+        </div>
+      )}
+
       {/* Medal earned */}
       {newMedal ? (
         <motion.div
           initial={{ scale: 0, y: 30 }} animate={{ scale: 1, y: 0 }}
           transition={{ delay: 0.7, type: "spring", bounce: 0.6 }}
-          className="flex flex-col items-center gap-1 rounded-3xl bg-kids-yellow/70 px-5 py-3 kids-shadow-lg"
+          className="flex flex-col items-center gap-1 rounded-3xl bg-kids-yellow/70 px-5 py-2 kids-shadow-lg"
           aria-label={`Nueva medalla: ${newMedal.label}`}
         >
           <div className="text-xs font-extrabold text-foreground">¡Nueva medalla!</div>
           <div className="flex items-center gap-2">
-            <span className="text-5xl">{newMedal.emoji}</span>
-            <span className="text-lg font-extrabold text-foreground">{newMedal.label}</span>
+            <span className="text-4xl">{newMedal.emoji}</span>
+            <span className="text-base font-extrabold text-foreground">{newMedal.label}</span>
           </div>
         </motion.div>
       ) : (
@@ -109,7 +128,7 @@ export default function Celebration({
           initial={{ y: 20, opacity: 0, scale: 0 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
           transition={{ delay: 0.6, type: "spring", bounce: 0.5 }}
-          className="text-7xl"
+          className="text-6xl"
         >
           🏆
         </motion.div>
