@@ -6,7 +6,7 @@ import { MEDALS } from "@/data/medals";
 interface Props {
   recipe?: Recipe;
   displayName?: string;
-  onHome: () => void;
+  onHome?: () => void;
   onAnother?: () => void;
   isFavorite?: boolean;
   onToggleFavorite?: () => void;
