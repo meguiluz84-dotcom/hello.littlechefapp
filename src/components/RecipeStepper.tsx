@@ -239,8 +239,13 @@ export default function RecipeStepper({
         </motion.div>
       )}
 
+      {/* Role indicator (kid vs adult) */}
+      <div className="mt-12 mb-1 w-full max-w-xs">
+        <RoleHeader needsAdult={needsAdult} />
+      </div>
+
       {/* Progress bar with dots */}
-      <div className="mt-12 flex w-full max-w-xs items-center gap-1.5">
+      <div className="flex w-full max-w-xs items-center gap-1.5">
         {recipe.steps.map((_, i) => (
           <motion.div
             key={i}
@@ -347,6 +352,17 @@ export default function RecipeStepper({
         >
           🔁
         </motion.button>
+
+        {voice.supported && voice.enabled && (
+          <motion.button
+            whileTap={{ scale: 0.85 }}
+            onClick={() => voice.speak(lineForAction(current.actionIcon))}
+            aria-label="Escuchar"
+            className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-card text-3xl kids-shadow"
+          >
+            🗣️
+          </motion.button>
+        )}
 
         <motion.button
           whileTap={{ scale: 0.85 }}
