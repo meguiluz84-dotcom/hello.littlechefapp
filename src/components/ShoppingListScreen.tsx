@@ -7,10 +7,11 @@ import { getIngredientName } from "@/data/ingredientNames";
 
 interface Props {
   recipes: Recipe[];
+  favorites?: string[];
   onClose: () => void;
 }
 
-export default function ShoppingListScreen({ recipes, onClose }: Props) {
+export default function ShoppingListScreen({ recipes, favorites = [], onClose }: Props) {
   const { items, addEmojis, toggle, remove, clear } = useShoppingList();
   const { plan } = useWeekPlan();
 
@@ -24,6 +25,15 @@ export default function ShoppingListScreen({ recipes, onClose }: Props) {
     });
     if (emojis.size) addEmojis(Array.from(emojis));
   }, [plan, recipes, addEmojis]);
+
+  const addFromFavorites = () => {
+    const emojis = new Set<string>();
+    favorites.forEach((id) => {
+      const r = recipes.find((x) => x.id === id);
+      r?.ingredients.forEach((i) => emojis.add(i.emoji));
+    });
+    if (emojis.size) addEmojis(Array.from(emojis));
+  };
 
   return (
     <div className="min-h-screen bg-background px-4 pb-10 pt-6">
