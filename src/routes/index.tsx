@@ -45,11 +45,13 @@ function Index() {
   const [addingPlayer, setAddingPlayer] = useState(false);
   const [resumeFrom, setResumeFrom] = useState(0);
   const [isChallenge, setIsChallenge] = useState(false);
+  const [newMedalId, setNewMedalId] = useState<string | null>(null);
 
   const players = usePlayers();
   const { markCompleted, isCompleted, completed, reset: resetCompleted } = useCompletedRecipes();
   const prefs = usePreferences();
   const medals = useMedals();
+  const earnedBeforeRef = medals.earned;
 
   const active = players.active;
   const needsOnboarding = players.hydrated && !active && !addingPlayer;
@@ -75,6 +77,7 @@ function Index() {
     setIsChallenge(asChallenge);
     prefs.setLastRecipe(recipe.id);
     setResumeFrom(0);
+    setNewMedalId(null);
     setScreen("ingredients");
   };
 
@@ -88,15 +91,36 @@ function Index() {
     setScreen("cooking");
   };
 
+  // Called the moment the recipe is finished — before navigating away.
+  // Marks completion and figures out which medal (if any) was newly earned.
+  const handleRecipeFinished = (recipe: Recipe, asChallenge: boolean) => {
+    markCompleted(recipe.id);
+    prefs.clearResume(recipe.id);
+    if (asChallenge) medals.completeChallenge(recipe.id);
+    // Detect newly earned medal by re-running the rule with the next state.
+    const completedNext = completed.includes(recipe.id) ? completed : [...completed, recipe.id];
+    const challengesNext = asChallenge ? medals.challengesDone + 1 : medals.challengesDone;
+    import("@/data/medals").then(({ earnedMedalIds }) => {
+      const after = earnedMedalIds({ completed: completedNext, challengesDone: challengesNext, recipes: ALL_RECIPES });
+      const fresh = after.find((id) => !earnedBeforeRef.includes(id)) ?? null;
+      setNewMedalId(fresh);
+    });
+  };
+
   const handleFinish = () => {
-    if (selectedRecipe) {
-      markCompleted(selectedRecipe.id);
-      prefs.clearResume(selectedRecipe.id);
-      if (isChallenge) medals.completeChallenge(selectedRecipe.id);
-    }
     setScreen("home");
     setSelectedRecipe(null);
     setIsChallenge(false);
+    setNewMedalId(null);
+  };
+
+  const handleAnother = () => {
+    // Pick a different allowed recipe at random.
+    const pool = allowedRecipes.filter((r) => r.id !== selectedRecipe?.id);
+    const next = pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+    setNewMedalId(null);
+    if (next) handleSelectRecipe(next, false);
+    else handleFinish();
   };
 
   const handleSplashStart = () => setScreen("home");
