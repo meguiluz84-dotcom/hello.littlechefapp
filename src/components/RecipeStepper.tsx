@@ -329,6 +329,13 @@ export default function RecipeStepper({
           {step < total - 1 ? "➡️" : "🎉"}
         </motion.button>
       </div>
+
+      {adultBlocking && (
+        <AdultGate
+          onConfirm={() => setAdultConfirmedStep(step)}
+          onCancel={pauseAndExit}
+        />
+      )}
     </div>
   );
 }
