@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { RESTRICTION_INFO, TAG_INFO, getRecipeMeta, type Restrictions } from "@/data/recipeMeta";
+import { RESTRICTION_INFO, TAG_INFO, getRecipeMeta, type Restrictions, EMPTY_RESTR } from "@/data/recipeMeta";
 import { ingredientNames } from "@/data/ingredientNames";
 import { isInSeason } from "@/data/seasons";
 import { usePlayers, type AgeBucket } from "@/hooks/use-players";
@@ -83,7 +83,7 @@ export default function ParentDashboard({
     return getRecipeName(active?.avatarId ?? "dino", r.id, r.name);
   };
 
-  const restr: Restrictions = active?.restrictions ?? { nuts: false, dairy: false, gluten: false, vegetarian: false };
+  const restr: Restrictions = active?.restrictions ?? EMPTY_RESTR;
   const setRestr = (next: Restrictions) => active && update(active.id, { restrictions: next });
   const setAge = (a: AgeBucket) => active && update(active.id, { age: a });
 

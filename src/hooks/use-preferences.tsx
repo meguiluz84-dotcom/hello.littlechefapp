@@ -1,3 +1,4 @@
+import { EMPTY_RESTR } from "@/data/recipeMeta";
 import { useCallback, useEffect, useState } from "react";
 import { usePlayers } from "./use-players";
 import type { Restrictions } from "@/data/recipeMeta";
@@ -16,7 +17,7 @@ const SHARED_KEYS = {
 
 const playerKey = (pid: string, name: string) => `lc:p:${pid}:${name}`;
 
-const DEFAULT_RESTR: Restrictions = { nuts: false, dairy: false, gluten: false, vegetarian: false };
+const DEFAULT_RESTR: Restrictions = { ...EMPTY_RESTR };
 
 function readJSON<T>(key: string, fallback: T): T {
   try {
