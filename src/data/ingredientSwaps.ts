@@ -22,6 +22,7 @@ const SWAPS_BY_RESTRICTION: Record<keyof Restrictions, Swap[]> = {
     { from: "🍪", to: "🍌", label: "Galleta de plátano" },
     { from: "🌯", to: "🥬", label: "Hoja de lechuga" },
     { from: "🫓", to: "🥬", label: "Hoja de lechuga" },
+    { from: "🥣", to: "🍚", label: "Arroz inflado" },
   ],
   vegetarian: [
     { from: "🥩", to: "🫘", label: "Legumbres" },
