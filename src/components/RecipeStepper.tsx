@@ -99,12 +99,13 @@ interface Props {
   onToggleFavorite?: () => void;
   onAnother?: () => void;
   newMedalId?: string | null;
+  onComplete?: () => void;
 }
 
 export default function RecipeStepper({
   recipe, onFinish, onBack, onHome,
   startAt = 0, soundOn = true, onPause, onClearResume,
-  displayName, isFavorite, onToggleFavorite, onAnother, newMedalId,
+  displayName, isFavorite, onToggleFavorite, onAnother, newMedalId, onComplete,
 }: Props) {
   const reduced = usePrefersReducedMotion();
   const [step, setStep] = useState(Math.min(startAt, recipe.steps.length - 1));
