@@ -4,6 +4,7 @@ import type { Recipe } from "@/data/recipes";
 import { getIngredientName } from "@/data/ingredientNames";
 import { getRecipeMeta, RESTRICTION_INFO, type Restrictions } from "@/data/recipeMeta";
 import DinoBubble from "./DinoBubble";
+import VisualQuantity from "./VisualQuantity";
 
 interface Props {
   recipe: Recipe;
