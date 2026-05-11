@@ -84,6 +84,10 @@ export default function RecipeIngredients({
         {displayName ?? recipe.name}
       </h1>
 
+      <div className="mb-3">
+        <DifficultyBadges recipe={recipe} />
+      </div>
+
       {/* Allergen badges (concise, visual) */}
       {allergenBadges.length > 0 && (
         <div className="mb-4 flex flex-wrap justify-center gap-2">
