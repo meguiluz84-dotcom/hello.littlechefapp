@@ -149,11 +149,6 @@ export default function RecipeIngredients({
                 }`}
               >
                 <span className="text-4xl">{ing.emoji}</span>
-                {ing.quantity && (
-                  <div className="absolute -bottom-2 -right-2 flex h-9 min-w-9 items-center justify-center rounded-full bg-primary px-2 text-base font-extrabold text-primary-foreground kids-shadow">
-                    ×{ing.quantity}
-                  </div>
-                )}
                 {isChecked && (
                   <motion.div
                     initial={{ scale: 0 }}
@@ -169,11 +164,7 @@ export default function RecipeIngredients({
                   {getIngredientName(ing.emoji)}
                 </div>
               )}
-              {ing.grams && (
-                <div className="rounded-full bg-secondary px-2 py-0.5 text-xs font-bold text-secondary-foreground kids-shadow">
-                  {ing.grams}g
-                </div>
-              )}
+              <VisualQuantity ingredient={ing} />
             </motion.button>
           );
         })}
