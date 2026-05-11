@@ -119,7 +119,18 @@ export default function RecipeStepper({
   const [direction, setDirection] = useState(1);
   const [showCelebration, setShowCelebration] = useState(false);
   const [replayKey, setReplayKey] = useState(0);
-  const [hygieneDone, setHygieneDone] = useState(startAt > 0);
+  const [hygieneDone, setHygieneDone] = useState(() => {
+    if (startAt > 0) return true;
+    try {
+      const ts = Number(sessionStorage.getItem("lc:hygiene-ts") ?? 0);
+      // Manos limpias durante 30 min dentro de la misma sesión
+      return ts > 0 && Date.now() - ts < 30 * 60 * 1000;
+    } catch { return false; }
+  });
+  const markHygieneDone = useCallback(() => {
+    try { sessionStorage.setItem("lc:hygiene-ts", String(Date.now())); } catch { /* ignore */ }
+    setHygieneDone(true);
+  }, []);
   const [adultConfirmedStep, setAdultConfirmedStep] = useState<number | null>(null);
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
   useEffect(() => {
@@ -185,7 +196,7 @@ export default function RecipeStepper({
   }
 
   if (!hygieneDone) {
-    return <HygieneStep soundOn={soundOn} onDone={() => setHygieneDone(true)} />;
+    return <HygieneStep soundOn={soundOn} onDone={markHygieneDone} />;
   }
 
   const actionAnim = reduced
