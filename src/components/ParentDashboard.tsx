@@ -222,6 +222,36 @@ export default function ParentDashboard({
                 )}
               </div>
             </div>
+
+            <div className="rounded-2xl bg-card p-4 kids-shadow">
+              <div className="mb-2 text-sm font-extrabold text-foreground">📜 Historial de recetas</div>
+              {completed.length === 0 ? (
+                <p className="text-sm font-bold text-muted-foreground">Aún no hay recetas completadas.</p>
+              ) : (
+                <ul className="max-h-48 space-y-1 overflow-y-auto pr-1">
+                  {[...completed].reverse().map((id) => (
+                    <li key={id} className="flex items-center gap-2 rounded-lg bg-background px-2 py-1.5 text-sm font-extrabold text-foreground">
+                      <span>✅</span>
+                      <span className="line-clamp-1">{recipeNameFor(id)}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="rounded-2xl bg-card p-4 kids-shadow">
+              <label className="mb-2 block text-sm font-extrabold text-foreground" htmlFor="parent-notes">
+                📝 Notas (privadas)
+              </label>
+              <textarea
+                id="parent-notes"
+                value={notes}
+                onChange={(e) => saveNotes(e.target.value)}
+                placeholder="Alergias, gustos, observaciones del peque…"
+                className="min-h-28 w-full resize-y rounded-xl border border-muted bg-background p-3 text-sm font-medium text-foreground outline-none focus:border-primary"
+              />
+              <p className="mt-1 text-[11px] font-bold text-muted-foreground">Solo se guardan en este dispositivo.</p>
+            </div>
           </div>
         )}
 
