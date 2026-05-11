@@ -60,6 +60,7 @@ export default function ParentDashboard({
   const { completed } = useCompletedRecipes();
   const { earned, challengesDone } = useMedals();
   const [tab, setTab] = useState<Tab>("ajustes");
+  const [recipeSearch, setRecipeSearch] = useState("");
   const voice = useVoice();
   const photos = usePhotos();
   const tastings = useTastings();
