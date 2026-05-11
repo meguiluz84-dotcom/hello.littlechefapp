@@ -296,6 +296,82 @@ export default function ParentDashboard({
           </div>
         )}
 
+        {/* RECETAS - búsqueda para adultos */}
+        {tab === "recetas" && (
+          <div className="space-y-3">
+            <div className="rounded-2xl bg-card p-3 kids-shadow">
+              <label htmlFor="recipe-search" className="mb-1 block text-xs font-extrabold text-muted-foreground">
+                🔍 Buscar receta o ingrediente
+              </label>
+              <input
+                id="recipe-search"
+                type="search"
+                value={recipeSearch}
+                onChange={(e) => setRecipeSearch(e.target.value)}
+                placeholder="Plátano, pizza, sin gluten…"
+                className="w-full rounded-xl border border-muted bg-background p-3 text-sm font-medium text-foreground outline-none focus:border-primary"
+              />
+              <p className="mt-1 text-[11px] font-bold text-muted-foreground">
+                {ALL_RECIPES.length} recetas en total · {completed.length} completadas
+              </p>
+            </div>
+            <ul className="space-y-2">
+              {ALL_RECIPES
+                .filter((r) => {
+                  const q = recipeSearch.trim().toLowerCase();
+                  if (!q) return true;
+                  const name = recipeNameFor(r.id).toLowerCase();
+                  if (name.includes(q)) return true;
+                  if (r.id.includes(q)) return true;
+                  if (r.category.includes(q)) return true;
+                  const ings = r.ingredients
+                    .map((i) => (ingredientNames[i.emoji] ?? "").toLowerCase())
+                    .join(" ");
+                  if (ings.includes(q)) return true;
+                  const meta = getRecipeMeta(r.id);
+                  if (meta.tags.some((t) => t.includes(q))) return true;
+                  return false;
+                })
+                .map((r) => {
+                  const meta = getRecipeMeta(r.id);
+                  const done = completed.includes(r.id);
+                  const inSeason = isInSeason(r.id);
+                  const restrictions = (Object.keys(meta.restrictions) as (keyof Restrictions)[])
+                    .filter((k) => k !== "vegetarian" && meta.restrictions[k]);
+                  return (
+                    <li key={r.id} className="flex gap-3 rounded-2xl bg-card p-2 kids-shadow">
+                      <img src={r.image} alt="" loading="lazy" width={64} height={64}
+                        className="h-16 w-16 shrink-0 rounded-xl object-cover" />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1">
+                          <span className="truncate text-sm font-extrabold text-foreground">{recipeNameFor(r.id)}</span>
+                          {done && <span title="Completada">⭐</span>}
+                          {inSeason && <span title="De temporada">🌿</span>}
+                        </div>
+                        <div className="mt-1 flex flex-wrap gap-1 text-[11px] font-bold text-muted-foreground">
+                          <span className="rounded-full bg-background px-2 py-0.5">
+                            {"⭐".repeat(meta.level)} · {meta.adultHelp === "low" ? "autónomo" : meta.adultHelp === "medium" ? "ayuda puntual" : "con adulto"}
+                          </span>
+                          <span className="rounded-full bg-background px-2 py-0.5">≥{meta.ageMin} años</span>
+                          {meta.tags.map((t) => (
+                            <span key={t} className="rounded-full bg-background px-2 py-0.5">
+                              {TAG_INFO[t].emoji} {TAG_INFO[t].label}
+                            </span>
+                          ))}
+                          {restrictions.length > 0 && (
+                            <span className="rounded-full bg-kids-yellow/50 px-2 py-0.5 text-foreground">
+                              ⚠ {restrictions.map((k) => RESTRICTION_INFO[k].emoji).join(" ")}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
+        )}
+
         {/* SEGURIDAD */}
         {tab === "seguridad" && (
           <div className="space-y-4">
