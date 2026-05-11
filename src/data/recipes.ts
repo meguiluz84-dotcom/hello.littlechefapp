@@ -19,6 +19,16 @@ import imgPizzaVegetal from "@/assets/recipe-pizza-vegetal.jpg";
 import imgGalletasCacao from "@/assets/recipe-galletas-cacao.jpg";
 import imgRosquitas from "@/assets/recipe-rosquitas.jpg";
 import imgPolosFresa from "@/assets/recipe-polos-fresa.jpg";
+import imgFruitFaces from "@/assets/recipe-fruit-faces.jpg";
+import imgRainbowToast from "@/assets/recipe-rainbow-toast.jpg";
+import imgCloudCup from "@/assets/recipe-cloud-cup.jpg";
+import imgCucumberBoats from "@/assets/recipe-cucumber-boats.jpg";
+import imgHappyPizza from "@/assets/recipe-happy-pizza.jpg";
+import imgBananaPancakes from "@/assets/recipe-banana-pancakes.jpg";
+import imgRiceEggs from "@/assets/recipe-rice-eggs.jpg";
+import imgBananaIcecream from "@/assets/recipe-banana-icecream.jpg";
+import imgOatBalls from "@/assets/recipe-oat-balls.jpg";
+import imgSnakeWrap from "@/assets/recipe-snake-wrap.jpg";
 
 export interface Ingredient {
   emoji: string;
@@ -511,6 +521,226 @@ export const recipes: Recipe[] = [
       { emoji: "🥛", ingredientEmojis: ["🥛", "🍓"], actionIcon: "mix" },
       { emoji: "🍡", ingredientEmojis: [], actionIcon: "pour" },
       { emoji: "❄️", ingredientEmojis: [], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "fruit-faces",
+    name: "🦕 Caritas de Fruta",
+    image: imgFruitFaces,
+    emoji: "😊",
+    color: "kids-pink",
+    category: "fruits",
+    difficulty: 1,
+    ingredients: [
+      { emoji: "🥛", quantity: 1, grams: 120 },
+      { emoji: "🍌", quantity: 1, grams: 120 },
+      { emoji: "🫐", quantity: 6, grams: 6 },
+      { emoji: "🍓", quantity: 3, grams: 45 },
+    ],
+    steps: [
+      { emoji: "🥛", ingredientEmojis: ["🥛"], actionIcon: "scoop" },
+      { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "place" },
+      { emoji: "🫐", ingredientEmojis: ["🫐"], actionIcon: "place" },
+      { emoji: "🍓", ingredientEmojis: ["🍓"], actionIcon: "place" },
+      { emoji: "🎉", ingredientEmojis: [], actionIcon: "shake" },
+    ],
+  },
+  {
+    id: "rainbow-toast",
+    name: "🌈 Tostada Arcoíris",
+    image: imgRainbowToast,
+    emoji: "🌈",
+    color: "kids-yellow",
+    category: "snacks",
+    difficulty: 1,
+    ingredients: [
+      { emoji: "🍞", quantity: 1, grams: 30 },
+      { emoji: "🧀", quantity: 1, grams: 25 },
+      { emoji: "🍅", quantity: 1, grams: 40 },
+      { emoji: "🥒", quantity: 1, grams: 30 },
+      { emoji: "🥕", quantity: 1, grams: 20 },
+      { emoji: "🌽", quantity: 1, grams: 20 },
+    ],
+    steps: [
+      { emoji: "🧀", ingredientEmojis: ["🍞", "🧀"], actionIcon: "spread" },
+      { emoji: "🍅", ingredientEmojis: ["🍅"], actionIcon: "place" },
+      { emoji: "🥒", ingredientEmojis: ["🥒"], actionIcon: "place" },
+      { emoji: "🥕", ingredientEmojis: ["🥕"], actionIcon: "place" },
+      { emoji: "🌽", ingredientEmojis: ["🌽"], actionIcon: "place" },
+      { emoji: "🔪", ingredientEmojis: [], actionIcon: "cut" },
+    ],
+  },
+  {
+    id: "cloud-cup",
+    name: "☁️ Vasito Nube",
+    image: imgCloudCup,
+    emoji: "☁️",
+    color: "kids-blue",
+    category: "desserts",
+    difficulty: 1,
+    ingredients: [
+      { emoji: "🥛", quantity: 1, grams: 150 },
+      { emoji: "🍌", quantity: 1, grams: 100 },
+      { emoji: "🥣", quantity: 1, grams: 30 },
+      { emoji: "🍓", quantity: 2, grams: 30 },
+    ],
+    steps: [
+      { emoji: "🥛", ingredientEmojis: ["🥛"], actionIcon: "scoop" },
+      { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "mix" },
+      { emoji: "🥣", ingredientEmojis: ["🥣"], actionIcon: "pour" },
+      { emoji: "🍓", ingredientEmojis: ["🍓"], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "cucumber-boats",
+    name: "⛵ Barquitos de Pepino",
+    image: imgCucumberBoats,
+    emoji: "⛵",
+    color: "kids-green",
+    category: "snacks",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🥒", quantity: 1, grams: 120 },
+      { emoji: "🧀", quantity: 1, grams: 30 },
+      { emoji: "🍅", quantity: 4, grams: 60 },
+    ],
+    steps: [
+      { emoji: "🔪", ingredientEmojis: ["🥒"], actionIcon: "cut" },
+      { emoji: "🧀", ingredientEmojis: ["🧀"], actionIcon: "spread" },
+      { emoji: "🍅", ingredientEmojis: ["🍅"], actionIcon: "place" },
+      { emoji: "⛵", ingredientEmojis: ["🧀"], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "happy-pizza",
+    name: "😀 Mini Pizzas Felices",
+    image: imgHappyPizza,
+    emoji: "🍕",
+    color: "kids-red",
+    category: "meals",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🫓", quantity: 1, grams: 60 },
+      { emoji: "🍅", quantity: 1, grams: 40 },
+      { emoji: "🧀", quantity: 1, grams: 25 },
+      { emoji: "🌽", quantity: 1, grams: 20 },
+      { emoji: "🫒", quantity: 3, grams: 10 },
+      { emoji: "🫑", quantity: 1, grams: 20 },
+    ],
+    steps: [
+      { emoji: "🍅", ingredientEmojis: ["🫓", "🍅"], actionIcon: "spread" },
+      { emoji: "🧀", ingredientEmojis: ["🧀"], actionIcon: "place" },
+      { emoji: "😀", ingredientEmojis: ["🌽", "🫒", "🫑"], actionIcon: "place" },
+      { emoji: "🔥", ingredientEmojis: [], actionIcon: "place" },
+      { emoji: "❄️", ingredientEmojis: [], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "banana-pancakes",
+    name: "🥞 Tortitas de Plátano",
+    image: imgBananaPancakes,
+    emoji: "🥞",
+    color: "kids-yellow",
+    category: "meals",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🍌", quantity: 1, grams: 120 },
+      { emoji: "🥚", quantity: 1, grams: 55 },
+      { emoji: "🥣", quantity: 1, grams: 40 },
+    ],
+    steps: [
+      { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "mix" },
+      { emoji: "🥚", ingredientEmojis: ["🥚"], actionIcon: "pour" },
+      { emoji: "🥣", ingredientEmojis: ["🥣"], actionIcon: "pour" },
+      { emoji: "🌀", ingredientEmojis: [], actionIcon: "mix" },
+      { emoji: "🍳", ingredientEmojis: [], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "rice-eggs",
+    name: "🥚 Huevitos de Arroz",
+    image: imgRiceEggs,
+    emoji: "🍙",
+    color: "kids-orange",
+    category: "meals",
+    difficulty: 1,
+    ingredients: [
+      { emoji: "🍚", quantity: 1, grams: 100 },
+      { emoji: "🧀", quantity: 1, grams: 30 },
+      { emoji: "🥕", quantity: 1, grams: 25 },
+    ],
+    steps: [
+      { emoji: "🍚", ingredientEmojis: ["🍚"], actionIcon: "scoop" },
+      { emoji: "🧀", ingredientEmojis: ["🧀"], actionIcon: "place" },
+      { emoji: "🥕", ingredientEmojis: ["🥕"], actionIcon: "place" },
+      { emoji: "🌀", ingredientEmojis: [], actionIcon: "mix" },
+      { emoji: "🖐️", ingredientEmojis: [], actionIcon: "scoop" },
+    ],
+  },
+  {
+    id: "banana-icecream",
+    name: "🍦 Helados de Plátano",
+    image: imgBananaIcecream,
+    emoji: "🍦",
+    color: "kids-pink",
+    category: "desserts",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🍌", quantity: 2, grams: 240 },
+      { emoji: "🥛", quantity: 1, grams: 120 },
+      { emoji: "🍓", quantity: 3, grams: 45 },
+    ],
+    steps: [
+      { emoji: "🔪", ingredientEmojis: ["🍌"], actionIcon: "cut" },
+      { emoji: "🌀", ingredientEmojis: ["🍌", "🥛"], actionIcon: "mix" },
+      { emoji: "🍓", ingredientEmojis: ["🍓"], actionIcon: "place" },
+      { emoji: "🍡", ingredientEmojis: [], actionIcon: "pour" },
+      { emoji: "❄️", ingredientEmojis: [], actionIcon: "place" },
+    ],
+  },
+  {
+    id: "oat-balls",
+    name: "🟤 Bolitas de Avena",
+    image: imgOatBalls,
+    emoji: "🟤",
+    color: "kids-orange",
+    category: "snacks",
+    difficulty: 1,
+    ingredients: [
+      { emoji: "🍌", quantity: 1, grams: 120 },
+      { emoji: "🥣", quantity: 1, grams: 60 },
+      { emoji: "🥜", quantity: 1, grams: 30 },
+      { emoji: "🍫", quantity: 1, grams: 5 },
+    ],
+    steps: [
+      { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "mix" },
+      { emoji: "🥣", ingredientEmojis: ["🥣"], actionIcon: "pour" },
+      { emoji: "🥜", ingredientEmojis: ["🥜"], actionIcon: "spread" },
+      { emoji: "🌀", ingredientEmojis: ["🍫"], actionIcon: "mix" },
+      { emoji: "🖐️", ingredientEmojis: [], actionIcon: "scoop" },
+    ],
+  },
+  {
+    id: "snake-wrap",
+    name: "🐍 Wrap Serpiente",
+    image: imgSnakeWrap,
+    emoji: "🐍",
+    color: "kids-green",
+    category: "meals",
+    difficulty: 2,
+    ingredients: [
+      { emoji: "🫓", quantity: 1, grams: 60 },
+      { emoji: "🥣", quantity: 1, grams: 30 },
+      { emoji: "🥬", quantity: 2, grams: 30 },
+      { emoji: "🥕", quantity: 1, grams: 25 },
+      { emoji: "🧀", quantity: 1, grams: 25 },
+    ],
+    steps: [
+      { emoji: "🥣", ingredientEmojis: ["🫓", "🥣"], actionIcon: "spread" },
+      { emoji: "🥬", ingredientEmojis: ["🥬"], actionIcon: "place" },
+      { emoji: "🥕", ingredientEmojis: ["🥕", "🧀"], actionIcon: "place" },
+      { emoji: "🌯", ingredientEmojis: [], actionIcon: "mix" },
+      { emoji: "🔪", ingredientEmojis: [], actionIcon: "cut" },
     ],
   },
 ];
