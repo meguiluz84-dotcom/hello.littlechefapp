@@ -16,7 +16,7 @@ import ParentLibrary from "./ParentLibrary";
 import StepTimersConfig from "./StepTimersConfig";
 import RoutinesConfig from "./RoutinesConfig";
 
-type Tab = "ajustes" | "perfiles" | "progreso" | "seguridad" | "guias" | "timers" | "extras" | "fotos" | "probados";
+type Tab = "ajustes" | "perfiles" | "progreso" | "recetas" | "seguridad" | "guias" | "timers" | "extras" | "fotos" | "probados";
 
 interface Props {
   onClose: () => void;
