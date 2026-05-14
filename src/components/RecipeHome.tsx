@@ -321,21 +321,25 @@ export default function RecipeHome({
             <div className="mb-5 flex items-center gap-3">
               <motion.button
                 whileTap={{ scale: 0.9 }}
-                onClick={() => { setActiveCategory(null); setTag(null); }}
+                onClick={() => { setActiveCategory(null); setTag(null); setLevel(null); }}
                 aria-label="Volver"
                 className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-2xl bg-card text-2xl kids-shadow"
               >⬅️</motion.button>
               <div className={`flex flex-1 items-center gap-2 rounded-2xl ${activeCat ? colorMap[activeCat.color] ?? "bg-primary" : "bg-primary"} px-4 py-3 kids-shadow`}>
-                <span className="text-3xl">{activeCat?.emoji ?? "🔍"}</span>
-                <span className="text-xl font-extrabold text-foreground">{activeCat?.label ?? (tag ? tag : "")}</span>
+                <span className="text-3xl">{activeCat?.emoji ?? (level !== null ? "👨‍🍳" : "🔍")}</span>
+                <span className="text-xl font-extrabold text-foreground">
+                  {activeCat?.label ?? (tag ? tag : level !== null ? `Nivel ${level}` : "")}
+                </span>
               </div>
             </div>
 
-            {((filteredByCategory ?? filteredByTag) ?? []).length === 0 ? (
+            <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
+
+            {(applyLevel((filteredByCategory ?? filteredByTag) ?? allowed)).length === 0 ? (
               <EmptyState emoji="🍽️" message="No hay recetas aquí todavía." />
             ) : (
               <div className="grid grid-cols-2 gap-4">
-                {((filteredByCategory ?? filteredByTag) ?? []).map((recipe, i) => {
+                {applyLevel((filteredByCategory ?? filteredByTag) ?? allowed).map((recipe, i) => {
                   return (
                     <motion.button
                       key={recipe.id}
