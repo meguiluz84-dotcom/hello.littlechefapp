@@ -177,7 +177,7 @@ export default function RecipeHome({
       </div>
 
       <AnimatePresence mode="wait">
-        {!activeCategory && !tag ? (
+        {!activeCategory && !tag && level === null ? (
           <motion.div
             key="home"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
