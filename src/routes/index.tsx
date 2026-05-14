@@ -327,6 +327,35 @@ function Index() {
         </div>
       );
     }
+  } else if (screen === "custom") {
+    content = <CustomRecipesScreen onClose={() => setScreen("home")} />;
+  } else if (screen === "collections") {
+    content = (
+      <CollectionsScreen
+        recipes={allowedRecipes}
+        getName={nameFor}
+        onPick={(r) => handleSelectRecipe(r)}
+        onClose={() => setScreen("home")}
+      />
+    );
+  } else if (screen === "generator") {
+    content = (
+      <IngredientGenerator
+        recipes={allowedRecipes}
+        restrictions={active?.restrictions ?? prefs.DEFAULT_RESTR}
+        getName={nameFor}
+        onPick={(r) => handleSelectRecipe(r)}
+        onClose={() => setScreen("home")}
+      />
+    );
+  } else if (screen === "school") {
+    content = (
+      <SchoolMode
+        recipes={allRecipes}
+        getName={nameFor}
+        onClose={() => setScreen("home")}
+      />
+    );
   }
 
   if (!content) {
