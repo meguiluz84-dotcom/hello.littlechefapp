@@ -1,85 +1,63 @@
-# Little Chef v4 — funciones avanzadas
+## Plan: Capa "Chef Avanzado" en Little Chef
 
-Mantenemos la regla de oro: niño = pantalla visual con poco texto; toda la lógica nueva (despensa, sustituciones, registro, ajustes de voz, misiones) vive en el panel de padres o como atajos visuales muy simples desde el home.
+Voy a integrar la capa avanzada **encima** de lo que ya existe (no reemplazar). El proyecto ya tiene `RecipeLevel` 1/2/3, `VisualTimer`, `use-step-timers`, `HygieneStep`, `medals`, `Celebration` y `VisualQuantity` — los reutilizo y amplío.
 
-## 1. Generador de recetas desde ingredientes (pantry)
+### 1. Nivel "Chef avanzado"
+- Reutilizo `RecipeLevel` añadiendo `4` como "Chef avanzado" en `LEVEL_INFO` con emoji 👨‍🍳⭐ y color especial (kids-yellow + borde dorado).
+- Componente `<AdvancedBadge />` reutilizable que aparece en: tarjeta de receta (`RecipeHome`), pantalla de ingredientes (`RecipeIngredients`) y header del stepper (`RecipeStepper`).
 
-- Nueva pantalla "🧺 Mi nevera" accesible desde el panel de padres y desde un botón visual en el home.
-- Cuadrícula de chips emoji con los ingredientes más usados (frutas, lácteos, pan, huevos, etc.). El padre/niño marca lo que tiene.
-- Estado guardado en `localStorage` por perfil: `lc:p:{pid}:pantry`.
-- Resultado: cards de recetas ordenadas por % de coincidencia con su despensa (con etiqueta visual "Tienes 4/5 🟢").
+### 2. Más pasos por receta
+- `recipes.ts` ya soporta N pasos. Reviso `RecipeStepper` para barra de progreso con segmentos cuando hay >5 pasos (ya muestra `paso / total`, mejoro la barra para escalar bien).
+- Añado 2-3 recetas avanzadas de ejemplo con 6-8 pasos completos.
 
-## 2. Sustituciones automáticas según restricciones
+### 3. Temporizadores visuales
+- `VisualTimer` ya existe con círculo de progreso. Añado:
+  - Botón "Saltar con adulto" (requiere `AdultGate`).
+  - Persistencia del estado restante en `use-step-timers` (ya guarda en localStorage; verifico que sobrevive al volver atrás).
+  - Botones más grandes para iniciar/pausar/reiniciar.
 
-- Tabla `ingredientSwaps` (`leche → bebida de avena`, `gluten → maíz`, `frutos secos → semillas`, etc.).
-- En `RecipeIngredients`, si la restricción del perfil activo coincide con un ingrediente de la receta, mostramos una pegatina con el emoji original tachado y el sustituto al lado.
-- En el panel de padres, sección "🔄 Sustituciones" lista los swaps activos para el perfil.
+### 4. Medidor visual de cantidades
+- Amplío `visualQty.ts` con tipos `cup-full`, `cup-half`, `spoon` y mapeo desde un nuevo campo `quantityLabel?: "1 taza" | "media taza" | "1 cuchara"` en `Ingredient`.
+- `VisualQuantity` renderiza icono grande (🥛 lleno, 🥛 con ½ overlay, 🥄) cuando hay `quantityLabel`.
 
-## 3. Lista de compra desde favoritos
+### 5. Iconos de higiene
+- Nuevo módulo `src/data/hygieneActions.ts` con `washHands`, `cleanTable`, `washVeggies` (emoji + label).
+- `HygieneStep` ahora acepta lista de acciones a mostrar; se invoca antes de recetas avanzadas y cuando los ingredientes incluyen frutas/verduras (detección por emoji).
 
-- En `ShoppingListScreen`, botón "❤️ Añadir favoritos" que vuelca los ingredientes de cada favorito (combinando duplicados con suma de cantidades visuales).
-- Mantiene tachado/limpiar existentes.
+### 6. Pasos de adulto
+- Amplío `stepNeedsAdult` para detectar más casos (sartén 🍳, batidora, calor).
+- En `RecipeStepper`: badge grande 👨‍🍳⚠️, borde rojo/naranja, `aria-label="Paso para adulto: ..."`, y tooltip explicativo en `AdultMode`.
 
-## 4. Registro de alimentos probados (tasting log)
+### 7. Modo Reto
+- Nuevo hook `use-challenge-mode.tsx` (localStorage `lc-challenge-mode`).
+- Toggle visible en home y en `ParentDashboard`.
+- En `RecipeStepper`, cuando está activo: oculta nombre del ingrediente, pista textual y descripciones; mantiene icono de acción, ingrediente emoji, badge de adulto y temporizador.
 
-- Después de terminar una receta, en la pantalla final añadimos 3 caritas grandes: 😋 / 🙂 / 😖.
-- Se guardan por perfil en `lc:p:{pid}:tastings` con `{ recipeId, ingredients[], reaction, date }`.
-- El panel de padres tiene una pestaña "🍽️ Probados" con timeline (cara + nombre receta + fecha) y conteo de "favoritos del peque" (los 😋).
+### 8. Medalla "Chef Avanzado"
+- Añado medalla `chef-avanzado` en `medals.ts`.
+- Al completar receta con `level: 4`, `Celebration` muestra variante especial (confeti + medalla animada) y guarda en `use-medals`.
+- `MedalsScreen` ya muestra medallas ganadas — verifico la nueva.
 
-## 5. Modo "Cocina juntos"
+### 9. Datos de recetas
+- Extiendo tipos en `recipes.ts`:
+  - `Step.adultRequired?: boolean`
+  - `Step.timerSeconds?: number` (ya existe via `use-step-timers`, lo muevo al dato)
+  - `Ingredient.quantityLabel?: string`
+  - `Recipe.hygieneSteps?: HygieneAction[]`
+  - `Recipe.challengeModeCompatible?: boolean`
+  - `Recipe.medalId?: string`
+- Compatibilidad: todos opcionales, recetas existentes sin tocar.
 
-- Reusamos la flag `stepNeedsAdult`. En `RecipeStepper` añadimos una franja superior con dos pestañas visuales: "🧒 Niño" y "🧑 Adulto".
-- Solo cambia el color de fondo del paso y el badge grande, el flujo es lineal — no separa la receta. Cuando toca un paso de adulto, vibración suave + sonido distinto + AdultGate ya existente.
-- Nuevo componente `RoleHeader` con dos burbujas grandes que se iluminan según el paso.
+### 10. Diseño
+- Mantengo `kids-shadow`, paleta actual, botones grandes (≥56px), tokens semánticos.
+- Sin nuevas dependencias.
 
-## 6. Guardar foto del resultado
+### Migración localStorage
+- Claves nuevas: `lc-challenge-mode`, `lc-medals` (ya existe), `lc-timer-state-{recipeId}-{stepIdx}`.
+- Sin romper claves existentes (favoritos, diplomas, players, preferencias).
 
-- En `Celebration`, botón nuevo "📸 Foto" que abre `<input type="file" capture="environment" accept="image/*">`.
-- La foto se guarda como dataURL en `lc:p:{pid}:photos:{recipeId}` (límite: una foto por receta, redimensionada a 600px en canvas para evitar saturar localStorage).
-- En `FavoritesScreen` y en el panel de padres ("📸 Galería") se muestran las fotos guardadas como thumbnails.
+### Archivos principales a crear/editar
+- **Crear**: `src/components/AdvancedBadge.tsx`, `src/data/hygieneActions.ts`, `src/hooks/use-challenge-mode.tsx`, `src/components/AdultStepBadge.tsx`
+- **Editar**: `src/data/recipeMeta.ts` (level 4 + LEVEL_INFO), `src/data/recipes.ts` (tipos + recetas nuevas), `src/data/medals.ts`, `src/data/visualQty.ts`, `src/components/VisualQuantity.tsx`, `src/components/VisualTimer.tsx`, `src/components/HygieneStep.tsx`, `src/components/RecipeStepper.tsx`, `src/components/RecipeIngredients.tsx`, `src/components/RecipeHome.tsx`, `src/components/Celebration.tsx`, `src/components/ParentDashboard.tsx`, `src/routes/index.tsx`
 
-## 7. Voz opcional por paso
-
-- Usamos `window.speechSynthesis` (Web Speech API, sin backend, sin coste). Frases muy cortas en español: "¡Mezcla!", "¡A cortar con un adulto!", "¡Vierte poco a poco!".
-- Mapeo `actionIcon → frase`. Diccionario en `src/data/voiceLines.ts`.
-- Toggle "🗣️ Voz" en panel de padres → ajustes; preferencia compartida `lc:voice`.
-- Botón nuevo en `RecipeStepper` (al lado del 🔁 repetir): 🗣️ habla la frase del paso actual.
-- Si la API no está disponible, escondemos el botón.
-
-## 8. Misiones semanales con recompensa visual
-
-- Catálogo de 6 misiones rotando por semana ISO: "Haz 3 recetas", "Prueba 2 frutas nuevas", "Completa 1 receta sin cocción", "Gana 1 medalla", etc.
-- Estado por perfil + semana en `lc:p:{pid}:missions:{isoWeek}`.
-- Nueva pantalla `MissionsScreen` accesible desde el home (botón 🎯 cerca del 🏅) con barras de progreso visuales y una recompensa al completar todas (sticker grande animado guardado en `lc:p:{pid}:rewards`).
-- Galería de stickers ganados en panel de padres → Progreso.
-
-## 9. Cambios de UI compartidos
-
-- Home: barra de accesos rápidos pasa de 3 a 4 botones: Plan / Lista / Misiones / Padres. El acceso a "Mi nevera" se añade como tarjeta visual sobre las categorías.
-- Pantalla final (`Celebration`): añade caritas de tasting + botón foto, sin perder el botón "otra receta" ni "favorito".
-
-## 10. Persistencia (todo localStorage por perfil, sin backend nuevo)
-
-- Claves añadidas: `pantry`, `tastings`, `photos:{recipeId}`, `missions:{isoWeek}`, `rewards`.
-- Compartidas: `lc:voice`.
-
-## Detalles técnicos
-
-- **Nuevos archivos**:
-  - `src/data/pantry.ts`, `src/data/ingredientSwaps.ts`, `src/data/missions.ts`, `src/data/voiceLines.ts`
-  - `src/hooks/use-pantry.tsx`, `src/hooks/use-tastings.tsx`, `src/hooks/use-photos.tsx`, `src/hooks/use-missions.tsx`, `src/hooks/use-voice.tsx`
-  - `src/components/PantryScreen.tsx`, `src/components/MissionsScreen.tsx`, `src/components/RoleHeader.tsx`, `src/components/TastingPicker.tsx`, `src/components/PhotoCapture.tsx`, `src/components/IngredientSwap.tsx`
-- **Editados**:
-  - `src/components/RecipeStepper.tsx` (RoleHeader, botón voz, sonido distinto en pasos adulto)
-  - `src/components/RecipeIngredients.tsx` (mostrar swaps)
-  - `src/components/Celebration.tsx` (TastingPicker + PhotoCapture)
-  - `src/components/RecipeHome.tsx` (botón nevera + misiones, badges de match con despensa)
-  - `src/components/ParentDashboard.tsx` (pestañas: Probados, Galería, Voz, Sustituciones)
-  - `src/components/ShoppingListScreen.tsx` (botón "Añadir favoritos")
-  - `src/routes/index.tsx` (nuevas pantallas: pantry, missions)
-
-## Fuera de alcance (siguen en "Próximamente")
-
-- Compartir resultados, sincronización en la nube, fotos en backend, voces personalizadas con ElevenLabs, comunidad, premium.
-
-¿Te parece bien o quieres ajustar prioridades antes de tocar código?
+¿Procedo con la implementación completa, o prefieres que empiece por un subconjunto (p. ej. puntos 1, 8 y 9 primero)?
