@@ -28,6 +28,10 @@ interface Props {
   onOpenWeekPlan: () => void;
   onOpenShopping: () => void;
   onOpenComingSoon: () => void;
+  onOpenCustom?: () => void;
+  onOpenCollections?: () => void;
+  onOpenGenerator?: () => void;
+  onOpenSchool?: () => void;
   soundOn: boolean;
   onToggleSound: (v: boolean) => void;
 }
