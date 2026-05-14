@@ -266,6 +266,36 @@ export default function RecipeHome({
             )}
 
             <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
+
+            {/* Packs carousel shortcut */}
+            {onOpenPack && (
+              <div className="mb-3">
+                <div className="mb-2 flex items-center justify-between px-1">
+                  <span className="text-sm font-extrabold text-foreground">📦 Packs</span>
+                </div>
+                <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                  {PACKS.map((p) => {
+                    const list = allowed.filter(p.match);
+                    if (list.length === 0) return null;
+                    const done = isCompleted ? list.filter((r) => isCompleted(r.id)).length : 0;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => onOpenPack(p)}
+                        className={`flex min-w-[7rem] shrink-0 flex-col items-center gap-1 rounded-2xl ${p.color} p-2 kids-shadow`}
+                        aria-label={p.label}
+                      >
+                        <span className="text-3xl">{p.emoji}</span>
+                        <span className="text-balance text-center text-[11px] font-extrabold leading-tight text-foreground">{p.label}</span>
+                        <span className="rounded-full bg-card/80 px-2 py-0.5 text-[10px] font-extrabold text-foreground">{done}/{list.length} ⭐</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             <CategoryFilters active={tag} onChange={setTag} />
 
             <div className="grid grid-cols-2 gap-4">
