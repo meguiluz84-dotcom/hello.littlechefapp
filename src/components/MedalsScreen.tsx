@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import { MEDALS } from "@/data/medals";
+import { SKILLS } from "@/data/skills";
 import { useMedals } from "@/hooks/use-medals";
+import { useSkills } from "@/hooks/use-skills";
 
 interface Props { onClose: () => void }
 
 export default function MedalsScreen({ onClose }: Props) {
   const { earned, challengesDone } = useMedals();
+  const { counters, earned: earnedSkills } = useSkills();
 
   return (
     <div className="min-h-screen bg-background px-4 pb-10 pt-6">
@@ -41,6 +44,26 @@ export default function MedalsScreen({ onClose }: Props) {
                 <span className="text-balance text-center text-xs font-bold text-muted-foreground line-clamp-2">
                   {m.description}
                 </span>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <h2 className="mb-3 mt-8 text-xl font-extrabold text-foreground">🌟 Logros por habilidad</h2>
+        <div className="grid grid-cols-2 gap-4">
+          {SKILLS.map((sk, i) => {
+            const got = earnedSkills.includes(sk.id);
+            const n = sk.count(counters);
+            return (
+              <motion.div
+                key={sk.id}
+                initial={{ scale: 0 }} animate={{ scale: 1 }}
+                transition={{ delay: i * 0.04, type: "spring", bounce: 0.4 }}
+                className={`flex min-h-32 flex-col items-center justify-center gap-1 rounded-3xl p-3 kids-shadow ${got ? "bg-kids-green" : "bg-card opacity-70"}`}
+              >
+                <span className={`text-5xl ${got ? "" : "grayscale"}`}>{sk.emoji}</span>
+                <span className="text-center text-sm font-extrabold text-foreground">{sk.label}</span>
+                <span className="text-[10px] font-bold text-muted-foreground">{Math.min(n, sk.threshold)}/{sk.threshold}</span>
               </motion.div>
             );
           })}
