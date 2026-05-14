@@ -19,6 +19,8 @@ import ChallengeBanner from "./ChallengeBanner";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
 import { useChallengeMode } from "@/hooks/use-challenge-mode";
+import { useNoCook } from "@/hooks/use-no-cook";
+import { PACKS, type RecipePack } from "@/data/recipePacks";
 import LevelBadge from "./LevelBadge";
 import type { AgeBucket } from "@/hooks/use-players";
 
