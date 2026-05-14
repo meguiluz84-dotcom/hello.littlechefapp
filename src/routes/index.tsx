@@ -19,7 +19,12 @@ import PantryScreen from "@/components/PantryScreen";
 import MissionsScreen from "@/components/MissionsScreen";
 import PackScreen from "@/components/PackScreen";
 import BottomNav, { type NavTab } from "@/components/BottomNav";
+import CustomRecipesScreen from "@/components/CustomRecipesScreen";
+import CollectionsScreen from "@/components/CollectionsScreen";
+import IngredientGenerator from "@/components/IngredientGenerator";
+import SchoolMode from "@/components/SchoolMode";
 import { PACKS, type RecipePack } from "@/data/recipePacks";
+import { useCustomRecipes, customToRecipe } from "@/hooks/use-custom-recipes";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
 import { useDiplomas } from "@/hooks/use-diplomas";
 import CategoryDiploma from "@/components/CategoryDiploma";
@@ -45,7 +50,8 @@ export const Route = createFileRoute("/")({
 
 type Screen =
   | "splash" | "home" | "ingredients" | "cooking"
-  | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack";
+  | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack"
+  | "custom" | "collections" | "generator" | "school";
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -68,22 +74,29 @@ function Index() {
   const missions = useMissions();
   const noCook = useNoCook();
   const skills = useSkills();
+  const customRecipes = useCustomRecipes();
   const earnedBeforeRef = medals.earned;
 
   const active = players.active;
   const needsOnboarding = players.hydrated && !active && !addingPlayer;
 
+  // Combine built-in recipes with the family's custom ones.
+  const allRecipes = useMemo<Recipe[]>(
+    () => [...ALL_RECIPES, ...customRecipes.items.map(customToRecipe)],
+    [customRecipes.items]
+  );
+
   // Filter recipes for the active player (age + allergens + optional no-cook).
   const allowedRecipes = useMemo(() => {
-    if (!active) return ALL_RECIPES;
-    return ALL_RECIPES.filter((r) => {
+    if (!active) return allRecipes;
+    return allRecipes.filter((r) => {
       const m = getRecipeMeta(r.id);
       if (!recipeAllowedForAge(m, active.age)) return false;
       if (!recipeMatchesRestrictions(m, active.restrictions)) return false;
       if (noCook.enabled && !recipeIsNoCook(r)) return false;
       return true;
     });
-  }, [active, noCook.enabled]);
+  }, [active, noCook.enabled, allRecipes]);
 
   const challengeRecipe = useMemo(() => {
     if (!active || allowedRecipes.length === 0) return null;
@@ -209,6 +222,10 @@ function Index() {
         onOpenWeekPlan={() => { setAdultOpen(false); setScreen("weekplan"); }}
         onOpenShopping={() => { setAdultOpen(false); setScreen("shopping"); }}
         onOpenComingSoon={() => { window.location.assign("/proximamente"); }}
+        onOpenCustom={() => { setAdultOpen(false); setScreen("custom"); }}
+        onOpenCollections={() => { setAdultOpen(false); setScreen("collections"); }}
+        onOpenGenerator={() => { setAdultOpen(false); setScreen("generator"); }}
+        onOpenSchool={() => { setAdultOpen(false); setScreen("school"); }}
         soundOn={prefs.soundOn}
         onToggleSound={prefs.setSoundOn}
       />
@@ -257,7 +274,7 @@ function Index() {
   } else if (screen === "shopping") {
     content = (
       <ShoppingListScreen
-        recipes={ALL_RECIPES}
+        recipes={allRecipes}
         favorites={prefs.favorites}
         onClose={() => setScreen("home")}
       />
@@ -314,6 +331,35 @@ function Index() {
         </div>
       );
     }
+  } else if (screen === "custom") {
+    content = <CustomRecipesScreen onClose={() => setScreen("home")} />;
+  } else if (screen === "collections") {
+    content = (
+      <CollectionsScreen
+        recipes={allowedRecipes}
+        getName={nameFor}
+        onPick={(r) => handleSelectRecipe(r)}
+        onClose={() => setScreen("home")}
+      />
+    );
+  } else if (screen === "generator") {
+    content = (
+      <IngredientGenerator
+        recipes={allowedRecipes}
+        restrictions={active?.restrictions ?? prefs.DEFAULT_RESTR}
+        getName={nameFor}
+        onPick={(r) => handleSelectRecipe(r)}
+        onClose={() => setScreen("home")}
+      />
+    );
+  } else if (screen === "school") {
+    content = (
+      <SchoolMode
+        recipes={allRecipes}
+        getName={nameFor}
+        onClose={() => setScreen("home")}
+      />
+    );
   }
 
   if (!content) {
@@ -374,6 +420,7 @@ function Index() {
           onOpenPantry={() => setScreen("pantry")}
           onOpenMissions={() => setScreen("missions")}
           onOpenPack={(p) => { setSelectedPack(p); setScreen("pack"); }}
+          extraRecipes={customRecipes.items.map(customToRecipe)}
           playerName={active?.name ?? "Chef"}
         />
       );

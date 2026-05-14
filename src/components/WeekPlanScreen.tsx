@@ -2,6 +2,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
 import { useWeekPlan, DAYS, MEALS, todayKey, type DayKey, type MealKey } from "@/hooks/use-week-plan";
+import { buildBalancedPlan } from "@/lib/planner";
+import { usePreferences } from "@/hooks/use-preferences";
+import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
 
 interface Props {
   recipes: Recipe[];
@@ -14,6 +17,24 @@ export default function WeekPlanScreen({ recipes, getName, onClose }: Props) {
   const [picking, setPicking] = useState<{ day: DayKey; meal: MealKey } | null>(null);
   const today = todayKey();
   const recipeById = (id: string | undefined) => recipes.find((r) => r.id === id);
+  const prefs = usePreferences();
+  const { isCompleted } = useCompletedRecipes();
+
+  const fillBalanced = () => {
+    const next = buildBalancedPlan(plan, {
+      recipes,
+      isFavorite: prefs.isFavorite,
+      isCompleted,
+    });
+    // Apply diff via setSlot (single source of truth in hook).
+    Object.entries(next).forEach(([k, rid]) => {
+      if (plan[k as keyof typeof plan] !== rid && rid) {
+        const [day, meal] = k.split("-") as [DayKey, MealKey];
+        setSlot(day, meal, rid);
+      }
+    });
+  };
+
 
   return (
     <div className="min-h-screen bg-background px-4 pb-10 pt-6">
@@ -62,7 +83,12 @@ export default function WeekPlanScreen({ recipes, getName, onClose }: Props) {
           ))}
         </div>
 
-        <div className="mt-6 flex justify-center">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <button
+            type="button"
+            onClick={fillBalanced}
+            className="min-h-12 rounded-full bg-kids-green px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
+          >✨ Llenar semana equilibrada</button>
           <button
             type="button"
             onClick={() => { if (confirm("¿Vaciar plan semanal?")) clear(); }}
