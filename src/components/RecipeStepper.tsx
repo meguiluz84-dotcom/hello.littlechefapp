@@ -151,11 +151,19 @@ export default function RecipeStepper({
   }, []);
   const total = recipe.steps.length;
   const current = recipe.steps[step];
+  const meta = getRecipeMeta(recipe.id);
+  const isAdvanced = meta.level === 4;
+  const challenge = useChallengeMode();
+  const challengeOn = challenge.enabled && (recipe.challengeModeCompatible ?? false);
   const needsAdult = useMemo(
-    () => stepNeedsAdult(current.actionIcon, current.emoji),
+    () => stepNeedsAdult(current.actionIcon, current.emoji, current.adultRequired),
     [current]
   );
   const adultBlocking = needsAdult && adultConfirmedStep !== step;
+  const hygieneActions = useMemo(
+    () => detectHygieneActions(recipe.ingredients.map((i) => i.emoji), isAdvanced),
+    [recipe, isAdvanced]
+  );
 
   // Speak the line for the current step when voice is enabled.
   useEffect(() => {
@@ -208,7 +216,7 @@ export default function RecipeStepper({
   }
 
   if (!hygieneDone) {
-    return <HygieneStep soundOn={soundOn} onDone={markHygieneDone} />;
+    return <HygieneStep soundOn={soundOn} onDone={markHygieneDone} actions={hygieneActions} />;
   }
 
   const actionAnim = reduced
