@@ -348,11 +348,15 @@ export default function RecipeHome({
                 </button>
               )}
               <button type="button" onClick={onOpenAdult}
-                className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
-                <span className="text-2xl">⚙️</span>
+                className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-kids-purple/40 ring-2 ring-kids-purple kids-shadow">
+                <span className="text-2xl">👨‍👩‍👧</span>
                 <span className="text-[10px] font-extrabold text-foreground">Padres</span>
               </button>
             </div>
+
+            <p className="mt-4 px-2 text-center text-[11px] font-bold text-muted-foreground">
+              👀 Cocina siempre con un adulto · ⚠️ Revisad alergias · Contenido orientativo
+            </p>
           </motion.div>
         ) : (
           <motion.div
