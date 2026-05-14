@@ -215,9 +215,30 @@ function Index() {
     );
   }
 
-  if (screen === "medals") return <MedalsScreen onClose={() => setScreen("home")} />;
-  if (screen === "favorites") {
-    return (
+  const handleHome = () => { setSelectedRecipe(null); setSelectedPack(null); setScreen("home"); };
+
+  const handleNavTab = (tab: NavTab) => {
+    if (tab === "home") handleHome();
+    else if (tab === "packs") { setSelectedPack(null); setScreen("pack"); }
+    else if (tab === "plan") setScreen("weekplan");
+    else if (tab === "progress") setScreen("medals");
+    else if (tab === "profile") setPlayersOpen(true);
+  };
+
+  const currentTab: NavTab =
+    screen === "weekplan" ? "plan"
+    : screen === "medals" ? "progress"
+    : screen === "pack" ? "packs"
+    : "home";
+
+  const showBottomNav =
+    screen !== "splash" && screen !== "ingredients" && screen !== "cooking";
+
+  let content;
+  if (screen === "medals") {
+    content = <MedalsScreen onClose={() => setScreen("home")} />;
+  } else if (screen === "favorites") {
+    content = (
       <FavoritesScreen
         recipes={allowedRecipes}
         favorites={prefs.favorites}
@@ -226,27 +247,24 @@ function Index() {
         getName={nameFor}
       />
     );
-  }
-  if (screen === "weekplan") {
-    return (
+  } else if (screen === "weekplan") {
+    content = (
       <WeekPlanScreen
         recipes={allowedRecipes}
         getName={nameFor}
         onClose={() => setScreen("home")}
       />
     );
-  }
-  if (screen === "shopping") {
-    return (
+  } else if (screen === "shopping") {
+    content = (
       <ShoppingListScreen
         recipes={ALL_RECIPES}
         favorites={prefs.favorites}
         onClose={() => setScreen("home")}
       />
     );
-  }
-  if (screen === "pantry") {
-    return (
+  } else if (screen === "pantry") {
+    content = (
       <PantryScreen
         recipes={allowedRecipes}
         getName={nameFor}
@@ -254,9 +272,49 @@ function Index() {
         onClose={() => setScreen("home")}
       />
     );
-  }
-  if (screen === "missions") {
-    return <MissionsScreen onClose={() => setScreen("home")} />;
+  } else if (screen === "missions") {
+    content = <MissionsScreen onClose={() => setScreen("home")} />;
+  } else if (screen === "pack") {
+    if (selectedPack) {
+      content = (
+        <PackScreen
+          pack={selectedPack}
+          allowed={allowedRecipes}
+          isCompleted={isCompleted}
+          isFavorite={prefs.isFavorite}
+          onPick={(r) => handleSelectRecipe(r)}
+          onClose={() => setSelectedPack(null)}
+          getName={nameFor}
+        />
+      );
+    } else {
+      // Pack picker grid
+      content = (
+        <div className="min-h-screen bg-background px-4 pb-24 pt-6">
+          <div className="mx-auto w-full max-w-xl">
+            <h1 className="mb-4 text-center text-2xl font-extrabold text-foreground">📦 Packs de recetas</h1>
+            <div className="grid grid-cols-2 gap-4">
+              {require("@/data/recipePacks").PACKS.map((p: RecipePack) => {
+                const list = allowedRecipes.filter(p.match);
+                const done = list.filter((r) => isCompleted(r.id)).length;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => setSelectedPack(p)}
+                    className={`flex min-h-32 flex-col items-center justify-center gap-1 rounded-3xl ${p.color} p-3 kids-shadow-lg`}
+                  >
+                    <span className="text-5xl">{p.emoji}</span>
+                    <span className="text-balance text-center text-sm font-extrabold text-foreground">{p.label}</span>
+                    <span className="rounded-full bg-card/80 px-2 py-0.5 text-[10px] font-extrabold text-foreground">{done}/{list.length} ⭐</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      );
+    }
   }
 
   const handleHome = () => { setSelectedRecipe(null); setScreen("home"); };
