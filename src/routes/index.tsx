@@ -420,6 +420,7 @@ function Index() {
           onOpenPantry={() => setScreen("pantry")}
           onOpenMissions={() => setScreen("missions")}
           onOpenPack={(p) => { setSelectedPack(p); setScreen("pack"); }}
+          extraRecipes={customRecipes.items.map(customToRecipe)}
           playerName={active?.name ?? "Chef"}
         />
       );
