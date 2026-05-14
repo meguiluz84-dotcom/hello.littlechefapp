@@ -176,9 +176,10 @@ function Index() {
     return (
       <Onboarding
         initialAvatar={null}
-        onComplete={(av, p, name) => {
+        onComplete={(av, p, name, goal) => {
           const id = players.add({
             name, avatarId: av, age: p.age, restrictions: p.restrictions,
+            ...(goal ? { goal } : {}),
           });
           players.setActive(id);
           setAddingPlayer(false);
@@ -236,7 +237,6 @@ function Index() {
 
   const handleNavTab = (tab: NavTab) => {
     if (tab === "home") handleHome();
-    else if (tab === "packs") { setSelectedPack(null); setScreen("pack"); }
     else if (tab === "plan") setScreen("weekplan");
     else if (tab === "progress") setScreen("medals");
     else if (tab === "profile") setPlayersOpen(true);
@@ -245,7 +245,6 @@ function Index() {
   const currentTab: NavTab =
     screen === "weekplan" ? "plan"
     : screen === "medals" ? "progress"
-    : screen === "pack" ? "packs"
     : "home";
 
   const showBottomNav = screen !== "ingredients" && screen !== "cooking";
