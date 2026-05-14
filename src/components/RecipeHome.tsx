@@ -63,7 +63,7 @@ export default function RecipeHome({
   restrictions, lastRecipeId, onOpenAdult, isFavorite,
   ageBucket, challengeRecipe, onPickChallenge,
   onOpenMedals, onOpenFavorites, onOpenWeekPlan, onOpenShopping,
-  onOpenPantry, onOpenMissions, playerName,
+  onOpenPantry, onOpenMissions, onOpenPack, playerName,
 }: RecipeHomeProps) {
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
