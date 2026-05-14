@@ -103,6 +103,21 @@ export default function RecipeHome({
     return allowed.filter((r) => r.category === activeCategory);
   }, [allowed, activeCategory]);
 
+  const levelProgress = useMemo(() => {
+    const out: Partial<Record<RecipeLevel, { done: number; total: number }>> = {};
+    ([1, 2, 3, 4] as RecipeLevel[]).forEach((lv) => {
+      const list = allowed.filter((r) => getRecipeMeta(r.id).level === lv);
+      out[lv] = {
+        total: list.length,
+        done: isCompleted ? list.filter((r) => isCompleted(r.id)).length : 0,
+      };
+    });
+    return out;
+  }, [allowed, isCompleted]);
+
+  const applyLevel = (list: Recipe[]) =>
+    level === null ? list : list.filter((r) => getRecipeMeta(r.id).level === level);
+
   const completedCount = isCompleted ? allowed.filter((r) => isCompleted(r.id)).length : 0;
   const countByCategory = (cat: RecipeCategory) => allowed.filter((r) => r.category === cat).length;
   const completedByCategory = (cat: RecipeCategory) =>
