@@ -355,7 +355,7 @@ export default function RecipeStepper({
             {actionIcons[current.actionIcon]}
           </motion.div>
 
-          {current.ingredientEmojis.length > 0 && (
+          {current.ingredientEmojis.length > 0 && !challengeOn && (
             <div className="flex gap-3">
               {current.ingredientEmojis.map((e, i) => (
                 <motion.div
