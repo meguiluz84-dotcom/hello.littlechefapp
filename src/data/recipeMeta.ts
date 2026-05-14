@@ -100,6 +100,16 @@ export const recipeMeta: Record<string, RecipeMeta> = {
   "chef-mini-pizzas":   { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "high", ageMin: 6, level: 4 },
   "chef-empanadas":     { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true, eggs: true }), adultHelp: "high", ageMin: 6, level: 4 },
   "chef-green-pancakes":{ tags: ["desayuno", "salado"], restrictions: veg({ dairy: true, gluten: true, eggs: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-mini-calzones":         { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-nuggets-garbanzo":      { tags: ["salado"], restrictions: veg({ gluten: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-sushi-vegetal":         { tags: ["salado", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-muffins-salados":       { tags: ["salado", "merienda"], restrictions: veg({ dairy: true, gluten: true, eggs: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-hamburguesitas-lentejas":{ tags: ["salado"], restrictions: veg({ gluten: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-pizza-trenzada":        { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-rollitos-primavera":    { tags: ["salado", "sin-coccion"], restrictions: veg({ gluten: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-gnocchi-boniato":       { tags: ["salado"], restrictions: veg({ gluten: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-smile-empanadas":       { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true, eggs: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-bizcochitos-zanahoria": { tags: ["merienda"], restrictions: veg({ dairy: true, gluten: true, eggs: true }), adultHelp: "high", ageMin: 6, level: 4 },
 };
 
 const DEFAULT_META: RecipeMeta = {
