@@ -8,9 +8,11 @@ import {
   recipeMatchesRestrictions,
   type FoodTag,
   type Restrictions,
+  type RecipeLevel,
 } from "@/data/recipeMeta";
 import RecipeOfTheDay from "./RecipeOfTheDay";
 import CategoryFilters from "./CategoryFilters";
+import LevelFilters from "./LevelFilters";
 import EmptyState from "./EmptyState";
 import DifficultyBadges from "./DifficultyBadges";
 import ChallengeBanner from "./ChallengeBanner";
