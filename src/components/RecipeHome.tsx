@@ -65,6 +65,7 @@ export default function RecipeHome({
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
   const [tag, setTag] = useState<FoodTag | null>(null);
+  const [level, setLevel] = useState<RecipeLevel | null>(null);
   const { plan } = useWeekPlan();
   const challenge = useChallengeMode();
 
