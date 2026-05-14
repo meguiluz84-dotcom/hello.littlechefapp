@@ -568,6 +568,34 @@ export default function ParentDashboard({
             </div>
           </div>
         )}
+
+        {/* ROADMAP */}
+        {tab === "roadmap" && (
+          <div className="space-y-3">
+            <section className="rounded-2xl bg-kids-blue/30 p-4 kids-shadow">
+              <p className="text-sm font-bold text-foreground">
+                Estamos construyendo Little Chef paso a paso. Estas funciones llegarán en próximas versiones.
+              </p>
+            </section>
+            <ul className="space-y-2">
+              {ROADMAP_ITEMS.map((it) => (
+                <li key={it.label} className="flex gap-3 rounded-2xl bg-card p-3 kids-shadow">
+                  <span className="text-3xl">{it.emoji}</span>
+                  <div className="flex-1">
+                    <div className="text-sm font-extrabold text-foreground">{it.label}</div>
+                    <div className="text-[12px] font-bold text-muted-foreground">{it.desc}</div>
+                  </div>
+                  <span className="self-start rounded-full bg-kids-yellow/60 px-2 py-0.5 text-[10px] font-extrabold text-foreground">Próximamente</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Footer trust strip — visible in all tabs */}
+        <p className="mt-6 rounded-2xl bg-muted/50 p-3 text-center text-[11px] font-bold text-muted-foreground">
+          Contenido orientativo · Supervisión adulta necesaria · Revisad alergias · Consultad a un profesional ante dudas médicas o alimentarias.
+        </p>
       </div>
     </div>
   );
