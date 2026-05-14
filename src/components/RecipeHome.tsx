@@ -19,6 +19,8 @@ import ChallengeBanner from "./ChallengeBanner";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
 import { useChallengeMode } from "@/hooks/use-challenge-mode";
+import { useNoCook } from "@/hooks/use-no-cook";
+import { PACKS, type RecipePack } from "@/data/recipePacks";
 import LevelBadge from "./LevelBadge";
 import type { AgeBucket } from "@/hooks/use-players";
 
@@ -52,6 +54,7 @@ interface RecipeHomeProps {
   onOpenShopping: () => void;
   onOpenPantry?: () => void;
   onOpenMissions?: () => void;
+  onOpenPack?: (pack: RecipePack) => void;
   playerName: string;
 }
 
@@ -60,7 +63,7 @@ export default function RecipeHome({
   restrictions, lastRecipeId, onOpenAdult, isFavorite,
   ageBucket, challengeRecipe, onPickChallenge,
   onOpenMedals, onOpenFavorites, onOpenWeekPlan, onOpenShopping,
-  onOpenPantry, onOpenMissions, playerName,
+  onOpenPantry, onOpenMissions, onOpenPack, playerName,
 }: RecipeHomeProps) {
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
@@ -68,6 +71,7 @@ export default function RecipeHome({
   const [level, setLevel] = useState<RecipeLevel | null>(null);
   const { plan } = useWeekPlan();
   const challenge = useChallengeMode();
+  const noCook = useNoCook();
 
   const allowed = useMemo(
     () => recipes.filter((r) => {
@@ -174,6 +178,13 @@ export default function RecipeHome({
           className={`flex h-12 min-h-12 items-center gap-1 rounded-full px-3 text-xl kids-shadow ${challenge.enabled ? "bg-kids-orange ring-4 ring-kids-yellow" : "bg-card"}`}
           title="Modo reto: menos pistas visuales"
         >🎯</button>
+        <button
+          type="button" onClick={noCook.toggle}
+          aria-pressed={noCook.enabled}
+          aria-label={noCook.enabled ? "Modo sin cocción activo (toca para desactivar)" : "Activar modo sin cocción"}
+          className={`flex h-12 min-h-12 items-center gap-1 rounded-full px-3 text-xl kids-shadow ${noCook.enabled ? "bg-kids-blue ring-4 ring-kids-teal" : "bg-card"}`}
+          title="Solo recetas sin cocción"
+        >❄️</button>
       </div>
 
       <AnimatePresence mode="wait">
@@ -255,6 +266,36 @@ export default function RecipeHome({
             )}
 
             <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
+
+            {/* Packs carousel shortcut */}
+            {onOpenPack && (
+              <div className="mb-3">
+                <div className="mb-2 flex items-center justify-between px-1">
+                  <span className="text-sm font-extrabold text-foreground">📦 Packs</span>
+                </div>
+                <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                  {PACKS.map((p) => {
+                    const list = allowed.filter(p.match);
+                    if (list.length === 0) return null;
+                    const done = isCompleted ? list.filter((r) => isCompleted(r.id)).length : 0;
+                    return (
+                      <button
+                        key={p.id}
+                        type="button"
+                        onClick={() => onOpenPack(p)}
+                        className={`flex min-w-[7rem] shrink-0 flex-col items-center gap-1 rounded-2xl ${p.color} p-2 kids-shadow`}
+                        aria-label={p.label}
+                      >
+                        <span className="text-3xl">{p.emoji}</span>
+                        <span className="text-balance text-center text-[11px] font-extrabold leading-tight text-foreground">{p.label}</span>
+                        <span className="rounded-full bg-card/80 px-2 py-0.5 text-[10px] font-extrabold text-foreground">{done}/{list.length} ⭐</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             <CategoryFilters active={tag} onChange={setTag} />
 
             <div className="grid grid-cols-2 gap-4">

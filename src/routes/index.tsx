@@ -293,7 +293,7 @@ function Index() {
           <div className="mx-auto w-full max-w-xl">
             <h1 className="mb-4 text-center text-2xl font-extrabold text-foreground">📦 Packs de recetas</h1>
             <div className="grid grid-cols-2 gap-4">
-              {require("@/data/recipePacks").PACKS.map((p: RecipePack) => {
+              {PACKS.map((p: RecipePack) => {
                 const list = allowedRecipes.filter(p.match);
                 const done = list.filter((r) => isCompleted(r.id)).length;
                 return (
@@ -373,6 +373,7 @@ function Index() {
           onOpenShopping={() => setScreen("shopping")}
           onOpenPantry={() => setScreen("pantry")}
           onOpenMissions={() => setScreen("missions")}
+          onOpenPack={(p) => { setSelectedPack(p); setScreen("pack"); }}
           playerName={active?.name ?? "Chef"}
         />
       );
