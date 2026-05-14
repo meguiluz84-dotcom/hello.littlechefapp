@@ -54,12 +54,24 @@ export interface Ingredient {
   emoji: string;
   quantity?: number;
   grams?: number;
+  /** Visual label like "1 taza" | "media taza" | "1 cuchara" — replaces grams in kid view. */
+  quantityLabel?: "1 taza" | "media taza" | "1 cuchara";
 }
 
+export type ActionIcon =
+  | "cut" | "mix" | "pour" | "spread" | "place" | "shake" | "scoop" | "peel" | "wash"
+  | "bake" | "chill" | "wait";
+
 export interface RecipeStep {
-  emoji: string; // main action emoji
-  ingredientEmojis: string[]; // ingredients used in this step
-  actionIcon: "cut" | "mix" | "pour" | "spread" | "place" | "shake" | "scoop" | "peel" | "wash";
+  emoji: string;
+  ingredientEmojis: string[];
+  actionIcon: ActionIcon;
+  /** Force adult requirement (overrides emoji/action heuristics). */
+  adultRequired?: boolean;
+  /** Optional countdown (seconds) shown as a visual timer. */
+  timerSeconds?: number;
+  /** Optional visual quantity for this step (e.g. "1 taza" of leche). */
+  quantity?: "1 taza" | "media taza" | "1 cuchara";
 }
 
 export type RecipeCategory = "fruits" | "snacks" | "drinks" | "meals" | "desserts";
@@ -82,6 +94,10 @@ export interface Recipe {
   ingredients: Ingredient[];
   steps: RecipeStep[];
   difficulty: 1 | 2 | 3;
+  /** Whether this recipe can be played in "Modo reto" (less visual hints). */
+  challengeModeCompatible?: boolean;
+  /** Optional medal id to award upon completion (besides automatic medals). */
+  medalId?: string;
 }
 
 export const recipes: Recipe[] = [
