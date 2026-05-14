@@ -95,6 +95,11 @@ export const recipeMeta: Record<string, RecipeMeta> = {
   "apple-donut":      { tags: ["fruta", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
   "watermelon-pops":  { tags: ["fruta", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
   "veggie-train":     { tags: ["salado", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
+
+  // Chef Avanzado (level 4)
+  "chef-mini-pizzas":   { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-empanadas":     { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true, eggs: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-green-pancakes":{ tags: ["desayuno", "salado"], restrictions: veg({ dairy: true, gluten: true, eggs: true }), adultHelp: "high", ageMin: 6, level: 4 },
 };
 
 const DEFAULT_META: RecipeMeta = {
