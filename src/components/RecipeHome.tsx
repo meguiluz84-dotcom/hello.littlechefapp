@@ -71,6 +71,7 @@ export default function RecipeHome({
   const [level, setLevel] = useState<RecipeLevel | null>(null);
   const { plan } = useWeekPlan();
   const challenge = useChallengeMode();
+  const noCook = useNoCook();
 
   const allowed = useMemo(
     () => recipes.filter((r) => {
