@@ -45,11 +45,12 @@ export const Route = createFileRoute("/")({
 
 type Screen =
   | "splash" | "home" | "ingredients" | "cooking"
-  | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions";
+  | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack";
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("splash");
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [selectedPack, setSelectedPack] = useState<RecipePack | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [adultOpen, setAdultOpen] = useState(false);
   const [playersOpen, setPlayersOpen] = useState(false);
@@ -65,19 +66,24 @@ function Index() {
   const prefs = usePreferences();
   const medals = useMedals();
   const missions = useMissions();
+  const noCook = useNoCook();
+  const skills = useSkills();
   const earnedBeforeRef = medals.earned;
 
   const active = players.active;
   const needsOnboarding = players.hydrated && !active && !addingPlayer;
 
-  // Filter recipes for the active player
+  // Filter recipes for the active player (age + allergens + optional no-cook).
   const allowedRecipes = useMemo(() => {
     if (!active) return ALL_RECIPES;
     return ALL_RECIPES.filter((r) => {
       const m = getRecipeMeta(r.id);
-      return recipeAllowedForAge(m, active.age) && recipeMatchesRestrictions(m, active.restrictions);
+      if (!recipeAllowedForAge(m, active.age)) return false;
+      if (!recipeMatchesRestrictions(m, active.restrictions)) return false;
+      if (noCook.enabled && !recipeIsNoCook(r)) return false;
+      return true;
     });
-  }, [active]);
+  }, [active, noCook.enabled]);
 
   const challengeRecipe = useMemo(() => {
     if (!active || allowedRecipes.length === 0) return null;
