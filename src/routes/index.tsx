@@ -270,7 +270,7 @@ function Index() {
   } else if (screen === "shopping") {
     content = (
       <ShoppingListScreen
-        recipes={ALL_RECIPES}
+        recipes={allRecipes}
         favorites={prefs.favorites}
         onClose={() => setScreen("home")}
       />
