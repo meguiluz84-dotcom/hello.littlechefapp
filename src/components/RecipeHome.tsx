@@ -8,9 +8,11 @@ import {
   recipeMatchesRestrictions,
   type FoodTag,
   type Restrictions,
+  type RecipeLevel,
 } from "@/data/recipeMeta";
 import RecipeOfTheDay from "./RecipeOfTheDay";
 import CategoryFilters from "./CategoryFilters";
+import LevelFilters from "./LevelFilters";
 import EmptyState from "./EmptyState";
 import DifficultyBadges from "./DifficultyBadges";
 import ChallengeBanner from "./ChallengeBanner";
@@ -63,6 +65,7 @@ export default function RecipeHome({
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
   const [tag, setTag] = useState<FoodTag | null>(null);
+  const [level, setLevel] = useState<RecipeLevel | null>(null);
   const { plan } = useWeekPlan();
   const challenge = useChallengeMode();
 
@@ -99,6 +102,21 @@ export default function RecipeHome({
     if (!activeCategory) return null;
     return allowed.filter((r) => r.category === activeCategory);
   }, [allowed, activeCategory]);
+
+  const levelProgress = useMemo(() => {
+    const out: Partial<Record<RecipeLevel, { done: number; total: number }>> = {};
+    ([1, 2, 3, 4] as RecipeLevel[]).forEach((lv) => {
+      const list = allowed.filter((r) => getRecipeMeta(r.id).level === lv);
+      out[lv] = {
+        total: list.length,
+        done: isCompleted ? list.filter((r) => isCompleted(r.id)).length : 0,
+      };
+    });
+    return out;
+  }, [allowed, isCompleted]);
+
+  const applyLevel = (list: Recipe[]) =>
+    level === null ? list : list.filter((r) => getRecipeMeta(r.id).level === level);
 
   const completedCount = isCompleted ? allowed.filter((r) => isCompleted(r.id)).length : 0;
   const countByCategory = (cat: RecipeCategory) => allowed.filter((r) => r.category === cat).length;
@@ -159,7 +177,7 @@ export default function RecipeHome({
       </div>
 
       <AnimatePresence mode="wait">
-        {!activeCategory && !tag ? (
+        {!activeCategory && !tag && level === null ? (
           <motion.div
             key="home"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -236,6 +254,7 @@ export default function RecipeHome({
               </motion.button>
             )}
 
+            <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
             <CategoryFilters active={tag} onChange={setTag} />
 
             <div className="grid grid-cols-2 gap-4">
@@ -302,21 +321,25 @@ export default function RecipeHome({
             <div className="mb-5 flex items-center gap-3">
               <motion.button
                 whileTap={{ scale: 0.9 }}
-                onClick={() => { setActiveCategory(null); setTag(null); }}
+                onClick={() => { setActiveCategory(null); setTag(null); setLevel(null); }}
                 aria-label="Volver"
                 className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-2xl bg-card text-2xl kids-shadow"
               >⬅️</motion.button>
               <div className={`flex flex-1 items-center gap-2 rounded-2xl ${activeCat ? colorMap[activeCat.color] ?? "bg-primary" : "bg-primary"} px-4 py-3 kids-shadow`}>
-                <span className="text-3xl">{activeCat?.emoji ?? "🔍"}</span>
-                <span className="text-xl font-extrabold text-foreground">{activeCat?.label ?? (tag ? tag : "")}</span>
+                <span className="text-3xl">{activeCat?.emoji ?? (level !== null ? "👨‍🍳" : "🔍")}</span>
+                <span className="text-xl font-extrabold text-foreground">
+                  {activeCat?.label ?? (tag ? tag : level !== null ? `Nivel ${level}` : "")}
+                </span>
               </div>
             </div>
 
-            {((filteredByCategory ?? filteredByTag) ?? []).length === 0 ? (
+            <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
+
+            {(applyLevel((filteredByCategory ?? filteredByTag) ?? allowed)).length === 0 ? (
               <EmptyState emoji="🍽️" message="No hay recetas aquí todavía." />
             ) : (
               <div className="grid grid-cols-2 gap-4">
-                {((filteredByCategory ?? filteredByTag) ?? []).map((recipe, i) => {
+                {applyLevel((filteredByCategory ?? filteredByTag) ?? allowed).map((recipe, i) => {
                   return (
                     <motion.button
                       key={recipe.id}
