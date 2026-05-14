@@ -222,6 +222,10 @@ function Index() {
         onOpenWeekPlan={() => { setAdultOpen(false); setScreen("weekplan"); }}
         onOpenShopping={() => { setAdultOpen(false); setScreen("shopping"); }}
         onOpenComingSoon={() => { window.location.assign("/proximamente"); }}
+        onOpenCustom={() => { setAdultOpen(false); setScreen("custom"); }}
+        onOpenCollections={() => { setAdultOpen(false); setScreen("collections"); }}
+        onOpenGenerator={() => { setAdultOpen(false); setScreen("generator"); }}
+        onOpenSchool={() => { setAdultOpen(false); setScreen("school"); }}
         soundOn={prefs.soundOn}
         onToggleSound={prefs.setSoundOn}
       />
