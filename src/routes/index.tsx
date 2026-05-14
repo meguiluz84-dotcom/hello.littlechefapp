@@ -74,22 +74,29 @@ function Index() {
   const missions = useMissions();
   const noCook = useNoCook();
   const skills = useSkills();
+  const customRecipes = useCustomRecipes();
   const earnedBeforeRef = medals.earned;
 
   const active = players.active;
   const needsOnboarding = players.hydrated && !active && !addingPlayer;
 
+  // Combine built-in recipes with the family's custom ones.
+  const allRecipes = useMemo<Recipe[]>(
+    () => [...ALL_RECIPES, ...customRecipes.items.map(customToRecipe)],
+    [customRecipes.items]
+  );
+
   // Filter recipes for the active player (age + allergens + optional no-cook).
   const allowedRecipes = useMemo(() => {
-    if (!active) return ALL_RECIPES;
-    return ALL_RECIPES.filter((r) => {
+    if (!active) return allRecipes;
+    return allRecipes.filter((r) => {
       const m = getRecipeMeta(r.id);
       if (!recipeAllowedForAge(m, active.age)) return false;
       if (!recipeMatchesRestrictions(m, active.restrictions)) return false;
       if (noCook.enabled && !recipeIsNoCook(r)) return false;
       return true;
     });
-  }, [active, noCook.enabled]);
+  }, [active, noCook.enabled, allRecipes]);
 
   const challengeRecipe = useMemo(() => {
     if (!active || allowedRecipes.length === 0) return null;
