@@ -55,6 +55,7 @@ interface RecipeHomeProps {
   onOpenPantry?: () => void;
   onOpenMissions?: () => void;
   onOpenPack?: (pack: RecipePack) => void;
+  extraRecipes?: Recipe[];
   playerName: string;
 }
 
@@ -63,7 +64,7 @@ export default function RecipeHome({
   restrictions, lastRecipeId, onOpenAdult, isFavorite,
   ageBucket, challengeRecipe, onPickChallenge,
   onOpenMedals, onOpenFavorites, onOpenWeekPlan, onOpenShopping,
-  onOpenPantry, onOpenMissions, onOpenPack, playerName,
+  onOpenPantry, onOpenMissions, onOpenPack, extraRecipes, playerName,
 }: RecipeHomeProps) {
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
@@ -74,11 +75,11 @@ export default function RecipeHome({
   const noCook = useNoCook();
 
   const allowed = useMemo(
-    () => recipes.filter((r) => {
+    () => [...recipes, ...(extraRecipes ?? [])].filter((r) => {
       const m = getRecipeMeta(r.id);
       return recipeAllowedForAge(m, ageBucket) && recipeMatchesRestrictions(m, restrictions);
     }),
-    [restrictions, ageBucket]
+    [restrictions, ageBucket, extraRecipes]
   );
 
   const recipeOfDay = useMemo(() => {
