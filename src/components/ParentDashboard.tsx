@@ -18,7 +18,7 @@ import ParentLibrary from "./ParentLibrary";
 import StepTimersConfig from "./StepTimersConfig";
 import RoutinesConfig from "./RoutinesConfig";
 
-type Tab = "ajustes" | "perfiles" | "progreso" | "recetas" | "seguridad" | "guias" | "timers" | "extras" | "fotos" | "probados";
+type Tab = "ajustes" | "perfiles" | "progreso" | "recetas" | "seguridad" | "guias" | "timers" | "extras" | "fotos" | "probados" | "roadmap";
 
 interface Props {
   onClose: () => void;
@@ -45,14 +45,26 @@ const AGE_OPTIONS: { id: AgeBucket; emoji: string; label: string }[] = [
 const TABS: { id: Tab; emoji: string; label: string }[] = [
   { id: "ajustes",   emoji: "⚙️", label: "Ajustes" },
   { id: "perfiles",  emoji: "👥", label: "Perfiles" },
+  { id: "seguridad", emoji: "🛡️", label: "Seguridad" },
   { id: "progreso",  emoji: "📈", label: "Progreso" },
   { id: "recetas",   emoji: "🔍", label: "Recetas" },
-  { id: "seguridad", emoji: "🛡️", label: "Seguridad" },
-  { id: "guias",     emoji: "📚", label: "Guías" },
+  { id: "extras",    emoji: "✨", label: "Extras" },
   { id: "timers",    emoji: "⏱️", label: "Timers" },
+  { id: "guias",     emoji: "📚", label: "Guías" },
   { id: "fotos",     emoji: "📸", label: "Fotos" },
   { id: "probados",  emoji: "🍽️", label: "Probados" },
-  { id: "extras",    emoji: "✨", label: "Extras" },
+  { id: "roadmap",   emoji: "🗺️", label: "Roadmap" },
+];
+
+const ROADMAP_ITEMS: { emoji: string; label: string; desc: string }[] = [
+  { emoji: "👨‍👩‍👧‍👦", label: "Comunidad familiar", desc: "Compartir con otras familias y ver recetas públicas." },
+  { emoji: "💎", label: "Premium", desc: "Packs avanzados, recetas exclusivas y sin límites." },
+  { emoji: "🏫", label: "Modo Escuela completo", desc: "Talleres, roles de grupo y vista para clase." },
+  { emoji: "📸", label: "Álbum de fotos avanzado", desc: "Recuerdos de cada plato cocinado en familia." },
+  { emoji: "🌍", label: "Multiidioma", desc: "Español, inglés, francés y más." },
+  { emoji: "📖", label: "Recetas públicas", desc: "Catálogo abierto creado por la comunidad." },
+  { emoji: "📤", label: "Exportación avanzada", desc: "PDF de recetas, planes y listas para imprimir." },
+  { emoji: "🎙️", label: "Voz y audio guiado", desc: "Lectura paso a paso con voz infantil." },
 ];
 
 export default function ParentDashboard({
