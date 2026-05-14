@@ -19,7 +19,7 @@ import PantryScreen from "@/components/PantryScreen";
 import MissionsScreen from "@/components/MissionsScreen";
 import PackScreen from "@/components/PackScreen";
 import BottomNav, { type NavTab } from "@/components/BottomNav";
-import type { RecipePack } from "@/data/recipePacks";
+import { PACKS, type RecipePack } from "@/data/recipePacks";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
 import { useDiplomas } from "@/hooks/use-diplomas";
 import CategoryDiploma from "@/components/CategoryDiploma";
@@ -374,9 +374,6 @@ function Index() {
           onOpenPantry={() => setScreen("pantry")}
           onOpenMissions={() => setScreen("missions")}
           playerName={active?.name ?? "Chef"}
-          noCookEnabled={noCook.enabled}
-          onToggleNoCook={noCook.toggle}
-          onOpenPacks={() => { setSelectedPack(null); setScreen("pack"); }}
         />
       );
     }
