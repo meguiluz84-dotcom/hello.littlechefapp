@@ -19,7 +19,7 @@ import ChallengeBanner from "./ChallengeBanner";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
 import { useChallengeMode } from "@/hooks/use-challenge-mode";
-import AdvancedBadge from "./AdvancedBadge";
+import LevelBadge from "./LevelBadge";
 import type { AgeBucket } from "@/hooks/use-players";
 
 const colorMap: Record<string, string> = {
@@ -364,7 +364,7 @@ export default function RecipeHome({
                       </div>
                       <div className="flex flex-col items-center gap-2 px-2 py-3">
                         <div className="text-balance text-center text-sm font-extrabold leading-tight text-foreground line-clamp-2">{getRecipeName(recipe)}</div>
-                        {getRecipeMeta(recipe.id).level === 4 && <AdvancedBadge size="sm" withLabel={false} />}
+                        <LevelBadge level={getRecipeMeta(recipe.id).level} size="sm" withLabel={false} />
                         <DifficultyBadges recipe={recipe} size="sm" compact />
                       </div>
                     </motion.button>
