@@ -254,6 +254,7 @@ export default function RecipeHome({
               </motion.button>
             )}
 
+            <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
             <CategoryFilters active={tag} onChange={setTag} />
 
             <div className="grid grid-cols-2 gap-4">
