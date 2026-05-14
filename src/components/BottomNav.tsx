@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export type NavTab = "home" | "packs" | "plan" | "progress" | "profile";
+export type NavTab = "home" | "plan" | "progress" | "profile";
 
 interface Props {
   active: NavTab;
@@ -9,7 +9,6 @@ interface Props {
 
 const items: { id: NavTab; emoji: string; label: string }[] = [
   { id: "home",     emoji: "🏠", label: "Inicio" },
-  { id: "packs",    emoji: "📦", label: "Packs" },
   { id: "plan",     emoji: "📅", label: "Plan" },
   { id: "progress", emoji: "🏅", label: "Logros" },
   { id: "profile",  emoji: "👥", label: "Perfil" },
