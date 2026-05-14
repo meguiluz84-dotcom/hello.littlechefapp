@@ -12,6 +12,7 @@ import VisualQuantity from "./VisualQuantity";
 import DifficultyBadges from "./DifficultyBadges";
 import IngredientSwap from "./IngredientSwap";
 import RecipeShareButton from "./RecipeShareButton";
+import AdvancedBadge from "./AdvancedBadge";
 
 interface Props {
   recipe: Recipe;
@@ -91,7 +92,9 @@ export default function RecipeIngredients({
       <h1 className="mb-2 text-balance text-center text-2xl font-extrabold text-foreground">
         {displayName ?? recipe.name}
       </h1>
-
+      {meta.level === 4 && (
+        <div className="mb-2"><AdvancedBadge size="md" /></div>
+      )}
       <div className="mb-3 flex items-center gap-2">
         <DifficultyBadges recipe={recipe} />
         <div

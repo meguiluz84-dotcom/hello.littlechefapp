@@ -16,6 +16,8 @@ import DifficultyBadges from "./DifficultyBadges";
 import ChallengeBanner from "./ChallengeBanner";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
+import { useChallengeMode } from "@/hooks/use-challenge-mode";
+import AdvancedBadge from "./AdvancedBadge";
 import type { AgeBucket } from "@/hooks/use-players";
 
 const colorMap: Record<string, string> = {
