@@ -231,8 +231,7 @@ function Index() {
     : screen === "pack" ? "packs"
     : "home";
 
-  const showBottomNav =
-    screen !== "splash" && screen !== "ingredients" && screen !== "cooking";
+  const showBottomNav = screen !== "ingredients" && screen !== "cooking";
 
   let content;
   if (screen === "medals") {
@@ -317,74 +316,77 @@ function Index() {
     }
   }
 
-  const handleHome = () => { setSelectedRecipe(null); setScreen("home"); };
-
-  let content;
-  if (screen === "ingredients" && selectedRecipe) {
-    const resume = prefs.getResume(selectedRecipe.id);
-    content = (
-      <RecipeIngredients
-        recipe={selectedRecipe}
-        onStart={() => handleStart(0)}
-        onBack={handleBack}
-        displayName={nameFor(selectedRecipe)}
-        hasResume={resume !== null && resume > 0}
-        onResume={() => handleStart(resume ?? 0)}
-        onResumeClear={() => { prefs.clearResume(selectedRecipe.id); handleStart(0); }}
-        isFavorite={prefs.isFavorite(selectedRecipe.id)}
-        onToggleFavorite={() => prefs.toggleFavorite(selectedRecipe.id)}
-      />
-    );
-  } else if (screen === "cooking" && selectedRecipe) {
-    content = (
-      <RecipeStepper
-        recipe={selectedRecipe}
-        onFinish={handleFinish}
-        onBack={handleBack}
-        onHome={handleHome}
-        startAt={resumeFrom}
-        soundOn={prefs.soundOn}
-        onPause={(step) => prefs.saveResume(selectedRecipe.id, step)}
-        onClearResume={() => prefs.clearResume(selectedRecipe.id)}
-        displayName={nameFor(selectedRecipe)}
-        isFavorite={prefs.isFavorite(selectedRecipe.id)}
-        onToggleFavorite={() => prefs.toggleFavorite(selectedRecipe.id)}
-        onAnother={handleAnother}
-        newMedalId={newMedalId}
-        onComplete={() => handleRecipeFinished(selectedRecipe, isChallenge)}
-        onTaste={() => missions.onTaste()}
-      />
-    );
-  } else {
-    content = (
-      <RecipeHome
-        onSelectRecipe={handleSelectRecipe}
-        isCompleted={isCompleted}
-        avatarId={active?.avatarId ?? "dino"}
-        onChangeAvatar={() => setPlayersOpen(true)}
-        getRecipeName={nameFor}
-        restrictions={active?.restrictions ?? prefs.DEFAULT_RESTR}
-        lastRecipeId={prefs.lastRecipe}
-        onOpenAdult={() => setAdultOpen(true)}
-        isFavorite={prefs.isFavorite}
-        ageBucket={active?.age ?? "4-5"}
-        challengeRecipe={challengeRecipe}
-        onPickChallenge={(r) => handleSelectRecipe(r, true)}
-        onOpenMedals={() => setScreen("medals")}
-        onOpenFavorites={() => setScreen("favorites")}
-        onOpenWeekPlan={() => setScreen("weekplan")}
-        onOpenShopping={() => setScreen("shopping")}
-        onOpenPantry={() => setScreen("pantry")}
-        onOpenMissions={() => setScreen("missions")}
-        playerName={active?.name ?? "Chef"}
-      />
-    );
+  if (!content) {
+    if (screen === "ingredients" && selectedRecipe) {
+      const resume = prefs.getResume(selectedRecipe.id);
+      content = (
+        <RecipeIngredients
+          recipe={selectedRecipe}
+          onStart={() => handleStart(0)}
+          onBack={handleBack}
+          displayName={nameFor(selectedRecipe)}
+          hasResume={resume !== null && resume > 0}
+          onResume={() => handleStart(resume ?? 0)}
+          onResumeClear={() => { prefs.clearResume(selectedRecipe.id); handleStart(0); }}
+          isFavorite={prefs.isFavorite(selectedRecipe.id)}
+          onToggleFavorite={() => prefs.toggleFavorite(selectedRecipe.id)}
+        />
+      );
+    } else if (screen === "cooking" && selectedRecipe) {
+      content = (
+        <RecipeStepper
+          recipe={selectedRecipe}
+          onFinish={handleFinish}
+          onBack={handleBack}
+          onHome={handleHome}
+          startAt={resumeFrom}
+          soundOn={prefs.soundOn}
+          onPause={(step) => prefs.saveResume(selectedRecipe.id, step)}
+          onClearResume={() => prefs.clearResume(selectedRecipe.id)}
+          displayName={nameFor(selectedRecipe)}
+          isFavorite={prefs.isFavorite(selectedRecipe.id)}
+          onToggleFavorite={() => prefs.toggleFavorite(selectedRecipe.id)}
+          onAnother={handleAnother}
+          newMedalId={newMedalId}
+          onComplete={() => handleRecipeFinished(selectedRecipe, isChallenge)}
+          onTaste={() => missions.onTaste()}
+        />
+      );
+    } else {
+      content = (
+        <RecipeHome
+          onSelectRecipe={handleSelectRecipe}
+          isCompleted={isCompleted}
+          avatarId={active?.avatarId ?? "dino"}
+          onChangeAvatar={() => setPlayersOpen(true)}
+          getRecipeName={nameFor}
+          restrictions={active?.restrictions ?? prefs.DEFAULT_RESTR}
+          lastRecipeId={prefs.lastRecipe}
+          onOpenAdult={() => setAdultOpen(true)}
+          isFavorite={prefs.isFavorite}
+          ageBucket={active?.age ?? "4-5"}
+          challengeRecipe={challengeRecipe}
+          onPickChallenge={(r) => handleSelectRecipe(r, true)}
+          onOpenMedals={() => setScreen("medals")}
+          onOpenFavorites={() => setScreen("favorites")}
+          onOpenWeekPlan={() => setScreen("weekplan")}
+          onOpenShopping={() => setScreen("shopping")}
+          onOpenPantry={() => setScreen("pantry")}
+          onOpenMissions={() => setScreen("missions")}
+          playerName={active?.name ?? "Chef"}
+          noCookEnabled={noCook.enabled}
+          onToggleNoCook={noCook.toggle}
+          onOpenPacks={() => { setSelectedPack(null); setScreen("pack"); }}
+        />
+      );
+    }
   }
 
   return (
     <>
       {content}
-      {screen !== "cooking" && <HomeButton onClick={handleHome} />}
+      {screen !== "cooking" && screen !== "ingredients" && <HomeButton onClick={handleHome} />}
+      {showBottomNav && <BottomNav active={currentTab} onChange={handleNavTab} />}
       {pendingDiploma && (
         <CategoryDiploma
           category={pendingDiploma}
