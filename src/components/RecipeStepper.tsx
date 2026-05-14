@@ -263,13 +263,20 @@ export default function RecipeStepper({
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="absolute left-3 top-3 z-10 flex items-center gap-2 rounded-full bg-kids-yellow px-3 py-2 kids-shadow"
-          aria-label="Necesita ayuda de un adulto"
-          title="Necesita ayuda de un adulto"
+          className="absolute left-3 top-3 z-10 flex max-w-[60%] items-center gap-2 rounded-2xl border-4 border-kids-orange bg-kids-yellow px-3 py-2 kids-shadow"
+          aria-label={`Paso para adulto: ${adultReasonFor(current.actionIcon, current.emoji)}`}
+          title={adultReasonFor(current.actionIcon, current.emoji)}
         >
           <span className="text-2xl">🧑</span>
-          <span className="text-xs font-extrabold text-foreground">¡Adulto!</span>
+          <span className="text-xs font-extrabold leading-tight text-foreground">¡Adulto!</span>
         </motion.div>
+      )}
+
+      {/* Advanced level badge */}
+      {isAdvanced && (
+        <div className="absolute left-1/2 top-3 z-10 -translate-x-1/2">
+          <AdvancedBadge size="sm" withLabel={false} />
+        </div>
       )}
 
       {/* Role indicator (kid vs adult) */}
@@ -365,7 +372,7 @@ export default function RecipeStepper({
           )}
 
           {(() => {
-            const wait = getStepTimer(recipe.id, step);
+            const wait = getStepTimer(recipe.id, step) || (current.timerSeconds ?? 0);
             if (wait <= 0) return null;
             return (
               <VisualTimer
@@ -373,6 +380,7 @@ export default function RecipeStepper({
                 seconds={wait}
                 emoji={current.emoji}
                 soundOn={soundOn}
+                storageKey={`lc:timer:${recipe.id}:${step}`}
                 onDone={() => { /* timer rings; user advances manually */ }}
               />
             );
