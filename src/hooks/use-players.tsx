@@ -4,6 +4,7 @@ import type { AvatarId } from "@/data/avatars";
 import type { Restrictions } from "@/data/recipeMeta";
 
 export type AgeBucket = "2-3" | "4-5" | "6+";
+export type FamilyGoal = "verduras" | "meriendas" | "juntos" | "sin-coccion";
 
 export interface Player {
   id: string;
@@ -11,7 +12,26 @@ export interface Player {
   avatarId: AvatarId;
   age: AgeBucket;
   restrictions: Restrictions;
+  goal?: FamilyGoal;
   createdAt: number;
+}
+
+export const GOAL_INFO: Record<FamilyGoal, { emoji: string; label: string }> = {
+  verduras:    { emoji: "🥦", label: "Probar verduras" },
+  meriendas:   { emoji: "🍎", label: "Meriendas fáciles" },
+  juntos:      { emoji: "👨‍👧", label: "Cocinar juntos" },
+  "sin-coccion": { emoji: "❄️", label: "Sin cocción" },
+};
+
+// Recommended starting level by age bucket.
+export function recommendedLevel(age: AgeBucket): 1 | 2 | 3 {
+  if (age === "2-3") return 1;
+  if (age === "4-5") return 2;
+  return 3;
+}
+export function recommendedLevelLabel(age: AgeBucket): string {
+  const lv = recommendedLevel(age);
+  return lv === 1 ? "Principiante" : lv === 2 ? "Intermedio" : "Chef Avanzado";
 }
 
 const PLAYERS_KEY = "lc:players-v3";
