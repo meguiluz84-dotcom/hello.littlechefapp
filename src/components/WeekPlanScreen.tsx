@@ -83,7 +83,12 @@ export default function WeekPlanScreen({ recipes, getName, onClose }: Props) {
           ))}
         </div>
 
-        <div className="mt-6 flex justify-center">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <button
+            type="button"
+            onClick={fillBalanced}
+            className="min-h-12 rounded-full bg-kids-green px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
+          >✨ Llenar semana equilibrada</button>
           <button
             type="button"
             onClick={() => { if (confirm("¿Vaciar plan semanal?")) clear(); }}
