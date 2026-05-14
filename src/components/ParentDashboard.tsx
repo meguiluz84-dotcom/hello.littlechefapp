@@ -529,6 +529,26 @@ export default function ParentDashboard({
                 type="button" onClick={onOpenShopping}
                 className="w-full min-h-16 rounded-2xl bg-card px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
               >🛒 Lista de compra</button>
+              {onOpenCustom && (
+                <button type="button" onClick={onOpenCustom}
+                  className="w-full min-h-16 rounded-2xl bg-kids-yellow px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
+                >📓 Mis recetas (familia)</button>
+              )}
+              {onOpenCollections && (
+                <button type="button" onClick={onOpenCollections}
+                  className="w-full min-h-16 rounded-2xl bg-kids-pink px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
+                >📚 Colecciones familiares</button>
+              )}
+              {onOpenGenerator && (
+                <button type="button" onClick={onOpenGenerator}
+                  className="w-full min-h-16 rounded-2xl bg-kids-green px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
+                >🧪 ¿Qué cocinamos? (por ingredientes)</button>
+              )}
+              {onOpenSchool && (
+                <button type="button" onClick={onOpenSchool}
+                  className="w-full min-h-16 rounded-2xl bg-kids-orange px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
+                >🏫 Modo Escuela / Taller</button>
+              )}
               <button
                 type="button" onClick={onOpenComingSoon}
                 className="w-full min-h-16 rounded-2xl bg-card px-4 py-3 text-left text-base font-extrabold text-foreground kids-shadow"
