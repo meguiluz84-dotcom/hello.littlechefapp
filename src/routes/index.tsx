@@ -373,6 +373,7 @@ function Index() {
           onOpenShopping={() => setScreen("shopping")}
           onOpenPantry={() => setScreen("pantry")}
           onOpenMissions={() => setScreen("missions")}
+          onOpenPack={(p) => { setSelectedPack(p); setScreen("pack"); }}
           playerName={active?.name ?? "Chef"}
         />
       );
