@@ -178,6 +178,13 @@ export default function RecipeHome({
           className={`flex h-12 min-h-12 items-center gap-1 rounded-full px-3 text-xl kids-shadow ${challenge.enabled ? "bg-kids-orange ring-4 ring-kids-yellow" : "bg-card"}`}
           title="Modo reto: menos pistas visuales"
         >🎯</button>
+        <button
+          type="button" onClick={noCook.toggle}
+          aria-pressed={noCook.enabled}
+          aria-label={noCook.enabled ? "Modo sin cocción activo (toca para desactivar)" : "Activar modo sin cocción"}
+          className={`flex h-12 min-h-12 items-center gap-1 rounded-full px-3 text-xl kids-shadow ${noCook.enabled ? "bg-kids-blue ring-4 ring-kids-teal" : "bg-card"}`}
+          title="Solo recetas sin cocción"
+        >❄️</button>
       </div>
 
       <AnimatePresence mode="wait">
