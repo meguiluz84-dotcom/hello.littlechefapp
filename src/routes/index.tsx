@@ -117,6 +117,7 @@ function Index() {
     markCompleted(recipe.id);
     prefs.clearResume(recipe.id);
     missions.onCompleteRecipe();
+    skills.addRecipe(recipe, asChallenge);
     if (asChallenge) { medals.completeChallenge(recipe.id); missions.onChallenge(); }
     // Detect newly earned medal by re-running the rule with the next state.
     const completedNext = completed.includes(recipe.id) ? completed : [...completed, recipe.id];
