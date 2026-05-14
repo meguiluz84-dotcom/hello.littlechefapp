@@ -61,6 +61,13 @@ export const MEDALS: Medal[] = [
     description: "Completaste una receta de nivel 3",
     earned: (c) => c.recipes.some((r) => c.completed.includes(r.id) && getRecipeMeta(r.id).level === 3),
   },
+  {
+    id: "chef-avanzado",
+    emoji: "👨‍🍳",
+    label: "Chef Avanzado",
+    description: "Completaste una receta de Chef Avanzado",
+    earned: (c) => c.recipes.some((r) => c.completed.includes(r.id) && getRecipeMeta(r.id).level === 4),
+  },
   // Family medals — celebrate cooking together, not just kid progress.
   {
     id: "family-trio",
