@@ -54,6 +54,7 @@ interface RecipeHomeProps {
   onOpenShopping: () => void;
   onOpenPantry?: () => void;
   onOpenMissions?: () => void;
+  onOpenPack?: (pack: RecipePack) => void;
   playerName: string;
 }
 
