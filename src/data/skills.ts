@@ -52,7 +52,7 @@ export function recipeContributes(recipe: Recipe): Partial<SkillCounters> {
   const tags = getRecipeMeta(recipe.id).tags;
   if (tags.includes("fruta")) out.fruits = 1;
   if (recipe.ingredients.some((i) => ["🥦", "🥕", "🥒", "🌶️", "🥬", "🌽", "🍅"].includes(i.emoji))) out.veggies = 1;
-  const hyg = detectHygieneActions(recipe);
+  const hyg = detectHygieneActions(recipe.ingredients.map((i) => i.emoji), getRecipeMeta(recipe.id).level === 4);
   if (hyg.length > 0) out.hygiene = 1;
   return out;
 }
