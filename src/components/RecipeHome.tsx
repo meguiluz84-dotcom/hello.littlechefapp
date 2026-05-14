@@ -16,6 +16,8 @@ import DifficultyBadges from "./DifficultyBadges";
 import ChallengeBanner from "./ChallengeBanner";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
+import { useChallengeMode } from "@/hooks/use-challenge-mode";
+import AdvancedBadge from "./AdvancedBadge";
 import type { AgeBucket } from "@/hooks/use-players";
 
 const colorMap: Record<string, string> = {
@@ -62,6 +64,7 @@ export default function RecipeHome({
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
   const [tag, setTag] = useState<FoodTag | null>(null);
   const { plan } = useWeekPlan();
+  const challenge = useChallengeMode();
 
   const allowed = useMemo(
     () => recipes.filter((r) => {
@@ -146,6 +149,13 @@ export default function RecipeHome({
           type="button" onClick={onOpenFavorites} aria-label="Favoritos"
           className="flex h-12 min-h-12 items-center gap-1 rounded-full bg-card px-3 text-xl kids-shadow"
         >❤️</button>
+        <button
+          type="button" onClick={challenge.toggle}
+          aria-pressed={challenge.enabled}
+          aria-label={challenge.enabled ? "Modo reto activo (toca para desactivar)" : "Activar modo reto"}
+          className={`flex h-12 min-h-12 items-center gap-1 rounded-full px-3 text-xl kids-shadow ${challenge.enabled ? "bg-kids-orange ring-4 ring-kids-yellow" : "bg-card"}`}
+          title="Modo reto: menos pistas visuales"
+        >🎯</button>
       </div>
 
       <AnimatePresence mode="wait">
@@ -331,6 +341,7 @@ export default function RecipeHome({
                       </div>
                       <div className="flex flex-col items-center gap-2 px-2 py-3">
                         <div className="text-balance text-center text-sm font-extrabold leading-tight text-foreground line-clamp-2">{getRecipeName(recipe)}</div>
+                        {getRecipeMeta(recipe.id).level === 4 && <AdvancedBadge size="sm" withLabel={false} />}
                         <DifficultyBadges recipe={recipe} size="sm" compact />
                       </div>
                     </motion.button>

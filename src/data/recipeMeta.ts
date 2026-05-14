@@ -29,7 +29,7 @@ export const EMPTY_RESTR: Restrictions = {
   vegetarian: false,
 };
 
-export type RecipeLevel = 1 | 2 | 3;
+export type RecipeLevel = 1 | 2 | 3 | 4;
 
 export interface RecipeMeta {
   tags: FoodTag[];
@@ -95,6 +95,11 @@ export const recipeMeta: Record<string, RecipeMeta> = {
   "apple-donut":      { tags: ["fruta", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
   "watermelon-pops":  { tags: ["fruta", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
   "veggie-train":     { tags: ["salado", "merienda", "sin-coccion"], restrictions: veg({ dairy: true }), adultHelp: "high", ageMin: 4, level: 2 },
+
+  // Chef Avanzado (level 4)
+  "chef-mini-pizzas":   { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-empanadas":     { tags: ["salado"], restrictions: veg({ dairy: true, gluten: true, eggs: true }), adultHelp: "high", ageMin: 6, level: 4 },
+  "chef-green-pancakes":{ tags: ["desayuno", "salado"], restrictions: veg({ dairy: true, gluten: true, eggs: true }), adultHelp: "high", ageMin: 6, level: 4 },
 };
 
 const DEFAULT_META: RecipeMeta = {
@@ -109,11 +114,28 @@ export function getRecipeMeta(id: string): RecipeMeta {
   return recipeMeta[id] ?? DEFAULT_META;
 }
 
-const ADULT_ACTIONS = new Set(["cut"]);
-const ADULT_EMOJIS = new Set(["🔥", "🔪", "🍳"]);
+const ADULT_ACTIONS = new Set(["cut", "bake"]);
+const ADULT_EMOJIS = new Set(["🔥", "🔪", "🍳", "🫕", "♨️"]);
 
-export function stepNeedsAdult(actionIcon: string, emoji: string): boolean {
+export function stepNeedsAdult(
+  actionIcon: string,
+  emoji: string,
+  override?: boolean,
+): boolean {
+  if (override !== undefined) return override;
   return ADULT_ACTIONS.has(actionIcon) || ADULT_EMOJIS.has(emoji);
+}
+
+// Short, parent-facing reasons shown in adult mode for adult-required steps.
+export const ADULT_REASONS: Record<string, string> = {
+  cut: "Uso de cuchillo: corte controlado por adulto.",
+  bake: "Horno o fuente de calor: solo adultos.",
+  default: "Necesita supervisión por seguridad.",
+};
+export function adultReasonFor(actionIcon: string, emoji: string): string {
+  if (actionIcon === "cut" || emoji === "🔪") return ADULT_REASONS.cut;
+  if (actionIcon === "bake" || emoji === "🔥" || emoji === "🍳") return ADULT_REASONS.bake;
+  return ADULT_REASONS.default;
 }
 
 export const TAG_INFO: Record<FoodTag, { emoji: string; label: string }> = {
@@ -146,6 +168,7 @@ export const LEVEL_INFO: Record<RecipeLevel, { emoji: string; label: string }> =
   1: { emoji: "👶", label: "Fácil" },
   2: { emoji: "🧒", label: "Medio" },
   3: { emoji: "🧑", label: "Reto" },
+  4: { emoji: "👨‍🍳", label: "Chef Avanzado" },
 };
 
 export function recipeMatchesRestrictions(
@@ -167,7 +190,7 @@ export function recipeMatchesRestrictions(
 export function maxLevelForAge(age: "2-3" | "4-5" | "6+"): RecipeLevel {
   if (age === "2-3") return 1;
   if (age === "4-5") return 2;
-  return 3;
+  return 4; // 6+ unlocks Chef Avanzado
 }
 
 export function recipeAllowedForAge(meta: RecipeMeta, age: "2-3" | "4-5" | "6+"): boolean {

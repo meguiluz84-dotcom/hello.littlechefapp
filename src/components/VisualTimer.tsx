@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import AdultGate from "./AdultGate";
 
 interface Props {
   seconds: number;
@@ -7,6 +8,8 @@ interface Props {
   emoji?: string;
   soundOn?: boolean;
   autoStart?: boolean;
+  /** Persist remaining state across mount/unmount (key includes recipe + step). */
+  storageKey?: string;
 }
 
 function beep(enabled: boolean) {
@@ -28,9 +31,34 @@ function beep(enabled: boolean) {
   } catch { /* ignore */ }
 }
 
-export default function VisualTimer({ seconds, onDone, emoji = "⏱️", soundOn = true, autoStart = true }: Props) {
-  const [remaining, setRemaining] = useState(seconds);
+function readStored(key?: string): number | null {
+  if (!key) return null;
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const v = Number(raw);
+    return Number.isFinite(v) ? v : null;
+  } catch { return null; }
+}
+function writeStored(key: string | undefined, v: number) {
+  if (!key) return;
+  try { localStorage.setItem(key, String(v)); } catch { /* ignore */ }
+}
+function clearStored(key?: string) {
+  if (!key) return;
+  try { localStorage.removeItem(key); } catch { /* ignore */ }
+}
+
+export default function VisualTimer({
+  seconds, onDone, emoji = "⏱️", soundOn = true, autoStart = true, storageKey,
+}: Props) {
+  const [remaining, setRemaining] = useState(() => {
+    const stored = readStored(storageKey);
+    if (stored !== null && stored > 0 && stored <= seconds) return stored;
+    return seconds;
+  });
   const [running, setRunning] = useState(autoStart);
+  const [askAdult, setAskAdult] = useState(false);
   const doneRef = useRef(false);
 
   useEffect(() => {
@@ -38,18 +66,45 @@ export default function VisualTimer({ seconds, onDone, emoji = "⏱️", soundOn
     if (remaining <= 0) {
       if (!doneRef.current) {
         doneRef.current = true;
+        clearStored(storageKey);
         beep(soundOn);
         onDone();
       }
       return;
     }
-    const t = setTimeout(() => setRemaining((r) => r - 1), 1000);
+    const t = setTimeout(() => {
+      setRemaining((r) => {
+        const next = r - 1;
+        writeStored(storageKey, next);
+        return next;
+      });
+    }, 1000);
     return () => clearTimeout(t);
-  }, [remaining, running, onDone, soundOn]);
+  }, [remaining, running, onDone, soundOn, storageKey]);
 
   const pct = Math.max(0, Math.min(1, remaining / seconds));
   const circumference = 2 * Math.PI * 70;
   const offset = circumference * (1 - pct);
+
+  const reset = () => {
+    doneRef.current = false;
+    setRemaining(seconds);
+    writeStored(storageKey, seconds);
+    setRunning(true);
+  };
+
+  const skip = () => {
+    doneRef.current = true;
+    clearStored(storageKey);
+    setRemaining(0);
+    setRunning(false);
+    onDone();
+  };
+
+  // Format mm:ss for >60s
+  const fmt = remaining >= 60
+    ? `${Math.floor(remaining / 60)}:${String(remaining % 60).padStart(2, "0")}`
+    : `${remaining}s`;
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -70,18 +125,43 @@ export default function VisualTimer({ seconds, onDone, emoji = "⏱️", soundOn
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ repeat: Infinity, duration: 1 }}
           >{emoji}</motion.span>
-          <span className="mt-1 text-2xl font-extrabold text-foreground">{remaining}s</span>
+          <span className="mt-1 text-2xl font-extrabold text-foreground">{fmt}</span>
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={() => setRunning((r) => !r)}
-        className="min-h-16 rounded-full bg-card px-6 py-3 text-2xl font-extrabold kids-shadow"
-        aria-label={running ? "Pausar" : "Reanudar"}
-      >
-        {running ? "⏸️" : "▶️"}
-      </button>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={() => setRunning((r) => !r)}
+          className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-card text-3xl kids-shadow"
+          aria-label={running ? "Pausar temporizador" : "Iniciar temporizador"}
+        >
+          {running ? "⏸️" : "▶️"}
+        </button>
+        <button
+          type="button"
+          onClick={reset}
+          className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-card text-3xl kids-shadow"
+          aria-label="Reiniciar temporizador"
+        >
+          🔄
+        </button>
+        <button
+          type="button"
+          onClick={() => setAskAdult(true)}
+          className="flex min-h-16 items-center gap-2 rounded-full bg-kids-yellow px-4 text-base font-extrabold text-foreground kids-shadow"
+          aria-label="Saltar con ayuda de un adulto"
+        >
+          🧑 Saltar
+        </button>
+      </div>
+
+      {askAdult && (
+        <AdultGate
+          onConfirm={() => { setAskAdult(false); skip(); }}
+          onCancel={() => setAskAdult(false)}
+        />
+      )}
     </div>
   );
 }

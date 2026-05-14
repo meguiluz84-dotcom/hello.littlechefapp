@@ -1,15 +1,18 @@
 import { useState, useCallback, useEffect, useReducer, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
-import { stepNeedsAdult } from "@/data/recipeMeta";
+import { stepNeedsAdult, adultReasonFor, getRecipeMeta } from "@/data/recipeMeta";
 import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
+import { useChallengeMode } from "@/hooks/use-challenge-mode";
+import { detectHygieneActions } from "@/data/hygieneActions";
 import Celebration from "./Celebration";
 import DinoBubble from "./DinoBubble";
 import HygieneStep from "./HygieneStep";
 import AdultGate from "./AdultGate";
 import RoleHeader from "./RoleHeader";
 import VisualTimer from "./VisualTimer";
+import AdvancedBadge from "./AdvancedBadge";
 import { useVoice } from "@/hooks/use-voice";
 import { lineForAction } from "@/data/voiceLines";
 import { getStepTimer } from "@/hooks/use-step-timers";
@@ -24,6 +27,9 @@ const actionIcons: Record<string, string> = {
   scoop: "🥄",
   peel: "✋",
   wash: "🚿",
+  bake: "🔥",
+  chill: "❄️",
+  wait: "⏳",
 };
 
 const actionAnimations: Record<string, { animate: object; transition: object }> = {
@@ -36,6 +42,9 @@ const actionAnimations: Record<string, { animate: object; transition: object }> 
   scoop: { animate: { y: [0, 10, -10, 0], rotate: [0, 15, -5, 0] }, transition: { repeat: Infinity, duration: 1.3, ease: "easeInOut" } },
   peel: { animate: { y: [0, -8, 0], x: [0, 8, 0] }, transition: { repeat: Infinity, duration: 1.0, ease: "easeInOut" } },
   wash: { animate: { y: [0, -5, 0], opacity: [1, 0.7, 1] }, transition: { repeat: Infinity, duration: 0.7, ease: "easeInOut" } },
+  bake: { animate: { scale: [1, 1.15, 1], rotate: [-5, 5, -5] }, transition: { repeat: Infinity, duration: 1.4, ease: "easeInOut" } },
+  chill: { animate: { y: [0, -6, 0], opacity: [1, 0.7, 1] }, transition: { repeat: Infinity, duration: 1.6, ease: "easeInOut" } },
+  wait: { animate: { rotate: [0, 360] }, transition: { repeat: Infinity, duration: 4, ease: "linear" } },
 };
 
 const soundProfiles: Record<string, { freq: number; duration: number; type: OscillatorType; ramp?: number }> = {
@@ -48,6 +57,9 @@ const soundProfiles: Record<string, { freq: number; duration: number; type: Osci
   scoop: { freq: 400, duration: 180, type: "sine", ramp: 600 },
   peel: { freq: 700, duration: 100, type: "sawtooth", ramp: 400 },
   wash: { freq: 250, duration: 300, type: "sine", ramp: 350 },
+  bake: { freq: 180, duration: 350, type: "sawtooth", ramp: 110 },
+  chill: { freq: 900, duration: 200, type: "sine", ramp: 1100 },
+  wait: { freq: 440, duration: 150, type: "sine" },
 };
 
 function playActionSound(action: string, enabled: boolean) {
@@ -139,11 +151,19 @@ export default function RecipeStepper({
   }, []);
   const total = recipe.steps.length;
   const current = recipe.steps[step];
+  const meta = getRecipeMeta(recipe.id);
+  const isAdvanced = meta.level === 4;
+  const challenge = useChallengeMode();
+  const challengeOn = challenge.enabled && (recipe.challengeModeCompatible ?? false);
   const needsAdult = useMemo(
-    () => stepNeedsAdult(current.actionIcon, current.emoji),
+    () => stepNeedsAdult(current.actionIcon, current.emoji, current.adultRequired),
     [current]
   );
   const adultBlocking = needsAdult && adultConfirmedStep !== step;
+  const hygieneActions = useMemo(
+    () => detectHygieneActions(recipe.ingredients.map((i) => i.emoji), isAdvanced),
+    [recipe, isAdvanced]
+  );
 
   // Speak the line for the current step when voice is enabled.
   useEffect(() => {
@@ -196,7 +216,7 @@ export default function RecipeStepper({
   }
 
   if (!hygieneDone) {
-    return <HygieneStep soundOn={soundOn} onDone={markHygieneDone} />;
+    return <HygieneStep soundOn={soundOn} onDone={markHygieneDone} actions={hygieneActions} />;
   }
 
   const actionAnim = reduced
@@ -243,13 +263,20 @@ export default function RecipeStepper({
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="absolute left-3 top-3 z-10 flex items-center gap-2 rounded-full bg-kids-yellow px-3 py-2 kids-shadow"
-          aria-label="Necesita ayuda de un adulto"
-          title="Necesita ayuda de un adulto"
+          className="absolute left-3 top-3 z-10 flex max-w-[60%] items-center gap-2 rounded-2xl border-4 border-kids-orange bg-kids-yellow px-3 py-2 kids-shadow"
+          aria-label={`Paso para adulto: ${adultReasonFor(current.actionIcon, current.emoji)}`}
+          title={adultReasonFor(current.actionIcon, current.emoji)}
         >
           <span className="text-2xl">🧑</span>
-          <span className="text-xs font-extrabold text-foreground">¡Adulto!</span>
+          <span className="text-xs font-extrabold leading-tight text-foreground">¡Adulto!</span>
         </motion.div>
+      )}
+
+      {/* Advanced level badge */}
+      {isAdvanced && (
+        <div className="absolute left-1/2 top-3 z-10 -translate-x-1/2">
+          <AdvancedBadge size="sm" withLabel={false} />
+        </div>
       )}
 
       {/* Role indicator (kid vs adult) */}
@@ -328,7 +355,7 @@ export default function RecipeStepper({
             {actionIcons[current.actionIcon]}
           </motion.div>
 
-          {current.ingredientEmojis.length > 0 && (
+          {current.ingredientEmojis.length > 0 && !challengeOn && (
             <div className="flex gap-3">
               {current.ingredientEmojis.map((e, i) => (
                 <motion.div
@@ -345,7 +372,7 @@ export default function RecipeStepper({
           )}
 
           {(() => {
-            const wait = getStepTimer(recipe.id, step);
+            const wait = getStepTimer(recipe.id, step) || (current.timerSeconds ?? 0);
             if (wait <= 0) return null;
             return (
               <VisualTimer
@@ -353,6 +380,7 @@ export default function RecipeStepper({
                 seconds={wait}
                 emoji={current.emoji}
                 soundOn={soundOn}
+                storageKey={`lc:timer:${recipe.id}:${step}`}
                 onDone={() => { /* timer rings; user advances manually */ }}
               />
             );

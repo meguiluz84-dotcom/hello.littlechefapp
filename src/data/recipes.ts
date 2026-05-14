@@ -54,12 +54,24 @@ export interface Ingredient {
   emoji: string;
   quantity?: number;
   grams?: number;
+  /** Visual label like "1 taza" | "media taza" | "1 cuchara" — replaces grams in kid view. */
+  quantityLabel?: "1 taza" | "media taza" | "1 cuchara";
 }
 
+export type ActionIcon =
+  | "cut" | "mix" | "pour" | "spread" | "place" | "shake" | "scoop" | "peel" | "wash"
+  | "bake" | "chill" | "wait";
+
 export interface RecipeStep {
-  emoji: string; // main action emoji
-  ingredientEmojis: string[]; // ingredients used in this step
-  actionIcon: "cut" | "mix" | "pour" | "spread" | "place" | "shake" | "scoop" | "peel" | "wash";
+  emoji: string;
+  ingredientEmojis: string[];
+  actionIcon: ActionIcon;
+  /** Force adult requirement (overrides emoji/action heuristics). */
+  adultRequired?: boolean;
+  /** Optional countdown (seconds) shown as a visual timer. */
+  timerSeconds?: number;
+  /** Optional visual quantity for this step (e.g. "1 taza" of leche). */
+  quantity?: "1 taza" | "media taza" | "1 cuchara";
 }
 
 export type RecipeCategory = "fruits" | "snacks" | "drinks" | "meals" | "desserts";
@@ -82,6 +94,10 @@ export interface Recipe {
   ingredients: Ingredient[];
   steps: RecipeStep[];
   difficulty: 1 | 2 | 3;
+  /** Whether this recipe can be played in "Modo reto" (less visual hints). */
+  challengeModeCompatible?: boolean;
+  /** Optional medal id to award upon completion (besides automatic medals). */
+  medalId?: string;
 }
 
 export const recipes: Recipe[] = [
@@ -1185,6 +1201,93 @@ export const recipes: Recipe[] = [
       { emoji: "🚃", ingredientEmojis: ["🥒"], actionIcon: "place" },
       { emoji: "⚙️", ingredientEmojis: ["🥕"], actionIcon: "place" },
       { emoji: "🚂", ingredientEmojis: ["🍅", "🧀"], actionIcon: "place" },
+    ],
+  },
+
+  // ===== CHEF AVANZADO (level 4) =====
+  {
+    id: "chef-mini-pizzas",
+    name: "👨‍🍳 Mini Pizzas Chef",
+    image: imgMiniPizza,
+    emoji: "🍕",
+    color: "kids-red",
+    category: "meals",
+    difficulty: 3,
+    challengeModeCompatible: true,
+    medalId: "chef-avanzado",
+    ingredients: [
+      { emoji: "🌾", quantityLabel: "1 taza" },
+      { emoji: "💧", quantityLabel: "media taza" },
+      { emoji: "🫒", quantityLabel: "1 cuchara" },
+      { emoji: "🍅", quantity: 3, grams: 60 },
+      { emoji: "🧀", quantity: 1, grams: 60 },
+      { emoji: "🌿", quantity: 1, grams: 5 },
+    ],
+    steps: [
+      { emoji: "🥣", ingredientEmojis: ["🌾", "💧", "🫒"], actionIcon: "mix", quantity: "1 taza" },
+      { emoji: "✋", ingredientEmojis: [], actionIcon: "scoop", timerSeconds: 60 },
+      { emoji: "🫓", ingredientEmojis: [], actionIcon: "spread" },
+      { emoji: "🍅", ingredientEmojis: ["🍅"], actionIcon: "spread" },
+      { emoji: "🧀", ingredientEmojis: ["🧀"], actionIcon: "place" },
+      { emoji: "🌿", ingredientEmojis: ["🌿"], actionIcon: "place" },
+      { emoji: "🔥", ingredientEmojis: [], actionIcon: "bake", adultRequired: true, timerSeconds: 600 },
+      { emoji: "❄️", ingredientEmojis: [], actionIcon: "chill", timerSeconds: 120 },
+    ],
+  },
+  {
+    id: "chef-empanadas",
+    name: "👨‍🍳 Empanadas Chef",
+    image: imgEmpanadas,
+    emoji: "🥟",
+    color: "kids-orange",
+    category: "meals",
+    difficulty: 3,
+    challengeModeCompatible: true,
+    medalId: "chef-avanzado",
+    ingredients: [
+      { emoji: "🌾", quantityLabel: "1 taza" },
+      { emoji: "🥚", quantity: 1 },
+      { emoji: "🧀", quantity: 1, grams: 50 },
+      { emoji: "🍅", quantity: 2, grams: 40 },
+      { emoji: "🌽", quantityLabel: "media taza" },
+      { emoji: "🫒", quantityLabel: "1 cuchara" },
+    ],
+    steps: [
+      { emoji: "🥣", ingredientEmojis: ["🌾", "🥚", "🫒"], actionIcon: "mix", quantity: "1 taza" },
+      { emoji: "🫓", ingredientEmojis: [], actionIcon: "spread" },
+      { emoji: "🔪", ingredientEmojis: ["🍅"], actionIcon: "cut", adultRequired: true },
+      { emoji: "🥄", ingredientEmojis: ["🧀", "🍅", "🌽"], actionIcon: "scoop", quantity: "1 cuchara" },
+      { emoji: "🤲", ingredientEmojis: [], actionIcon: "place" },
+      { emoji: "🍴", ingredientEmojis: [], actionIcon: "shake" },
+      { emoji: "🔥", ingredientEmojis: [], actionIcon: "bake", adultRequired: true, timerSeconds: 900 },
+    ],
+  },
+  {
+    id: "chef-green-pancakes",
+    name: "👨‍🍳 Tortitas Verdes Chef",
+    image: imgGreenPancakes,
+    emoji: "🥞",
+    color: "kids-green",
+    category: "meals",
+    difficulty: 3,
+    challengeModeCompatible: true,
+    medalId: "chef-avanzado",
+    ingredients: [
+      { emoji: "🌾", quantityLabel: "1 taza" },
+      { emoji: "🥛", quantityLabel: "media taza" },
+      { emoji: "🥚", quantity: 1 },
+      { emoji: "🥬", quantity: 1, grams: 30 },
+      { emoji: "🍌", quantity: 1, grams: 100 },
+      { emoji: "🍯", quantityLabel: "1 cuchara" },
+    ],
+    steps: [
+      { emoji: "🚿", ingredientEmojis: ["🥬"], actionIcon: "wash" },
+      { emoji: "🍌", ingredientEmojis: ["🍌"], actionIcon: "peel" },
+      { emoji: "🥣", ingredientEmojis: ["🌾", "🥛", "🥚"], actionIcon: "mix", quantity: "1 taza" },
+      { emoji: "🥬", ingredientEmojis: ["🥬", "🍌"], actionIcon: "mix" },
+      { emoji: "🥄", ingredientEmojis: [], actionIcon: "scoop" },
+      { emoji: "🍳", ingredientEmojis: [], actionIcon: "bake", adultRequired: true, timerSeconds: 180 },
+      { emoji: "🍯", ingredientEmojis: ["🍯"], actionIcon: "pour", quantity: "1 cuchara" },
     ],
   },
 ];
