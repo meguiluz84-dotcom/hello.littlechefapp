@@ -58,6 +58,7 @@ const TABS: { id: Tab; emoji: string; label: string }[] = [
 export default function ParentDashboard({
   onClose, onChangeAvatar, onAddPlayer, onResetProgress,
   onOpenWeekPlan, onOpenShopping, onOpenComingSoon,
+  onOpenCustom, onOpenCollections, onOpenGenerator, onOpenSchool,
   soundOn, onToggleSound,
 }: Props) {
   const { players, active, setActive, remove, update } = usePlayers();
