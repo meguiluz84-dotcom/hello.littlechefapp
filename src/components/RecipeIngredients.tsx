@@ -130,8 +130,17 @@ export default function RecipeIngredients({
         </div>
       )}
 
-      {/* Adult actions: print, workshop, share */}
+      {/* Adult actions: parent sheet, print, workshop, share */}
       <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+        <button
+          type="button"
+          onClick={() => setParentOpen(true)}
+          className="flex min-h-14 items-center gap-2 rounded-2xl bg-kids-purple/40 px-4 py-2 text-sm font-extrabold text-foreground kids-shadow ring-2 ring-kids-purple"
+          aria-label="Ficha de receta para padres"
+        >
+          <span className="text-2xl" aria-hidden>👨‍👩‍👧</span>
+          <span>Para padres</span>
+        </button>
         <Link
           to="/imprimir/$recipeId" params={{ recipeId: recipe.id }}
           target="_blank" rel="noopener"
