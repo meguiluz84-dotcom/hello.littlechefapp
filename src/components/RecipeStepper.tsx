@@ -237,23 +237,23 @@ export default function RecipeStepper({
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-between bg-background px-4 pb-8 pt-6">
-      {/* Top-right controls: pause + home */}
+      {/* Top-right controls: long-press to exit + home */}
       <div className="absolute right-3 top-3 z-10 flex flex-col items-end gap-2">
-        {onPause && (
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            onClick={pauseAndExit}
-            aria-label="Pausar y salir"
-            className="flex h-14 w-14 min-h-14 min-w-14 items-center justify-center rounded-full bg-card text-2xl kids-shadow md:h-20 md:w-20 md:text-4xl"
-          >
-            ⏸️
-          </motion.button>
-        )}
+        <motion.button
+          whileTap={{ scale: 0.85 }}
+          {...exitLongPress}
+          onClick={() => setExitConfirm(true)}
+          aria-label="Mantén pulsado para salir"
+          title="Mantén pulsado para salir"
+          className="flex h-14 w-14 min-h-14 min-w-14 items-center justify-center rounded-full bg-card text-2xl kids-shadow md:h-20 md:w-20 md:text-4xl"
+        >
+          ⏸️
+        </motion.button>
         {onHome && (
           <motion.button
             whileTap={{ scale: 0.85 }}
             whileHover={{ scale: 1.05 }}
-            onClick={onHome}
+            onClick={() => setExitConfirm(true)}
             className="flex h-14 w-14 min-h-14 min-w-14 items-center justify-center rounded-full bg-card text-3xl kids-shadow md:h-20 md:w-20 md:text-5xl"
             aria-label="Inicio"
           >
