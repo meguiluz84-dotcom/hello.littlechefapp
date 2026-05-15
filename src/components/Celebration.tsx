@@ -5,6 +5,8 @@ import { MEDALS } from "@/data/medals";
 import TastingPicker from "./TastingPicker";
 import PhotoCapture from "./PhotoCapture";
 import { useTastings } from "@/hooks/use-tastings";
+import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
+import { useState } from "react";
 
 interface Props {
   recipe?: Recipe;
@@ -14,8 +16,7 @@ interface Props {
   isFavorite?: boolean;
   onToggleFavorite?: () => void;
   newMedalId?: string | null;
-  onTaste?: () => void; // notifies missions when a tasting is logged
-  // Back-compat with older callers
+  onTaste?: () => void;
   onDone?: () => void;
   recipeEmoji?: string;
 }
@@ -34,9 +35,24 @@ export default function Celebration({
   const recipeId = recipe?.id ?? "";
   const currentReaction = recipeId ? reactionFor(recipeId) : null;
 
+  const week = useWeekPlan();
+  const [planAdded, setPlanAdded] = useState(false);
+  const addToPlan = () => {
+    if (!recipe) return;
+    week.setSlot(todayKey(), "merienda", recipe.id);
+    setPlanAdded(true);
+  };
+
+  const dinoMessage = newMedal
+    ? `¡Medalla nueva! ${newMedal.emoji}`
+    : currentReaction === "🔁"
+    ? "¡A repetir pronto!"
+    : currentReaction === "😍"
+    ? "¡Qué chef!"
+    : "¡Lo hiciste! 🎉";
+
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-between overflow-hidden bg-background px-4 pb-8 pt-8">
-      {/* Floating confetti */}
       {confetti.map((c, i) => (
         <motion.span
           key={i}
@@ -66,9 +82,9 @@ export default function Celebration({
           <motion.div
             initial={{ scale: 0 }} animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", bounce: 0.6 }}
-            className="absolute -right-2 top-0 rounded-3xl rounded-bl-sm bg-card px-3 py-1.5 text-2xl kids-shadow"
+            className="absolute -right-2 top-0 max-w-[10rem] rounded-3xl rounded-bl-sm bg-card px-3 py-1.5 text-sm font-extrabold text-foreground kids-shadow"
           >
-            {dishEmoji}🎉
+            {dinoMessage}
           </motion.div>
         </motion.div>
 
@@ -98,9 +114,9 @@ export default function Celebration({
         )}
       </div>
 
-      {/* Tasting + photo row */}
+      {/* Tasting + photo */}
       {recipe && (
-        <div className="flex w-full max-w-sm items-center justify-around gap-3">
+        <div className="flex w-full max-w-sm flex-col items-center gap-3">
           <TastingPicker
             current={currentReaction}
             onPick={(r) => { log(recipe.id, r); onTaste?.(); }}
@@ -109,8 +125,8 @@ export default function Celebration({
         </div>
       )}
 
-      {/* Medal earned */}
-      {newMedal ? (
+      {/* Medal */}
+      {newMedal && (
         <motion.div
           initial={{ scale: 0, y: 30 }} animate={{ scale: 1, y: 0 }}
           transition={{ delay: 0.7, type: "spring", bounce: 0.6 }}
@@ -123,59 +139,73 @@ export default function Celebration({
             <span className="text-base font-extrabold text-foreground">{newMedal.label}</span>
           </div>
         </motion.div>
-      ) : (
-        <motion.div
-          initial={{ y: 20, opacity: 0, scale: 0 }}
-          animate={{ y: 0, opacity: 1, scale: 1 }}
-          transition={{ delay: 0.6, type: "spring", bounce: 0.5 }}
-          className="text-6xl"
-        >
-          🏆
-        </motion.div>
       )}
 
-      {/* Action buttons */}
-      <div className="flex w-full max-w-sm items-center justify-center gap-3">
-        {onToggleFavorite && (
+      {/* Action grid */}
+      <div className="flex w-full max-w-sm flex-col items-center gap-3">
+        {/* Secondary chips */}
+        <div className="flex w-full items-center justify-center gap-2">
+          {onToggleFavorite && (
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.85 }}
+              initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.8 }}
+              onClick={onToggleFavorite}
+              aria-label={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
+              aria-pressed={!!isFavorite}
+              className="flex min-h-14 items-center gap-2 rounded-full bg-card px-4 text-base font-extrabold text-foreground kids-shadow"
+            >
+              <span className="text-2xl">{isFavorite ? "❤️" : "🤍"}</span>
+              <span className="hidden sm:inline">Favorita</span>
+            </motion.button>
+          )}
+          {recipe && (
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.85 }}
+              initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.85 }}
+              onClick={addToPlan}
+              disabled={planAdded}
+              aria-label="Añadir al plan de hoy"
+              className={`flex min-h-14 items-center gap-2 rounded-full px-4 text-base font-extrabold kids-shadow ${
+                planAdded ? "bg-kids-green text-foreground" : "bg-card text-foreground"
+              }`}
+            >
+              <span className="text-2xl">{planAdded ? "✅" : "📅"}</span>
+              <span className="hidden sm:inline">{planAdded ? "En el plan" : "Al plan"}</span>
+            </motion.button>
+          )}
+        </div>
+
+        {/* Primary actions */}
+        <div className="flex w-full items-center justify-center gap-3">
+          {onAnother && (
+            <motion.button
+              type="button"
+              whileTap={{ scale: 0.85 }}
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ repeat: Infinity, duration: 1.6 }}
+              onClick={onAnother}
+              aria-label="Hacer otra receta parecida"
+              className="flex h-20 min-h-16 items-center gap-2 rounded-full bg-accent px-6 text-2xl font-extrabold text-accent-foreground kids-shadow-lg"
+            >
+              🍳 ➕
+            </motion.button>
+          )}
           <motion.button
             type="button"
             whileTap={{ scale: 0.85 }}
-            initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.9 }}
-            onClick={onToggleFavorite}
-            aria-label={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
-            aria-pressed={!!isFavorite}
-            className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-card text-3xl kids-shadow"
+            initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.95 }}
+            onClick={finishHome}
+            aria-label="Inicio"
+            className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-primary text-3xl text-primary-foreground kids-shadow-lg"
           >
-            {isFavorite ? "❤️" : "🤍"}
+            🏠
           </motion.button>
-        )}
-
-        {onAnother && (
-          <motion.button
-            type="button"
-            whileTap={{ scale: 0.85 }}
-            animate={{ scale: [1, 1.05, 1] }}
-            transition={{ repeat: Infinity, duration: 1.6 }}
-            onClick={onAnother}
-            aria-label="Hacer otra receta"
-            className="flex h-20 min-h-16 items-center gap-2 rounded-full bg-accent px-6 text-3xl font-extrabold text-accent-foreground kids-shadow-lg"
-          >
-            🍳 ➕
-          </motion.button>
-        )}
-
-        <motion.button
-          type="button"
-          whileTap={{ scale: 0.85 }}
-          initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 1 }}
-          onClick={finishHome}
-          aria-label="Inicio"
-          className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-primary text-3xl text-primary-foreground kids-shadow-lg"
-        >
-          🏠
-        </motion.button>
+        </div>
       </div>
     </div>
   );

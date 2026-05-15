@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import type { Recipe } from "@/data/recipes";
 import { getIngredientName } from "@/data/ingredientNames";
@@ -13,6 +13,7 @@ import DifficultyBadges from "./DifficultyBadges";
 import IngredientSwap from "./IngredientSwap";
 import RecipeShareButton from "./RecipeShareButton";
 import LevelBadge from "./LevelBadge";
+import ParentRecipeSheet from "./ParentRecipeSheet";
 
 interface Props {
   recipe: Recipe;
@@ -32,6 +33,7 @@ export default function RecipeIngredients({
   isFavorite, onToggleFavorite,
 }: Props) {
   const [checked, setChecked] = useState<Set<number>>(new Set());
+  const [parentOpen, setParentOpen] = useState(false);
   const meta = getRecipeMeta(recipe.id);
   const { active } = usePlayers();
   const restrictions = active?.restrictions ?? { nuts: false, dairy: false, gluten: false, vegetarian: false };
@@ -128,8 +130,17 @@ export default function RecipeIngredients({
         </div>
       )}
 
-      {/* Adult actions: print, workshop, share */}
+      {/* Adult actions: parent sheet, print, workshop, share */}
       <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+        <button
+          type="button"
+          onClick={() => setParentOpen(true)}
+          className="flex min-h-14 items-center gap-2 rounded-2xl bg-kids-purple/40 px-4 py-2 text-sm font-extrabold text-foreground kids-shadow ring-2 ring-kids-purple"
+          aria-label="Ficha de receta para padres"
+        >
+          <span className="text-2xl" aria-hidden>👨‍👩‍👧</span>
+          <span>Para padres</span>
+        </button>
         <Link
           to="/imprimir/$recipeId" params={{ recipeId: recipe.id }}
           target="_blank" rel="noopener"
@@ -236,6 +247,16 @@ export default function RecipeIngredients({
       >
         ▶️
       </motion.button>
+
+      <AnimatePresence>
+        {parentOpen && (
+          <ParentRecipeSheet
+            recipe={recipe}
+            displayName={displayName}
+            onClose={() => setParentOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

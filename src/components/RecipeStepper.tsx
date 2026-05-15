@@ -6,6 +6,7 @@ import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { useChallengeMode } from "@/hooks/use-challenge-mode";
 import { detectHygieneActions } from "@/data/hygieneActions";
+import { useLongPress } from "@/hooks/use-long-press";
 import Celebration from "./Celebration";
 import DinoBubble from "./DinoBubble";
 import HygieneStep from "./HygieneStep";
@@ -144,6 +145,7 @@ export default function RecipeStepper({
     setHygieneDone(true);
   }, []);
   const [adultConfirmedStep, setAdultConfirmedStep] = useState<number | null>(null);
+  const [exitConfirm, setExitConfirm] = useState(false);
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
   useEffect(() => {
     const unsub = subscribeStepImages(forceUpdate);
@@ -200,6 +202,8 @@ export default function RecipeStepper({
     onBack();
   }, [step, onPause, onBack]);
 
+  const exitLongPress = useLongPress(() => setExitConfirm(true), 800);
+
   if (showCelebration) {
     return (
       <Celebration
@@ -233,23 +237,23 @@ export default function RecipeStepper({
 
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-between bg-background px-4 pb-8 pt-6">
-      {/* Top-right controls: pause + home */}
+      {/* Top-right controls: long-press to exit + home */}
       <div className="absolute right-3 top-3 z-10 flex flex-col items-end gap-2">
-        {onPause && (
-          <motion.button
-            whileTap={{ scale: 0.85 }}
-            onClick={pauseAndExit}
-            aria-label="Pausar y salir"
-            className="flex h-14 w-14 min-h-14 min-w-14 items-center justify-center rounded-full bg-card text-2xl kids-shadow md:h-20 md:w-20 md:text-4xl"
-          >
-            ⏸️
-          </motion.button>
-        )}
+        <motion.button
+          whileTap={{ scale: 0.85 }}
+          {...exitLongPress}
+          onClick={() => setExitConfirm(true)}
+          aria-label="Mantén pulsado para salir"
+          title="Mantén pulsado para salir"
+          className="flex h-14 w-14 min-h-14 min-w-14 items-center justify-center rounded-full bg-card text-2xl kids-shadow md:h-20 md:w-20 md:text-4xl"
+        >
+          ⏸️
+        </motion.button>
         {onHome && (
           <motion.button
             whileTap={{ scale: 0.85 }}
             whileHover={{ scale: 1.05 }}
-            onClick={onHome}
+            onClick={() => setExitConfirm(true)}
             className="flex h-14 w-14 min-h-14 min-w-14 items-center justify-center rounded-full bg-card text-3xl kids-shadow md:h-20 md:w-20 md:text-5xl"
             aria-label="Inicio"
           >
@@ -436,6 +440,37 @@ export default function RecipeStepper({
           onConfirm={() => setAdultConfirmedStep(step)}
           onCancel={pauseAndExit}
         />
+      )}
+
+      {exitConfirm && (
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-5 bg-background/95 px-6 backdrop-blur"
+        >
+          <div className="text-7xl">🧑</div>
+          <h2 className="text-balance text-center text-xl font-extrabold text-foreground">
+            ¿Salir de la receta?
+          </h2>
+          <p className="text-balance text-center text-sm font-bold text-muted-foreground">
+            Guardamos por dónde vas para continuar luego.
+          </p>
+          <div className="flex flex-col items-center gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={() => { setExitConfirm(false); pauseAndExit(); }}
+              className="min-h-16 rounded-full bg-accent px-6 py-3 text-lg font-extrabold text-accent-foreground kids-shadow-lg"
+            >
+              ✅ Salir y guardar
+            </button>
+            <button
+              type="button"
+              onClick={() => setExitConfirm(false)}
+              className="min-h-16 rounded-full bg-card px-6 py-3 text-base font-extrabold text-foreground kids-shadow"
+            >
+              ⬅️ Seguir cocinando
+            </button>
+          </div>
+        </motion.div>
       )}
     </div>
   );
