@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import type { Recipe } from "@/data/recipes";
 import { getIngredientName } from "@/data/ingredientNames";
@@ -13,6 +13,7 @@ import DifficultyBadges from "./DifficultyBadges";
 import IngredientSwap from "./IngredientSwap";
 import RecipeShareButton from "./RecipeShareButton";
 import LevelBadge from "./LevelBadge";
+import ParentRecipeSheet from "./ParentRecipeSheet";
 
 interface Props {
   recipe: Recipe;
