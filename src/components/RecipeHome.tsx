@@ -23,6 +23,8 @@ import { useNoCook } from "@/hooks/use-no-cook";
 import { PACKS, type RecipePack } from "@/data/recipePacks";
 import LevelBadge from "./LevelBadge";
 import type { AgeBucket } from "@/hooks/use-players";
+import { useMedals } from "@/hooks/use-medals";
+import { MEDALS } from "@/data/medals";
 
 const colorMap: Record<string, string> = {
   "kids-pink": "bg-kids-pink",
@@ -73,6 +75,11 @@ export default function RecipeHome({
   const { plan } = useWeekPlan();
   const challenge = useChallengeMode();
   const noCook = useNoCook();
+  const { earned: earnedMedals } = useMedals();
+  const recentMedals = useMemo(
+    () => MEDALS.filter((m) => earnedMedals.includes(m.id)).slice(-3).reverse(),
+    [earnedMedals]
+  );
 
   const allowed = useMemo(
     () => [...recipes, ...(extraRecipes ?? [])].filter((r) => {
@@ -267,6 +274,28 @@ export default function RecipeHome({
             )}
 
             <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
+
+            {recentMedals.length > 0 && (
+              <button
+                type="button"
+                onClick={onOpenMedals}
+                aria-label="Ver mis medallas"
+                className="mb-4 flex w-full items-center gap-2 rounded-2xl bg-kids-yellow/40 p-3 kids-shadow"
+              >
+                <span className="text-xs font-extrabold text-foreground">🏅 Últimas</span>
+                <div className="flex flex-1 items-center justify-end gap-2">
+                  {recentMedals.map((m) => (
+                    <span
+                      key={m.id}
+                      title={m.label}
+                      className="flex h-10 w-10 items-center justify-center rounded-full bg-card text-2xl kids-shadow"
+                    >
+                      {m.emoji}
+                    </span>
+                  ))}
+                </div>
+              </button>
+            )}
 
             {/* Packs carousel shortcut */}
             {onOpenPack && (
