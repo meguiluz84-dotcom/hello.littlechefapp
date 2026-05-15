@@ -247,6 +247,16 @@ export default function RecipeIngredients({
       >
         ▶️
       </motion.button>
+
+      <AnimatePresence>
+        {parentOpen && (
+          <ParentRecipeSheet
+            recipe={recipe}
+            displayName={displayName}
+            onClose={() => setParentOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
