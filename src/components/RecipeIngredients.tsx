@@ -33,6 +33,7 @@ export default function RecipeIngredients({
   isFavorite, onToggleFavorite,
 }: Props) {
   const [checked, setChecked] = useState<Set<number>>(new Set());
+  const [parentOpen, setParentOpen] = useState(false);
   const meta = getRecipeMeta(recipe.id);
   const { active } = usePlayers();
   const restrictions = active?.restrictions ?? { nuts: false, dairy: false, gluten: false, vegetarian: false };
