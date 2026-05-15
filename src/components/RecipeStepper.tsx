@@ -202,6 +202,8 @@ export default function RecipeStepper({
     onBack();
   }, [step, onPause, onBack]);
 
+  const exitLongPress = useLongPress(() => setExitConfirm(true), 800);
+
   if (showCelebration) {
     return (
       <Celebration
