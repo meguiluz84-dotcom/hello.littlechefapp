@@ -23,6 +23,8 @@ import { useNoCook } from "@/hooks/use-no-cook";
 import { PACKS, type RecipePack } from "@/data/recipePacks";
 import LevelBadge from "./LevelBadge";
 import type { AgeBucket } from "@/hooks/use-players";
+import { useMedals } from "@/hooks/use-medals";
+import { MEDALS } from "@/data/medals";
 
 const colorMap: Record<string, string> = {
   "kids-pink": "bg-kids-pink",
