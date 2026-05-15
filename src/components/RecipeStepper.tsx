@@ -441,6 +441,37 @@ export default function RecipeStepper({
           onCancel={pauseAndExit}
         />
       )}
+
+      {exitConfirm && (
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-5 bg-background/95 px-6 backdrop-blur"
+        >
+          <div className="text-7xl">🧑</div>
+          <h2 className="text-balance text-center text-xl font-extrabold text-foreground">
+            ¿Salir de la receta?
+          </h2>
+          <p className="text-balance text-center text-sm font-bold text-muted-foreground">
+            Guardamos por dónde vas para continuar luego.
+          </p>
+          <div className="flex flex-col items-center gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={() => { setExitConfirm(false); pauseAndExit(); }}
+              className="min-h-16 rounded-full bg-accent px-6 py-3 text-lg font-extrabold text-accent-foreground kids-shadow-lg"
+            >
+              ✅ Salir y guardar
+            </button>
+            <button
+              type="button"
+              onClick={() => setExitConfirm(false)}
+              className="min-h-16 rounded-full bg-card px-6 py-3 text-base font-extrabold text-foreground kids-shadow"
+            >
+              ⬅️ Seguir cocinando
+            </button>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 }
