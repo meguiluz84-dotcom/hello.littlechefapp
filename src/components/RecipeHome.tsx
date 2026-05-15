@@ -75,6 +75,11 @@ export default function RecipeHome({
   const { plan } = useWeekPlan();
   const challenge = useChallengeMode();
   const noCook = useNoCook();
+  const { earned: earnedMedals } = useMedals();
+  const recentMedals = useMemo(
+    () => MEDALS.filter((m) => earnedMedals.includes(m.id)).slice(-3).reverse(),
+    [earnedMedals]
+  );
 
   const allowed = useMemo(
     () => [...recipes, ...(extraRecipes ?? [])].filter((r) => {
