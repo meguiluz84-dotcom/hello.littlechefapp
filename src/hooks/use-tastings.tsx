@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { usePlayers } from "./use-players";
 
-export type Reaction = "😋" | "🙂" | "😖";
+// 4 reactions per the family-feedback spec.
+// 😍 me encantó · 🙂 estuvo bien · 😖 no me gustó · 🔁 quiero repetir
+export type Reaction = "😍" | "🙂" | "😖" | "🔁";
 
 export interface Tasting {
   recipeId: string;
   reaction: Reaction;
   date: number;
+  note?: string;
 }
 
 const key = (pid: string) => `lc:p:${pid}:tastings`;
@@ -20,16 +23,29 @@ export function useTastings() {
     if (!pid) { setItems([]); return; }
     try {
       const raw = localStorage.getItem(key(pid));
-      setItems(raw ? JSON.parse(raw) : []);
+      const parsed = raw ? (JSON.parse(raw) as Tasting[]) : [];
+      // Migrate legacy "😋" → "😍".
+      const migrated = parsed.map((t) =>
+        (t.reaction as unknown as string) === "😋" ? { ...t, reaction: "😍" as Reaction } : t,
+      );
+      setItems(migrated);
     } catch { setItems([]); }
   }, [pid]);
 
-  const log = useCallback((recipeId: string, reaction: Reaction) => {
+  const log = useCallback((recipeId: string, reaction: Reaction, note?: string) => {
     if (!pid) return;
     setItems((prev) => {
-      // Replace existing reaction for the same recipe (keep latest).
       const filtered = prev.filter((t) => t.recipeId !== recipeId);
-      const next = [...filtered, { recipeId, reaction, date: Date.now() }];
+      const next = [...filtered, { recipeId, reaction, date: Date.now(), ...(note ? { note } : {}) }];
+      try { localStorage.setItem(key(pid), JSON.stringify(next)); } catch { /* ignore */ }
+      return next;
+    });
+  }, [pid]);
+
+  const setNote = useCallback((recipeId: string, note: string) => {
+    if (!pid) return;
+    setItems((prev) => {
+      const next = prev.map((t) => t.recipeId === recipeId ? { ...t, note } : t);
       try { localStorage.setItem(key(pid), JSON.stringify(next)); } catch { /* ignore */ }
       return next;
     });
@@ -41,7 +57,7 @@ export function useTastings() {
     [items],
   );
 
-  const lovedCount = items.filter((t) => t.reaction === "😋").length;
+  const lovedCount = items.filter((t) => t.reaction === "😍").length;
 
-  return { items, log, reactionFor, lovedCount };
+  return { items, log, setNote, reactionFor, lovedCount };
 }
