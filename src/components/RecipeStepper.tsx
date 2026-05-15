@@ -6,6 +6,7 @@ import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { useChallengeMode } from "@/hooks/use-challenge-mode";
 import { detectHygieneActions } from "@/data/hygieneActions";
+import { useLongPress } from "@/hooks/use-long-press";
 import Celebration from "./Celebration";
 import DinoBubble from "./DinoBubble";
 import HygieneStep from "./HygieneStep";
