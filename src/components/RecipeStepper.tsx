@@ -145,6 +145,7 @@ export default function RecipeStepper({
     setHygieneDone(true);
   }, []);
   const [adultConfirmedStep, setAdultConfirmedStep] = useState<number | null>(null);
+  const [exitConfirm, setExitConfirm] = useState(false);
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
   useEffect(() => {
     const unsub = subscribeStepImages(forceUpdate);
