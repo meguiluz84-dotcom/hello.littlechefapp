@@ -153,8 +153,6 @@ export default function RecipeStepper({
   const current = recipe.steps[step];
   const meta = getRecipeMeta(recipe.id);
   const isAdvanced = meta.level === 4;
-  const challenge = useChallengeMode();
-  const challengeOn = challenge.enabled && (recipe.challengeModeCompatible ?? false);
   const needsAdult = useMemo(
     () => stepNeedsAdult(current.actionIcon, current.emoji, current.adultRequired),
     [current]
