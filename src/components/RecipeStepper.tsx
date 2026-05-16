@@ -11,7 +11,7 @@ import Celebration from "./Celebration";
 import HygieneStep from "./HygieneStep";
 import AdultGate from "./AdultGate";
 import VisualTimer from "./VisualTimer";
-import AdvancedBadge from "./AdvancedBadge";
+
 import { useVoice } from "@/hooks/use-voice";
 import { lineForAction } from "@/data/voiceLines";
 import { getStepTimer } from "@/hooks/use-step-timers";
