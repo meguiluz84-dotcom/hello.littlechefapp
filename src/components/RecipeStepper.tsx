@@ -4,7 +4,7 @@ import type { Recipe } from "@/data/recipes";
 import { stepNeedsAdult, adultReasonFor, getRecipeMeta } from "@/data/recipeMeta";
 import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
-import { useChallengeMode } from "@/hooks/use-challenge-mode";
+
 import { detectHygieneActions } from "@/data/hygieneActions";
 import { useLongPress } from "@/hooks/use-long-press";
 import Celebration from "./Celebration";
