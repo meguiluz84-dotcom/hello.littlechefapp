@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "@tanstack/react-router";
 import type { Recipe } from "@/data/recipes";
 import { getIngredientName } from "@/data/ingredientNames";
 import { getRecipeMeta, RESTRICTION_INFO, LEVEL_INFO, type Restrictions } from "@/data/recipeMeta";
@@ -11,7 +10,6 @@ import DinoBubble from "./DinoBubble";
 import VisualQuantity from "./VisualQuantity";
 import DifficultyBadges from "./DifficultyBadges";
 import IngredientSwap from "./IngredientSwap";
-import RecipeShareButton from "./RecipeShareButton";
 import LevelBadge from "./LevelBadge";
 import ParentRecipeSheet from "./ParentRecipeSheet";
 
@@ -130,8 +128,8 @@ export default function RecipeIngredients({
         </div>
       )}
 
-      {/* Adult actions: parent sheet, print, workshop, share */}
-      <div className="mb-4 flex flex-wrap items-center justify-center gap-2">
+      {/* Adult action: opens parent sheet (contains print/workshop/share) */}
+      <div className="mb-4 flex justify-center">
         <button
           type="button"
           onClick={() => setParentOpen(true)}
@@ -141,22 +139,6 @@ export default function RecipeIngredients({
           <span className="text-2xl" aria-hidden>👨‍👩‍👧</span>
           <span>Para padres</span>
         </button>
-        <Link
-          to="/imprimir/$recipeId" params={{ recipeId: recipe.id }}
-          target="_blank" rel="noopener"
-          className="flex min-h-14 items-center gap-2 rounded-2xl bg-card px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
-        >
-          <span className="text-2xl" aria-hidden>🖨️</span>
-          <span>Imprimir</span>
-        </Link>
-        <Link
-          to="/taller/$recipeId" params={{ recipeId: recipe.id }}
-          className="flex min-h-14 items-center gap-2 rounded-2xl bg-card px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
-        >
-          <span className="text-2xl" aria-hidden>🏫</span>
-          <span>Taller</span>
-        </Link>
-        <RecipeShareButton recipe={recipe} displayName={displayName} />
       </div>
 
       {/* Resume banner */}

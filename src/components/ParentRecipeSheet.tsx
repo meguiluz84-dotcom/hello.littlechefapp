@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 import type { Recipe } from "@/data/recipes";
 import {
   getRecipeMeta,
@@ -9,6 +10,7 @@ import {
   LEVEL_INFO,
   type Restrictions,
 } from "@/data/recipeMeta";
+import RecipeShareButton from "./RecipeShareButton";
 import dinoChef from "@/assets/dino-chef.png";
 
 interface Props {
@@ -256,6 +258,29 @@ export default function ParentRecipeSheet({ recipe, displayName, onClose }: Prop
               </p>
             </section>
           )}
+
+          {/* Compartir / Imprimir / Taller */}
+          <section className="rounded-2xl bg-card p-4 kids-shadow">
+            <h2 className="mb-3 text-sm font-extrabold text-foreground">📤 Compartir e imprimir</h2>
+            <div className="flex flex-wrap gap-2">
+              <Link
+                to="/imprimir/$recipeId" params={{ recipeId: recipe.id }}
+                target="_blank" rel="noopener"
+                className="flex min-h-14 items-center gap-2 rounded-2xl bg-background px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
+              >
+                <span className="text-2xl" aria-hidden>🖨️</span>
+                <span>Imprimir</span>
+              </Link>
+              <Link
+                to="/taller/$recipeId" params={{ recipeId: recipe.id }}
+                className="flex min-h-14 items-center gap-2 rounded-2xl bg-background px-4 py-2 text-sm font-extrabold text-foreground kids-shadow"
+              >
+                <span className="text-2xl" aria-hidden>🏫</span>
+                <span>Taller</span>
+              </Link>
+              <RecipeShareButton recipe={recipe} displayName={displayName} />
+            </div>
+          </section>
 
           {/* Safety footer */}
           <section className="rounded-2xl bg-kids-yellow/40 p-4 kids-shadow">
