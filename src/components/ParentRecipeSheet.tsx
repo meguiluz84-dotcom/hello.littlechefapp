@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
+import { Link } from "@tanstack/react-router";
 import type { Recipe } from "@/data/recipes";
 import {
   getRecipeMeta,
@@ -9,6 +10,7 @@ import {
   LEVEL_INFO,
   type Restrictions,
 } from "@/data/recipeMeta";
+import RecipeShareButton from "./RecipeShareButton";
 import dinoChef from "@/assets/dino-chef.png";
 
 interface Props {
