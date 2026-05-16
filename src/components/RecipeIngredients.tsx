@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "@tanstack/react-router";
 import type { Recipe } from "@/data/recipes";
 import { getIngredientName } from "@/data/ingredientNames";
 import { getRecipeMeta, RESTRICTION_INFO, LEVEL_INFO, type Restrictions } from "@/data/recipeMeta";
@@ -11,7 +10,6 @@ import DinoBubble from "./DinoBubble";
 import VisualQuantity from "./VisualQuantity";
 import DifficultyBadges from "./DifficultyBadges";
 import IngredientSwap from "./IngredientSwap";
-import RecipeShareButton from "./RecipeShareButton";
 import LevelBadge from "./LevelBadge";
 import ParentRecipeSheet from "./ParentRecipeSheet";
 
