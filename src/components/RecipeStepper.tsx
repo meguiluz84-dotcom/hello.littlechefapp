@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useReducer, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
-import { stepNeedsAdult, adultReasonFor, getRecipeMeta } from "@/data/recipeMeta";
+import { stepNeedsAdult, getRecipeMeta } from "@/data/recipeMeta";
 import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
@@ -11,7 +11,7 @@ import Celebration from "./Celebration";
 import HygieneStep from "./HygieneStep";
 import AdultGate from "./AdultGate";
 import VisualTimer from "./VisualTimer";
-import AdvancedBadge from "./AdvancedBadge";
+
 import { useVoice } from "@/hooks/use-voice";
 import { lineForAction } from "@/data/voiceLines";
 import { getStepTimer } from "@/hooks/use-step-timers";
@@ -278,26 +278,8 @@ export default function RecipeStepper({
         )}
       </div>
 
-      {/* Adult-required badge */}
-      {needsAdult && (
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="absolute left-3 top-3 z-10 flex max-w-[60%] items-center gap-2 rounded-2xl border-4 border-kids-orange bg-kids-yellow px-3 py-2 kids-shadow"
-          aria-label={`Paso para adulto: ${adultReasonFor(current.actionIcon, current.emoji)}`}
-          title={adultReasonFor(current.actionIcon, current.emoji)}
-        >
-          <span className="text-2xl">🧑</span>
-          <span className="text-xs font-extrabold leading-tight text-foreground">¡Adulto!</span>
-        </motion.div>
-      )}
-
-      {/* Advanced level badge */}
-      {isAdvanced && (
-        <div className="absolute left-1/2 top-3 z-10 -translate-x-1/2">
-          <AdvancedBadge size="sm" withLabel={false} />
-        </div>
-      )}
+      {/* Clean step screen: badges hidden by design.
+          Safety (adult-required) is still enforced via the AdultGate modal below. */}
 
       {/* Progress bar with dots */}
       <div className="mt-12 flex w-full max-w-xs items-center gap-1.5">
