@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useReducer, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
-import { stepNeedsAdult, adultReasonFor, getRecipeMeta } from "@/data/recipeMeta";
+import { stepNeedsAdult, getRecipeMeta } from "@/data/recipeMeta";
 import { getStepImage, subscribeStepImages } from "@/data/stepImages";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
