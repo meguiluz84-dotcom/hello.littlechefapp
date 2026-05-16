@@ -283,13 +283,8 @@ export default function RecipeStepper({
         </div>
       )}
 
-      {/* Role indicator (kid vs adult) */}
-      <div className="mt-12 mb-1 w-full max-w-xs">
-        <RoleHeader needsAdult={needsAdult} />
-      </div>
-
       {/* Progress bar with dots */}
-      <div className="flex w-full max-w-xs items-center gap-1.5">
+      <div className="mt-12 flex w-full max-w-xs items-center gap-1.5">
         {recipe.steps.map((_, i) => (
           <motion.div
             key={i}
@@ -300,15 +295,6 @@ export default function RecipeStepper({
             style={{ flex: i === step ? 2.5 : 1 }}
           />
         ))}
-      </div>
-
-      {/* Dino guide with action emoji */}
-      <div className="self-start">
-        <DinoBubble
-          emojis={`${actionIcons[current.actionIcon]}${current.emoji}`}
-          size="sm"
-          bubbleKey={step}
-        />
       </div>
 
       {/* Step number badge */}
@@ -322,7 +308,7 @@ export default function RecipeStepper({
         {step + 1}
       </motion.div>
 
-      {/* Step content */}
+      {/* Step content — clean: just the image */}
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={`${step}-${replayKey}`}
@@ -335,7 +321,7 @@ export default function RecipeStepper({
           className="flex flex-col items-center gap-5"
         >
           <motion.div
-            className="relative flex h-48 w-48 items-center justify-center overflow-hidden rounded-3xl bg-card kids-shadow-lg"
+            className="relative flex h-72 w-72 items-center justify-center overflow-hidden rounded-3xl bg-card kids-shadow-lg md:h-96 md:w-96"
             initial={reduced ? false : { rotateY: 90 }}
             animate={{ rotateY: 0 }}
             transition={{ type: "spring", bounce: 0.4, delay: 0.1 }}
@@ -347,33 +333,9 @@ export default function RecipeStepper({
                 className="h-full w-full object-cover"
               />
             ) : (
-              <span className="text-8xl">{current.emoji}</span>
+              <span className="text-9xl">{current.emoji}</span>
             )}
           </motion.div>
-
-          <motion.div
-            animate={actionAnim.animate as Record<string, number[]>}
-            transition={actionAnim.transition as Record<string, unknown>}
-            className="text-6xl"
-          >
-            {actionIcons[current.actionIcon]}
-          </motion.div>
-
-          {current.ingredientEmojis.length > 0 && !challengeOn && (
-            <div className="flex gap-3">
-              {current.ingredientEmojis.map((e, i) => (
-                <motion.div
-                  key={i}
-                  initial={reduced ? false : { scale: 0, y: 20 }}
-                  animate={{ scale: 1, y: 0 }}
-                  transition={{ type: "spring", bounce: 0.6, delay: 0.3 + i * 0.1 }}
-                  className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-2xl bg-secondary text-3xl kids-shadow"
-                >
-                  {e}
-                </motion.div>
-              ))}
-            </div>
-          )}
 
           {(() => {
             const wait = getStepTimer(recipe.id, step) || (current.timerSeconds ?? 0);
