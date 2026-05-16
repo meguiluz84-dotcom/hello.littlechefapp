@@ -352,44 +352,47 @@ export default function RecipeStepper({
         </motion.div>
       </AnimatePresence>
 
-      {/* Navigation */}
-      <div className="flex w-full max-w-sm items-center justify-between gap-3">
+      {/* Navigation — extra tactile on tablets and phones */}
+      <div className="flex w-full max-w-2xl items-center justify-between gap-4 sm:gap-6 px-2 pb-[env(safe-area-inset-bottom)]">
         <motion.button
-          whileTap={{ scale: 0.85 }}
+          whileTap={{ scale: 0.88, backgroundColor: "hsl(var(--accent))" }}
+          transition={{ type: "spring", stiffness: 500, damping: 25 }}
           onClick={prev}
           aria-label="Anterior"
-          className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-muted text-3xl kids-shadow md:h-24 md:w-24 md:text-5xl"
+          className="flex h-20 w-20 min-h-20 min-w-20 touch-manipulation select-none items-center justify-center rounded-full bg-muted text-4xl kids-shadow ring-4 ring-transparent transition-shadow active:ring-foreground/20 active:shadow-inner md:h-28 md:w-28 md:text-5xl"
         >
           ⬅️
         </motion.button>
 
         <motion.button
-          whileTap={{ scale: 0.85 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 500, damping: 25 }}
           onClick={replay}
           aria-label="Repetir"
-          className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-card text-3xl kids-shadow"
+          className="flex h-16 w-16 min-h-16 min-w-16 touch-manipulation select-none items-center justify-center rounded-full bg-card text-3xl kids-shadow ring-4 ring-transparent transition-shadow active:ring-foreground/20 active:shadow-inner md:h-24 md:w-24 md:text-4xl"
         >
           🔁
         </motion.button>
 
         {voice.supported && voice.enabled && (
           <motion.button
-            whileTap={{ scale: 0.85 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 500, damping: 25 }}
             onClick={() => voice.speak(lineForAction(current.actionIcon))}
             aria-label="Escuchar"
-            className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-full bg-card text-3xl kids-shadow"
+            className="flex h-16 w-16 min-h-16 min-w-16 touch-manipulation select-none items-center justify-center rounded-full bg-card text-3xl kids-shadow ring-4 ring-transparent transition-shadow active:ring-foreground/20 active:shadow-inner md:h-24 md:w-24 md:text-4xl"
           >
             🗣️
           </motion.button>
         )}
 
         <motion.button
-          whileTap={{ scale: 0.85 }}
-          animate={reduced ? {} : { scale: [1, 1.08, 1] }}
+          whileTap={{ scale: 0.88 }}
+          animate={reduced ? {} : { scale: [1, 1.06, 1] }}
           transition={{ repeat: Infinity, duration: 2 }}
           onClick={next}
           aria-label={step < total - 1 ? "Siguiente" : "Terminar"}
-          className="flex h-20 w-20 min-h-16 min-w-16 items-center justify-center rounded-full bg-accent text-4xl kids-shadow-lg md:h-32 md:w-32 md:text-6xl"
+          className="flex h-24 w-24 min-h-24 min-w-24 touch-manipulation select-none items-center justify-center rounded-full bg-accent text-5xl text-accent-foreground kids-shadow-lg ring-4 ring-transparent transition-all active:ring-accent-foreground/30 active:shadow-inner md:h-36 md:w-36 md:text-6xl"
         >
           {step < total - 1 ? "➡️" : "🎉"}
         </motion.button>
