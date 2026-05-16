@@ -169,6 +169,26 @@ export default function RecipeStepper({
     voice.speak(lineForAction(current.actionIcon));
   }, [step, voice.enabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Autosave progress on every step change and when the tab is hidden/closed,
+  // so the user can resume even if they don't tap "Salir y guardar".
+  useEffect(() => {
+    if (showCelebration) return;
+    onPause?.(step);
+  }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const save = () => { if (!showCelebration) onPause?.(step); };
+    const onVis = () => { if (document.visibilityState === "hidden") save(); };
+    window.addEventListener("pagehide", save);
+    window.addEventListener("beforeunload", save);
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      window.removeEventListener("pagehide", save);
+      window.removeEventListener("beforeunload", save);
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [step, showCelebration, onPause]);
+
   const next = useCallback(() => {
     setDirection(1);
     if (step < total - 1) {
