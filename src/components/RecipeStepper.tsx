@@ -179,12 +179,18 @@ export default function RecipeStepper({
   useEffect(() => {
     const save = () => { if (!showCelebration) onPause?.(step); };
     const onVis = () => { if (document.visibilityState === "hidden") save(); };
+    // Periodic safety-net autosave in case the browser kills the tab
+    // without firing pagehide (mobile background, OOM, force-quit).
+    const interval = window.setInterval(save, 5000);
     window.addEventListener("pagehide", save);
     window.addEventListener("beforeunload", save);
+    window.addEventListener("blur", save);
     document.addEventListener("visibilitychange", onVis);
     return () => {
+      window.clearInterval(interval);
       window.removeEventListener("pagehide", save);
       window.removeEventListener("beforeunload", save);
+      window.removeEventListener("blur", save);
       document.removeEventListener("visibilitychange", onVis);
     };
   }, [step, showCelebration, onPause]);
