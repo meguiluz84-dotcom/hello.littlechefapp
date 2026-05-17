@@ -143,6 +143,7 @@ export function usePreferences() {
     setLastRecipe,
     saveResume,
     getResume,
+    getResumeInfo,
     clearResume,
     DEFAULT_RESTR,
   };
