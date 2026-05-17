@@ -371,22 +371,22 @@ export default function RecipeStepper({
         </motion.button>
 
         <motion.button
-          whileTap={{ scale: 0.9 }}
+          whileTap={{ scale: 0.88, backgroundColor: "hsl(var(--accent))" }}
           transition={{ type: "spring", stiffness: 500, damping: 25 }}
           onClick={replay}
           aria-label="Repetir"
-          className="flex h-16 w-16 min-h-16 min-w-16 touch-manipulation select-none items-center justify-center rounded-full bg-card text-3xl kids-shadow ring-4 ring-transparent transition-shadow active:ring-foreground/20 active:shadow-inner md:h-24 md:w-24 md:text-4xl"
+          className="flex h-20 w-20 min-h-20 min-w-20 touch-manipulation select-none items-center justify-center rounded-full bg-card text-4xl kids-shadow ring-4 ring-transparent transition-shadow active:ring-foreground/20 active:shadow-inner md:h-28 md:w-28 md:text-5xl"
         >
           🔁
         </motion.button>
 
         {voice.supported && voice.enabled && (
           <motion.button
-            whileTap={{ scale: 0.9 }}
+            whileTap={{ scale: 0.88, backgroundColor: "hsl(var(--accent))" }}
             transition={{ type: "spring", stiffness: 500, damping: 25 }}
             onClick={() => voice.speak(lineForAction(current.actionIcon))}
             aria-label="Escuchar"
-            className="flex h-16 w-16 min-h-16 min-w-16 touch-manipulation select-none items-center justify-center rounded-full bg-card text-3xl kids-shadow ring-4 ring-transparent transition-shadow active:ring-foreground/20 active:shadow-inner md:h-24 md:w-24 md:text-4xl"
+            className="flex h-20 w-20 min-h-20 min-w-20 touch-manipulation select-none items-center justify-center rounded-full bg-card text-4xl kids-shadow ring-4 ring-transparent transition-shadow active:ring-foreground/20 active:shadow-inner md:h-28 md:w-28 md:text-5xl"
           >
             🗣️
           </motion.button>
