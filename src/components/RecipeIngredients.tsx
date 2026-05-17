@@ -28,7 +28,7 @@ interface Props {
 
 export default function RecipeIngredients({
   recipe, onStart, onBack, displayName,
-  hasResume, onResume, onResumeClear,
+  hasResume, resumeStep, onResume, onResumeClear,
   isFavorite, onToggleFavorite,
 }: Props) {
   const [checked, setChecked] = useState<Set<number>>(new Set());
