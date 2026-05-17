@@ -19,6 +19,7 @@ interface Props {
   onBack: () => void;
   displayName?: string;
   hasResume?: boolean;
+  resumeStep?: number;
   onResume?: () => void;
   onResumeClear?: () => void;
   isFavorite?: boolean;
@@ -27,7 +28,7 @@ interface Props {
 
 export default function RecipeIngredients({
   recipe, onStart, onBack, displayName,
-  hasResume, onResume, onResumeClear,
+  hasResume, resumeStep, onResume, onResumeClear,
   isFavorite, onToggleFavorite,
 }: Props) {
   const [checked, setChecked] = useState<Set<number>>(new Set());
@@ -148,13 +149,18 @@ export default function RecipeIngredients({
           animate={{ scale: 1, opacity: 1 }}
           className="mb-4 flex w-full max-w-sm items-center gap-3 rounded-2xl bg-accent p-3 kids-shadow"
         >
-          <span className="text-3xl">⏸️</span>
+          <span className="text-3xl" aria-hidden>⏸️</span>
           <button
             type="button"
             onClick={onResume}
-            className="flex-1 min-h-12 rounded-xl bg-card px-3 py-2 text-base font-extrabold text-foreground kids-shadow"
+            className="flex flex-1 min-h-12 flex-col items-start rounded-xl bg-card px-3 py-2 text-left kids-shadow"
           >
-            ▶️ Continuar
+            <span className="text-base font-extrabold text-foreground">▶️ Continuar</span>
+            {typeof resumeStep === "number" && (
+              <span className="text-xs font-bold text-muted-foreground">
+                Paso {Math.min(resumeStep + 1, recipe.steps.length)} de {recipe.steps.length}
+              </span>
+            )}
           </button>
           {onResumeClear && (
             <button

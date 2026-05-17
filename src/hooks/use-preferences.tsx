@@ -82,20 +82,52 @@ export function usePreferences() {
     } catch { /* ignore */ }
   }, []);
 
+  // 30 days — beyond this we consider the resume stale.
+  const RESUME_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+
   const saveResume = useCallback((recipeId: string, step: number) => {
     if (!pid) return;
-    writeJSON(playerKey(pid, `resume-${recipeId}`), { step, ts: Date.now() });
+    const key = playerKey(pid, `resume-${recipeId}`);
+    const payload = { step, ts: Date.now() };
+    // Primary write to localStorage; mirror to sessionStorage so a tab crash
+    // mid-write still leaves a recoverable copy for the same session.
+    writeJSON(key, payload);
+    try { sessionStorage.setItem(key, JSON.stringify(payload)); } catch { /* ignore */ }
+    // Track this recipe as the most-recently-active one across reloads.
+    try { localStorage.setItem(SHARED_KEYS.lastRecipe, recipeId); } catch { /* ignore */ }
+    setLastRecipeState(recipeId);
   }, [pid]);
 
-  const getResume = useCallback((recipeId: string): number | null => {
+  const readResume = useCallback((recipeId: string): { step: number; ts: number } | null => {
     if (!pid) return null;
-    const v = readJSON<{ step: number; ts: number } | null>(playerKey(pid, `resume-${recipeId}`), null);
-    return v?.step ?? null;
-  }, [pid]);
+    const key = playerKey(pid, `resume-${recipeId}`);
+    let v = readJSON<{ step: number; ts: number } | null>(key, null);
+    if (!v) {
+      try {
+        const raw = sessionStorage.getItem(key);
+        if (raw) {
+          v = JSON.parse(raw) as { step: number; ts: number };
+          // Heal localStorage from session backup.
+          writeJSON(key, v);
+        }
+      } catch { /* ignore */ }
+    }
+    if (!v) return null;
+    if (typeof v.ts === "number" && Date.now() - v.ts > RESUME_MAX_AGE_MS) return null;
+    return v;
+  }, [pid, RESUME_MAX_AGE_MS]);
+
+  const getResume = useCallback((recipeId: string): number | null => {
+    return readResume(recipeId)?.step ?? null;
+  }, [readResume]);
+
+  const getResumeInfo = useCallback((recipeId: string) => readResume(recipeId), [readResume]);
 
   const clearResume = useCallback((recipeId: string) => {
     if (!pid) return;
-    try { localStorage.removeItem(playerKey(pid, `resume-${recipeId}`)); } catch { /* ignore */ }
+    const key = playerKey(pid, `resume-${recipeId}`);
+    try { localStorage.removeItem(key); } catch { /* ignore */ }
+    try { sessionStorage.removeItem(key); } catch { /* ignore */ }
   }, [pid]);
 
   return {
@@ -111,6 +143,7 @@ export function usePreferences() {
     setLastRecipe,
     saveResume,
     getResume,
+    getResumeInfo,
     clearResume,
     DEFAULT_RESTR,
   };
