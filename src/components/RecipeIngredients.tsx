@@ -19,6 +19,7 @@ interface Props {
   onBack: () => void;
   displayName?: string;
   hasResume?: boolean;
+  resumeStep?: number;
   onResume?: () => void;
   onResumeClear?: () => void;
   isFavorite?: boolean;
