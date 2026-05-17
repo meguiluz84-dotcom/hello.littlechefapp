@@ -57,17 +57,25 @@ export default function CategoryDiploma({ category, playerName, onClose }: Props
             className="block h-auto w-full select-none"
             draggable={false}
           />
-          {/* Overlay player name + date + category */}
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-end pb-[18%]">
-            <div className="w-[78%] -translate-y-[32%]">
-              <div className="font-extrabold text-[clamp(1.1rem,5vw,1.6rem)] leading-tight text-[#7a3a14] text-center truncate">
-                {playerName}
-              </div>
+          {/* Overlay aligned to the printed lines: name on "Otorgado a",
+              date on "Fecha", category as a subtitle below. */}
+          <div className="pointer-events-none absolute inset-0">
+            <div
+              className="absolute font-extrabold leading-none text-[#7a3a14] truncate"
+              style={{ top: "60.5%", left: "32%", right: "8%", fontSize: "clamp(1rem, 4.6vw, 1.5rem)" }}
+            >
+              {playerName}
             </div>
-            <div className="w-[78%] -translate-y-[14%] text-center text-[clamp(0.7rem,3vw,0.95rem)] font-bold text-[#7a3a14]">
+            <div
+              className="absolute font-bold leading-none text-[#7a3a14] truncate"
+              style={{ top: "70.5%", left: "26%", right: "8%", fontSize: "clamp(0.8rem, 3.4vw, 1.1rem)" }}
+            >
               {today}
             </div>
-            <div className="w-[78%] mt-1 text-center text-[clamp(0.85rem,4vw,1.15rem)] font-extrabold text-kids-orange">
+            <div
+              className="absolute text-center font-extrabold text-kids-orange"
+              style={{ top: "77.5%", left: "8%", right: "8%", fontSize: "clamp(0.9rem, 3.8vw, 1.15rem)" }}
+            >
               {cat?.emoji} {cat?.label}
             </div>
           </div>
