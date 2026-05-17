@@ -371,6 +371,7 @@ function Index() {
           onBack={handleBack}
           displayName={nameFor(selectedRecipe)}
           hasResume={resume !== null && resume > 0}
+          resumeStep={resume ?? undefined}
           onResume={() => handleStart(resume ?? 0)}
           onResumeClear={() => { prefs.clearResume(selectedRecipe.id); handleStart(0); }}
           isFavorite={prefs.isFavorite(selectedRecipe.id)}
