@@ -24,7 +24,13 @@ export default function FavoritesScreen({ recipes, favorites, onPick, onClose, g
         </div>
 
         {favRecipes.length === 0 ? (
-          <EmptyState emoji="🤍" message="Aún no tienes favoritos. Toca el corazón en una receta." />
+          <EmptyState
+            emoji="🤍"
+            tone="pink"
+            message="Aún no hay favoritas"
+            hint="Toca el ❤️ en cualquier receta para guardarla aquí."
+            cta={{ label: "🍳 Elegir receta", onClick: onClose }}
+          />
         ) : (
           <div className="grid grid-cols-2 gap-4">
             {favRecipes.map((r, i) => (
