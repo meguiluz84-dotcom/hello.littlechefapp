@@ -420,7 +420,13 @@ export default function RecipeHome({
             <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
 
             {(applyLevel((filteredByCategory ?? filteredByTag) ?? allowed)).length === 0 ? (
-              <EmptyState emoji="🍽️" message="No hay recetas aquí todavía." />
+              <EmptyState
+                emoji="🔍"
+                tone="blue"
+                message="No hay recetas con este filtro"
+                hint="Prueba otro nivel o categoría."
+                cta={{ label: "Quitar filtros", onClick: () => { setActiveCategory(null); setTag(null); setLevel(null); } }}
+              />
             ) : (
               <div className="grid grid-cols-2 gap-4">
                 {applyLevel((filteredByCategory ?? filteredByTag) ?? allowed).map((recipe, i) => {
