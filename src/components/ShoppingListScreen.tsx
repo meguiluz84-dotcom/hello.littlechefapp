@@ -4,6 +4,7 @@ import type { Recipe } from "@/data/recipes";
 import { useShoppingList } from "@/hooks/use-shopping-list";
 import { useWeekPlan } from "@/hooks/use-week-plan";
 import { getIngredientName } from "@/data/ingredientNames";
+import EmptyState from "./EmptyState";
 
 interface Props {
   recipes: Recipe[];
@@ -47,9 +48,14 @@ export default function ShoppingListScreen({ recipes, favorites = [], onClose }:
         </div>
 
         {items.length === 0 ? (
-          <p className="mt-12 text-center text-base font-bold text-muted-foreground">
-            Aún no hay ingredientes. Añade recetas a tu plan semanal o marca favoritas.
-          </p>
+          <EmptyState
+            emoji="🛒"
+            tone="green"
+            message="Tu cesta está vacía"
+            hint="Añade recetas al plan semanal o marca favoritas y aparecerán aquí."
+            cta={favorites.length > 0 ? { label: "❤️ Añadir favoritas", onClick: addFromFavorites } : undefined}
+            secondaryCta={{ label: "Volver", onClick: onClose }}
+          />
         ) : (
           <ul className="space-y-2">
             {items.map((it, i) => (

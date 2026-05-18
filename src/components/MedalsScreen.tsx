@@ -3,6 +3,7 @@ import { MEDALS } from "@/data/medals";
 import { SKILLS } from "@/data/skills";
 import { useMedals } from "@/hooks/use-medals";
 import { useSkills } from "@/hooks/use-skills";
+import DinoBubble from "./DinoBubble";
 
 interface Props { onClose: () => void }
 
@@ -25,6 +26,17 @@ export default function MedalsScreen({ onClose }: Props) {
           <span className="rounded-full bg-kids-yellow px-3 py-1 kids-shadow">⭐ {earned.length}/{MEDALS.length}</span>
           <span className="rounded-full bg-kids-blue px-3 py-1 kids-shadow">🎯 {challengesDone}</span>
         </div>
+
+        {earned.length === 0 && (
+          <div className="mb-5 flex justify-center">
+            <DinoBubble
+              emojis="🏅✨"
+              message="¡Tu primera medalla está cerquita! Termina una receta."
+              tone="yellow"
+              size="md"
+            />
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-4">
           {MEDALS.map((m, i) => {

@@ -1,24 +1,45 @@
 import { motion } from "framer-motion";
 import dinoChef from "@/assets/dino-chef.png";
 
+interface CTA {
+  label: string;
+  onClick: () => void;
+}
+
 interface Props {
   /** Big emoji shown in the kawaii bubble next to dino */
   emoji?: string;
-  /** Short, warm headline */
+  /** Short, warm headline (always under ~6 words) */
   message: string;
   /** Optional secondary line (kept short) */
   hint?: string;
-  cta?: { label: string; onClick: () => void };
+  /** Primary action button */
+  cta?: CTA;
+  /** Optional softer secondary action */
+  secondaryCta?: CTA;
   /** When false, hides the dino mascot (rare) */
   showDino?: boolean;
+  /** Visual tone of the speech bubble */
+  tone?: "yellow" | "green" | "blue" | "pink" | "purple" | "orange";
 }
+
+const toneMap = {
+  yellow: "bg-kids-yellow/70",
+  green: "bg-kids-green/60",
+  blue: "bg-kids-blue/60",
+  pink: "bg-kids-pink/60",
+  purple: "bg-kids-purple/60",
+  orange: "bg-kids-orange/60",
+};
 
 export default function EmptyState({
   emoji = "✨",
   message,
   hint,
   cta,
+  secondaryCta,
   showDino = true,
+  tone = "yellow",
 }: Props) {
   return (
     <motion.div
@@ -41,7 +62,7 @@ export default function EmptyState({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", bounce: 0.6, delay: 0.15 }}
-            className="relative mb-2 rounded-3xl rounded-bl-sm bg-kids-yellow/70 px-4 py-2 text-3xl kids-shadow"
+            className={`relative mb-2 rounded-3xl rounded-bl-sm ${toneMap[tone]} px-4 py-2 text-3xl kids-shadow`}
           >
             {emoji}
           </motion.div>
@@ -55,9 +76,18 @@ export default function EmptyState({
         <button
           type="button"
           onClick={cta.onClick}
-          className="min-h-16 rounded-full bg-accent px-6 py-3 text-lg font-extrabold text-accent-foreground kids-shadow"
+          className="min-h-16 rounded-full bg-accent px-6 py-3 text-lg font-extrabold text-accent-foreground kids-shadow active:scale-95 active:shadow-inner touch-manipulation"
         >
           {cta.label}
+        </button>
+      )}
+      {secondaryCta && (
+        <button
+          type="button"
+          onClick={secondaryCta.onClick}
+          className="min-h-12 rounded-full bg-card px-5 py-2 text-sm font-extrabold text-foreground kids-shadow active:scale-95 touch-manipulation"
+        >
+          {secondaryCta.label}
         </button>
       )}
     </motion.div>

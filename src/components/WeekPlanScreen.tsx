@@ -5,6 +5,7 @@ import { useWeekPlan, DAYS, MEALS, todayKey, type DayKey, type MealKey } from "@
 import { buildBalancedPlan } from "@/lib/planner";
 import { usePreferences } from "@/hooks/use-preferences";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
+import DinoBubble from "./DinoBubble";
 
 interface Props {
   recipes: Recipe[];
@@ -46,6 +47,17 @@ export default function WeekPlanScreen({ recipes, getName, onClose }: Props) {
             className="flex h-12 w-12 items-center justify-center rounded-full bg-card text-2xl kids-shadow"
           >✖️</button>
         </div>
+
+        {Object.values(plan).every((v) => !v) && (
+          <div className="mb-4 flex justify-center">
+            <DinoBubble
+              emojis="📅✨"
+              message="Tu plan está vacío. ¿Lo llenamos juntos?"
+              tone="yellow"
+              size="md"
+            />
+          </div>
+        )}
 
         <div className="space-y-3">
           {DAYS.map((d) => (
