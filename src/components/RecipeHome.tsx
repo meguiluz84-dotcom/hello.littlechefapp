@@ -156,7 +156,15 @@ export default function RecipeHome({
           <span className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-card text-base kids-shadow ring-2 ring-background">👥</span>
         </motion.button>
       </div>
-      <p className="mb-3 text-center text-base font-extrabold text-foreground">¡Hola, {playerName}! 👋</p>
+      <div className="mb-4 flex justify-center">
+        <DinoBubble
+          emojis="👋"
+          message={`¡Hola, ${playerName}! ¿Cocinamos algo rico?`}
+          tone="yellow"
+          size="md"
+          bubbleKey={playerName}
+        />
+      </div>
 
       {/* Stars + medals trophy counter */}
       <div className="mx-auto mb-4 flex w-fit items-center gap-2">
