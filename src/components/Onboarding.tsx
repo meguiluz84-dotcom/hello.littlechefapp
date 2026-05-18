@@ -5,6 +5,7 @@ import type { AvatarId } from "@/data/avatars";
 import type { OnboardingPrefs, AgeBucket } from "@/hooks/use-preferences";
 import { RESTRICTION_INFO, type Restrictions, EMPTY_RESTR } from "@/data/recipeMeta";
 import { GOAL_INFO, recommendedLevelLabel, type FamilyGoal } from "@/hooks/use-players";
+import DinoBubble from "./DinoBubble";
 
 interface Props {
   initialAvatar: AvatarId | null;
