@@ -14,6 +14,7 @@ import RecipeOfTheDay from "./RecipeOfTheDay";
 import CategoryFilters from "./CategoryFilters";
 import LevelFilters from "./LevelFilters";
 import EmptyState from "./EmptyState";
+import DinoBubble from "./DinoBubble";
 import DifficultyBadges from "./DifficultyBadges";
 import ChallengeBanner from "./ChallengeBanner";
 import { useLongPress } from "@/hooks/use-long-press";
