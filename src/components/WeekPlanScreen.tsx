@@ -5,6 +5,7 @@ import { useWeekPlan, DAYS, MEALS, todayKey, type DayKey, type MealKey } from "@
 import { buildBalancedPlan } from "@/lib/planner";
 import { usePreferences } from "@/hooks/use-preferences";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
+import DinoBubble from "./DinoBubble";
 
 interface Props {
   recipes: Recipe[];
