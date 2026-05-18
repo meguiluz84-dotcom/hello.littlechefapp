@@ -48,6 +48,17 @@ export default function WeekPlanScreen({ recipes, getName, onClose }: Props) {
           >✖️</button>
         </div>
 
+        {Object.values(plan).every((v) => !v) && (
+          <div className="mb-4 flex justify-center">
+            <DinoBubble
+              emojis="📅✨"
+              message="Tu plan está vacío. ¿Lo llenamos juntos?"
+              tone="yellow"
+              size="md"
+            />
+          </div>
+        )}
+
         <div className="space-y-3">
           {DAYS.map((d) => (
             <div
