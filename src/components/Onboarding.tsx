@@ -56,8 +56,18 @@ export default function Onboarding({ initialAvatar, onComplete, showName = true 
 
   const totalSteps = showName ? 5 : 4;
 
+  const dinoMessage =
+    step === 1 ? "¿Cuántos años tienes, chef?"
+    : step === 2 ? "¿Hay algo que evitemos?"
+    : step === 3 ? "¿Qué buscáis hoy?"
+    : step === 4 ? "¿Cómo te llamo?"
+    : "¡Listos para cocinar!";
+
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-background px-4 pb-8 pt-8 overflow-y-auto">
+      <div className="mx-auto mb-4 flex w-full max-w-md justify-center">
+        <DinoBubble emojis="🦖" message={dinoMessage} tone="yellow" size="md" bubbleKey={step} />
+      </div>
       <div className="mx-auto mb-6 flex w-full max-w-xs items-center gap-2">
         {Array.from({ length: totalSteps }).map((_, i) => (
           <div
