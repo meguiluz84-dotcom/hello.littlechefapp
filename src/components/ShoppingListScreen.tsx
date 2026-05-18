@@ -4,6 +4,7 @@ import type { Recipe } from "@/data/recipes";
 import { useShoppingList } from "@/hooks/use-shopping-list";
 import { useWeekPlan } from "@/hooks/use-week-plan";
 import { getIngredientName } from "@/data/ingredientNames";
+import EmptyState from "./EmptyState";
 
 interface Props {
   recipes: Recipe[];
