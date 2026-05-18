@@ -3,6 +3,7 @@ import { MEDALS } from "@/data/medals";
 import { SKILLS } from "@/data/skills";
 import { useMedals } from "@/hooks/use-medals";
 import { useSkills } from "@/hooks/use-skills";
+import DinoBubble from "./DinoBubble";
 
 interface Props { onClose: () => void }
 
