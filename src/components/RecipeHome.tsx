@@ -214,8 +214,10 @@ export default function RecipeHome({
             {allowed.length === 0 && (
               <EmptyState
                 emoji="🍳"
-                message="No hay recetas con esas restricciones."
-                cta={{ label: "Ajustes", onClick: onOpenAdult }}
+                tone="orange"
+                message="Hoy no encuentro recetas para ti"
+                hint="Pide a un adulto que revise tus filtros y alergias."
+                cta={{ label: "Ajustes para padres", onClick: onOpenAdult }}
               />
             )}
 
