@@ -4,9 +4,9 @@ import type { Recipe } from "@/data/recipes";
 import { MEDALS } from "@/data/medals";
 import TastingPicker from "./TastingPicker";
 import PhotoCapture from "./PhotoCapture";
-import { useTastings } from "@/hooks/use-tastings";
+import { useTastings, type Reaction } from "@/hooks/use-tastings";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   recipe?: Recipe;
@@ -31,9 +31,27 @@ export default function Celebration({
   const dishEmoji = recipe?.emoji ?? recipeEmoji ?? "🍽️";
   const newMedal = newMedalId ? MEDALS.find((m) => m.id === newMedalId) ?? null : null;
 
-  const { reactionFor, log } = useTastings();
+  const { reactionFor, log, items, setNote } = useTastings();
   const recipeId = recipe?.id ?? "";
   const currentReaction = recipeId ? reactionFor(recipeId) : null;
+  const existingNote = recipeId
+    ? items.find((t) => t.recipeId === recipeId)?.note ?? ""
+    : "";
+
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteDraft, setNoteDraft] = useState(existingNote);
+  const [noteSaved, setNoteSaved] = useState(false);
+  useEffect(() => { setNoteDraft(existingNote); }, [existingNote]);
+
+  const saveAdultNote = () => {
+    if (!recipe) return;
+    const trimmed = noteDraft.trim().slice(0, 280);
+    // Ensure a tasting row exists so the note has somewhere to live.
+    if (!currentReaction) log(recipe.id, "🙂" as Reaction, trimmed || undefined);
+    else if (trimmed) setNote(recipe.id, trimmed);
+    setNoteSaved(true);
+    window.setTimeout(() => setNoteSaved(false), 1500);
+  };
 
   const week = useWeekPlan();
   const [planAdded, setPlanAdded] = useState(false);
@@ -114,7 +132,7 @@ export default function Celebration({
         )}
       </div>
 
-      {/* Tasting + photo */}
+      {/* Tasting + photo + adult note */}
       {recipe && (
         <div className="flex w-full max-w-sm flex-col items-center gap-3">
           <TastingPicker
@@ -122,6 +140,50 @@ export default function Celebration({
             onPick={(r) => { log(recipe.id, r); onTaste?.(); }}
           />
           <PhotoCapture recipeId={recipe.id} />
+
+          {/* Adult-only private note */}
+          {!noteOpen ? (
+            <button
+              type="button"
+              onClick={() => setNoteOpen(true)}
+              className="flex min-h-12 items-center gap-2 rounded-full bg-card px-4 py-2 text-xs font-extrabold text-muted-foreground kids-shadow"
+              aria-label="Añadir nota privada para adultos"
+            >
+              <span aria-hidden>📝</span>
+              <span>{existingNote ? "Editar nota (adulto)" : "Añadir nota (adulto)"}</span>
+            </button>
+          ) : (
+            <div className="flex w-full flex-col gap-2 rounded-2xl bg-card p-3 kids-shadow">
+              <label htmlFor="adult-note" className="text-[11px] font-extrabold uppercase tracking-wide text-muted-foreground">
+                📝 Nota privada (solo adultos)
+              </label>
+              <textarea
+                id="adult-note"
+                value={noteDraft}
+                onChange={(e) => setNoteDraft(e.target.value.slice(0, 280))}
+                maxLength={280}
+                rows={2}
+                placeholder="Ej: poner menos azúcar, salió muy líquido…"
+                className="w-full resize-none rounded-xl bg-background p-2 text-sm font-medium text-foreground outline-none ring-2 ring-transparent focus:ring-primary"
+              />
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => { setNoteOpen(false); setNoteDraft(existingNote); }}
+                  className="min-h-10 rounded-full bg-muted px-3 py-1.5 text-xs font-extrabold text-foreground"
+                >
+                  Cerrar
+                </button>
+                <button
+                  type="button"
+                  onClick={saveAdultNote}
+                  className="min-h-10 rounded-full bg-primary px-4 py-1.5 text-xs font-extrabold text-primary-foreground kids-shadow"
+                >
+                  {noteSaved ? "✅ Guardada" : "Guardar"}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
