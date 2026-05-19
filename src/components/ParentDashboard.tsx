@@ -495,8 +495,8 @@ export default function ParentDashboard({
           <div className="space-y-3">
             <div className="rounded-2xl bg-card p-4 kids-shadow">
               <div className="text-sm font-bold text-muted-foreground">Reacciones del peque</div>
-              <div className="mt-2 grid grid-cols-3 gap-2 text-center">
-                {(["😋","🙂","😖"] as const).map((r) => {
+              <div className="mt-2 grid grid-cols-4 gap-2 text-center">
+                {(["😍","🙂","😖","🔁"] as const).map((r) => {
                   const n = tastings.items.filter((t) => t.reaction === r).length;
                   return (
                     <div key={r} className="rounded-xl bg-background p-3">
@@ -507,19 +507,66 @@ export default function ParentDashboard({
                 })}
               </div>
             </div>
+
+            {/* Quiere repetir */}
+            <div className="rounded-2xl bg-kids-green/30 p-4 kids-shadow">
+              <div className="mb-2 text-sm font-extrabold text-foreground">🔁 Quiere repetir</div>
+              {(() => {
+                const list = tastings.items.filter((t) => t.reaction === "🔁" || t.reaction === "😍");
+                if (list.length === 0) return <p className="text-xs font-bold text-muted-foreground">Aún sin recetas marcadas para repetir.</p>;
+                return (
+                  <ul className="space-y-1">
+                    {list.sort((a,b) => b.date - a.date).slice(0, 8).map((t) => (
+                      <li key={t.recipeId + t.date} className="flex items-center gap-2 rounded-lg bg-background px-2 py-1.5 text-sm font-extrabold text-foreground">
+                        <span className="text-lg">{t.reaction}</span>
+                        <span className="line-clamp-1 flex-1">{recipeNameFor(t.recipeId)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                );
+              })()}
+            </div>
+
+            {/* No gustaron */}
+            <div className="rounded-2xl bg-kids-pink/30 p-4 kids-shadow">
+              <div className="mb-2 text-sm font-extrabold text-foreground">😖 No le gustaron</div>
+              {(() => {
+                const list = tastings.items.filter((t) => t.reaction === "😖");
+                if (list.length === 0) return <p className="text-xs font-bold text-muted-foreground">Ninguna receta rechazada por ahora. 💛</p>;
+                return (
+                  <ul className="space-y-1">
+                    {list.sort((a,b) => b.date - a.date).slice(0, 8).map((t) => (
+                      <li key={t.recipeId + t.date} className="rounded-lg bg-background px-2 py-1.5 text-sm font-extrabold text-foreground line-clamp-1">
+                        {recipeNameFor(t.recipeId)}
+                      </li>
+                    ))}
+                  </ul>
+                );
+              })()}
+            </div>
+
+            {/* Historial con notas privadas */}
             <div className="rounded-2xl bg-card p-4 kids-shadow">
-              <div className="mb-2 text-sm font-extrabold text-foreground">🍽️ Historial probados</div>
+              <div className="mb-2 text-sm font-extrabold text-foreground">🍽️ Historial y notas privadas</div>
               {tastings.items.length === 0 ? (
                 <p className="text-sm font-bold text-muted-foreground">Aún no hay reacciones registradas.</p>
               ) : (
-                <ul className="max-h-64 space-y-1 overflow-y-auto pr-1">
+                <ul className="max-h-80 space-y-1.5 overflow-y-auto pr-1">
                   {[...tastings.items].sort((a,b) => b.date - a.date).map((t) => (
-                    <li key={t.recipeId + t.date} className="flex items-center gap-2 rounded-lg bg-background px-2 py-1.5 text-sm font-extrabold text-foreground">
-                      <span className="text-xl">{t.reaction}</span>
-                      <span className="line-clamp-1 flex-1">{recipeNameFor(t.recipeId)}</span>
-                      <span className="text-[10px] font-bold text-muted-foreground">
-                        {new Date(t.date).toLocaleDateString()}
-                      </span>
+                    <li key={t.recipeId + t.date} className="rounded-lg bg-background px-2 py-1.5 text-sm">
+                      <div className="flex items-center gap-2 font-extrabold text-foreground">
+                        <span className="text-xl">{t.reaction}</span>
+                        <span className="line-clamp-1 flex-1">{recipeNameFor(t.recipeId)}</span>
+                        <span className="text-[10px] font-bold text-muted-foreground">
+                          {new Date(t.date).toLocaleDateString()}
+                        </span>
+                      </div>
+                      {t.note && (
+                        <div className="mt-1 flex items-start gap-1 rounded-md bg-kids-yellow/40 px-2 py-1 text-[12px] font-bold text-foreground">
+                          <span aria-hidden>📝</span>
+                          <span className="flex-1">{t.note}</span>
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
