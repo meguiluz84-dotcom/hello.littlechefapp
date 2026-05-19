@@ -284,11 +284,24 @@ export default function RecipeStepper({
         )}
       </div>
 
-      {/* Clean step screen: badges hidden by design.
-          Safety (adult-required) is still enforced via the AdultGate modal below. */}
+      {/* Persistent adult-required banner — stays visible even after the gate
+          so the adult keeps supervising the step. Cannot be dismissed. */}
+      {needsAdult && (
+        <motion.div
+          key={`adult-banner-${step}`}
+          initial={reduced ? false : { y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          role="status"
+          aria-live="polite"
+          className="mt-2 mb-1 flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-kids-orange/80 px-4 py-2 text-sm font-extrabold text-foreground kids-shadow ring-2 ring-kids-orange"
+        >
+          <span className="text-2xl" aria-hidden>🧑</span>
+          <span>Adulto necesario en este paso</span>
+        </motion.div>
+      )}
 
       {/* Progress bar with dots */}
-      <div className="mt-12 flex w-full max-w-xs items-center gap-1.5">
+      <div className={`${needsAdult ? "mt-2" : "mt-12"} flex w-full max-w-xs items-center gap-1.5`}>
         {recipe.steps.map((_, i) => (
           <motion.div
             key={i}
@@ -325,7 +338,9 @@ export default function RecipeStepper({
           className="flex flex-col items-center gap-5"
         >
           <motion.div
-            className="relative flex h-72 w-72 items-center justify-center overflow-hidden rounded-3xl bg-card kids-shadow-lg md:h-96 md:w-96"
+            className={`relative flex h-72 w-72 items-center justify-center overflow-hidden rounded-3xl bg-card kids-shadow-lg md:h-96 md:w-96 ${
+              needsAdult ? "ring-8 ring-kids-orange/70" : ""
+            }`}
             initial={reduced ? false : { rotateY: 90 }}
             animate={{ rotateY: 0 }}
             transition={{ type: "spring", bounce: 0.4, delay: 0.1 }}
