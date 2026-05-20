@@ -21,7 +21,7 @@ import PackScreen from "@/components/PackScreen";
 import BottomNav, { type NavTab } from "@/components/BottomNav";
 import CustomRecipesScreen from "@/components/CustomRecipesScreen";
 import CollectionsScreen from "@/components/CollectionsScreen";
-import IngredientGenerator from "@/components/IngredientGenerator";
+import CookWhatIHave from "@/components/CookWhatIHave";
 import SchoolMode from "@/components/SchoolMode";
 import { PACKS, type RecipePack } from "@/data/recipePacks";
 import { useCustomRecipes, customToRecipe } from "@/hooks/use-custom-recipes";
@@ -343,10 +343,11 @@ function Index() {
     );
   } else if (screen === "generator") {
     content = (
-      <IngredientGenerator
+      <CookWhatIHave
         recipes={allowedRecipes}
         restrictions={active?.restrictions ?? prefs.DEFAULT_RESTR}
         getName={nameFor}
+        isFavorite={prefs.isFavorite}
         onPick={(r) => handleSelectRecipe(r)}
         onClose={() => setScreen("home")}
       />
