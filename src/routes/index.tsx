@@ -419,6 +419,7 @@ function Index() {
           onOpenWeekPlan={() => setScreen("weekplan")}
           onOpenShopping={() => setScreen("shopping")}
           onOpenPantry={() => setScreen("pantry")}
+          onOpenCookWhat={() => setScreen("generator")}
           onOpenMissions={() => setScreen("missions")}
           onOpenPack={(p) => { setSelectedPack(p); setScreen("pack"); }}
           extraRecipes={customRecipes.items.map(customToRecipe)}

@@ -56,6 +56,7 @@ interface RecipeHomeProps {
   onOpenWeekPlan: () => void;
   onOpenShopping: () => void;
   onOpenPantry?: () => void;
+  onOpenCookWhat?: () => void;
   onOpenMissions?: () => void;
   onOpenPack?: (pack: RecipePack) => void;
   extraRecipes?: Recipe[];
@@ -67,7 +68,7 @@ export default function RecipeHome({
   restrictions, lastRecipeId, onOpenAdult, isFavorite,
   ageBucket, challengeRecipe, onPickChallenge,
   onOpenMedals, onOpenFavorites, onOpenWeekPlan, onOpenShopping,
-  onOpenPantry, onOpenMissions, onOpenPack, extraRecipes, playerName,
+  onOpenPantry, onOpenCookWhat, onOpenMissions, onOpenPack, extraRecipes, playerName,
 }: RecipeHomeProps) {
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
