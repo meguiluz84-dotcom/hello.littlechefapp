@@ -56,6 +56,7 @@ interface RecipeHomeProps {
   onOpenWeekPlan: () => void;
   onOpenShopping: () => void;
   onOpenPantry?: () => void;
+  onOpenCookWhat?: () => void;
   onOpenMissions?: () => void;
   onOpenPack?: (pack: RecipePack) => void;
   extraRecipes?: Recipe[];
@@ -67,7 +68,7 @@ export default function RecipeHome({
   restrictions, lastRecipeId, onOpenAdult, isFavorite,
   ageBucket, challengeRecipe, onPickChallenge,
   onOpenMedals, onOpenFavorites, onOpenWeekPlan, onOpenShopping,
-  onOpenPantry, onOpenMissions, onOpenPack, extraRecipes, playerName,
+  onOpenPantry, onOpenCookWhat, onOpenMissions, onOpenPack, extraRecipes, playerName,
 }: RecipeHomeProps) {
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
@@ -360,6 +361,24 @@ export default function RecipeHome({
                 );
               })}
             </div>
+
+            {/* Cocinar con lo que tengo */}
+            {onOpenCookWhat && (
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.97 }}
+                onClick={onOpenCookWhat}
+                className="mt-4 flex w-full items-center gap-3 rounded-3xl bg-kids-green/60 p-4 kids-shadow-lg ring-2 ring-kids-green"
+                aria-label="Cocinar con lo que tengo"
+              >
+                <span className="text-4xl">🧑‍🍳</span>
+                <div className="flex flex-1 flex-col items-start text-left">
+                  <span className="text-base font-extrabold text-foreground">Cocinar con lo que tengo</span>
+                  <span className="text-xs font-bold text-foreground/70">Marca ingredientes y mira qué puedes preparar.</span>
+                </div>
+                <span className="text-2xl">➡️</span>
+              </motion.button>
+            )}
 
             {/* Quick access bar */}
             <div className="mt-6 grid grid-cols-5 gap-2">
