@@ -380,36 +380,15 @@ export default function RecipeHome({
               </motion.button>
             )}
 
-            {/* Quick access bar */}
-            <div className="mt-6 grid grid-cols-5 gap-2">
-              <button type="button" onClick={onOpenWeekPlan}
-                className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
-                <span className="text-2xl">📅</span>
-                <span className="text-[10px] font-extrabold text-foreground">Plan</span>
-              </button>
-              <button type="button" onClick={onOpenShopping}
-                className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
-                <span className="text-2xl">🛒</span>
-                <span className="text-[10px] font-extrabold text-foreground">Lista</span>
-              </button>
-              {onOpenPantry && (
-                <button type="button" onClick={onOpenPantry}
-                  className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
-                  <span className="text-2xl">🧺</span>
-                  <span className="text-[10px] font-extrabold text-foreground">Nevera</span>
-                </button>
-              )}
-              {onOpenMissions && (
-                <button type="button" onClick={onOpenMissions}
-                  className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-card kids-shadow">
-                  <span className="text-2xl">🎯</span>
-                  <span className="text-[10px] font-extrabold text-foreground">Misión</span>
-                </button>
-              )}
-              <button type="button" onClick={onOpenAdult}
-                className="flex min-h-16 flex-col items-center justify-center rounded-2xl bg-kids-purple/40 ring-2 ring-kids-purple kids-shadow">
+            {/* Acceso adultos (los demás accesos viven dentro del panel adulto) */}
+            <div className="mt-6 flex justify-center">
+              <button
+                type="button"
+                onClick={onOpenAdult}
+                className="kids-press flex min-h-16 items-center gap-2 rounded-2xl bg-kids-purple/40 px-6 ring-2 ring-kids-purple"
+              >
                 <span className="text-2xl">👨‍👩‍👧</span>
-                <span className="text-[10px] font-extrabold text-foreground">Padres</span>
+                <span className="text-sm font-extrabold text-foreground">Modo adultos</span>
               </button>
             </div>
 

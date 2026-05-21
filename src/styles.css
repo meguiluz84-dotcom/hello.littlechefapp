@@ -2,6 +2,9 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Fuentes infantiles: Fredoka (titulares) + Nunito (cuerpo) */
+@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap");
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -53,80 +56,121 @@
   --color-kids-yellow: var(--kids-yellow);
   --color-kids-red: var(--kids-red);
   --color-kids-teal: var(--kids-teal);
+  --font-display: 'Fredoka', 'Nunito', system-ui, sans-serif;
+  --font-sans: 'Nunito', system-ui, sans-serif;
 }
 
 :root {
-  --radius: 1.25rem;
-  --background: oklch(0.98 0.01 90);
-  --foreground: oklch(0.25 0.05 300);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.25 0.05 300);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.25 0.05 300);
-  --primary: oklch(0.65 0.25 350);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.92 0.03 90);
-  --secondary-foreground: oklch(0.25 0.05 300);
-  --muted: oklch(0.95 0.02 90);
-  --muted-foreground: oklch(0.55 0.03 260);
-  --accent: oklch(0.75 0.18 150);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.6 0.24 25);
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0.02 90);
-  --input: oklch(0.92 0.02 90);
-  --ring: oklch(0.65 0.25 350);
-  --chart-1: oklch(0.65 0.25 350);
-  --chart-2: oklch(0.7 0.2 200);
-  --chart-3: oklch(0.75 0.18 150);
-  --chart-4: oklch(0.8 0.17 70);
-  --chart-5: oklch(0.65 0.2 300);
-  --sidebar: oklch(0.98 0.01 90);
-  --sidebar-foreground: oklch(0.25 0.05 300);
-  --sidebar-primary: oklch(0.65 0.25 350);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.92 0.03 90);
-  --sidebar-accent-foreground: oklch(0.25 0.05 300);
-  --sidebar-border: oklch(0.92 0.02 90);
-  --sidebar-ring: oklch(0.65 0.25 350);
+  /* Bordes muy redondeados */
+  --radius: 1.5rem;
 
-  /* Kids palette */
-  --kids-pink: oklch(0.7 0.22 350);
-  --kids-blue: oklch(0.65 0.2 240);
-  --kids-green: oklch(0.72 0.2 150);
-  --kids-orange: oklch(0.75 0.18 60);
-  --kids-purple: oklch(0.6 0.22 300);
-  --kids-yellow: oklch(0.88 0.18 90);
-  --kids-red: oklch(0.62 0.24 25);
-  --kids-teal: oklch(0.7 0.15 190);
+  /* Fondo crema cálido, nunca oscuro */
+  --background: oklch(0.985 0.015 95);
+  --foreground: oklch(0.28 0.04 260);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.28 0.04 260);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.28 0.04 260);
+
+  /* Duolingo Kids: verde primario brillante */
+  --primary: oklch(0.74 0.21 142);          /* #58CC02 */
+  --primary-foreground: oklch(1 0 0);
+
+  --secondary: oklch(0.95 0.04 95);
+  --secondary-foreground: oklch(0.28 0.04 260);
+  --muted: oklch(0.96 0.02 95);
+  --muted-foreground: oklch(0.5 0.04 260);
+
+  --accent: oklch(0.88 0.18 95);            /* amarillo */
+  --accent-foreground: oklch(0.28 0.04 260);
+
+  --destructive: oklch(0.66 0.24 25);       /* #FF4B4B */
+  --destructive-foreground: oklch(1 0 0);
+
+  --border: oklch(0.92 0.02 95);
+  --input: oklch(0.92 0.02 95);
+  --ring: oklch(0.74 0.21 142);
+
+  --chart-1: oklch(0.74 0.21 142);
+  --chart-2: oklch(0.72 0.18 230);
+  --chart-3: oklch(0.88 0.18 95);
+  --chart-4: oklch(0.72 0.2 30);
+  --chart-5: oklch(0.65 0.22 320);
+
+  --sidebar: oklch(0.985 0.015 95);
+  --sidebar-foreground: oklch(0.28 0.04 260);
+  --sidebar-primary: oklch(0.74 0.21 142);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.95 0.04 95);
+  --sidebar-accent-foreground: oklch(0.28 0.04 260);
+  --sidebar-border: oklch(0.92 0.02 95);
+  --sidebar-ring: oklch(0.74 0.21 142);
+
+  /* Paleta infantil estilo Duolingo Kids */
+  --kids-green:  oklch(0.74 0.21 142);  /* #58CC02 */
+  --kids-yellow: oklch(0.88 0.18 95);   /* #FFC800 */
+  --kids-red:    oklch(0.66 0.24 25);   /* #FF4B4B */
+  --kids-blue:   oklch(0.72 0.18 230);  /* #1CB0F6 */
+  --kids-orange: oklch(0.78 0.18 55);   /* naranja cálido */
+  --kids-pink:   oklch(0.74 0.18 350);  /* rosa kawaii */
+  --kids-purple: oklch(0.65 0.2 305);   /* morado alegre */
+  --kids-teal:   oklch(0.78 0.13 195);  /* turquesa suave */
 }
+
+/* Nada de modo oscuro: forzamos paleta clara siempre */
+.dark { color-scheme: light; }
 
 @layer base {
   * {
     border-color: var(--color-border);
   }
 
+  html, body {
+    font-family: 'Fredoka', 'Nunito', system-ui, sans-serif;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
-    font-family: 'Nunito', system-ui, sans-serif;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     overflow-x: hidden;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Fredoka', 'Nunito', system-ui, sans-serif;
+    letter-spacing: 0.005em;
   }
 }
 
 @layer utilities {
   .kids-shadow {
-    box-shadow: 0 8px 24px -4px oklch(0.5 0.1 300 / 15%);
+    box-shadow: 0 6px 0 -1px oklch(0.5 0.1 260 / 14%), 0 10px 24px -6px oklch(0.5 0.1 260 / 18%);
   }
 
   .kids-shadow-lg {
-    box-shadow: 0 16px 40px -8px oklch(0.5 0.1 300 / 20%);
+    box-shadow: 0 10px 0 -2px oklch(0.5 0.1 260 / 16%), 0 20px 40px -10px oklch(0.5 0.1 260 / 22%);
+  }
+
+  /* Botón "tactil 3D" estilo Duolingo: borde inferior grueso */
+  .kids-press {
+    box-shadow: inset 0 -6px 0 0 oklch(0 0 0 / 14%), 0 8px 20px -6px oklch(0.5 0.1 260 / 22%);
+    transition: transform 80ms ease, box-shadow 80ms ease;
+  }
+  .kids-press:active {
+    transform: translateY(3px);
+    box-shadow: inset 0 -2px 0 0 oklch(0 0 0 / 14%), 0 4px 12px -4px oklch(0.5 0.1 260 / 18%);
   }
 
   .bounce-tap:active {
     transform: scale(0.92);
     transition: transform 0.1s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kids-press, .bounce-tap { transition: none; }
   }
 }

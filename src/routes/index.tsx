@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 import type { Recipe } from "@/data/recipes";
 import { recipes as ALL_RECIPES } from "@/data/recipes";
 import RecipeHome from "@/components/RecipeHome";
+import KidsHome from "@/components/KidsHome";
+import PlayScreen from "@/components/PlayScreen";
 import RecipeIngredients from "@/components/RecipeIngredients";
 import RecipeStepper from "@/components/RecipeStepper";
 import HomeButton from "@/components/HomeButton";
@@ -49,8 +51,8 @@ export const Route = createFileRoute("/")({
 });
 
 type Screen =
-  | "splash" | "home" | "ingredients" | "cooking"
-  | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack"
+  | "splash" | "kidshome" | "home" | "ingredients" | "cooking"
+  | "play" | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack"
   | "custom" | "collections" | "generator" | "school";
 
 function Index() {
@@ -164,7 +166,7 @@ function Index() {
     else handleFinish();
   };
 
-  const handleSplashStart = () => setScreen("home");
+  const handleSplashStart = () => setScreen("kidshome");
   const nameFor = (r: Recipe) =>
     getRecipeName(active?.avatarId ?? "dino", r.id, r.name);
 
@@ -233,25 +235,48 @@ function Index() {
     );
   }
 
-  const handleHome = () => { setSelectedRecipe(null); setSelectedPack(null); setScreen("home"); };
+  const handleHome = () => { setSelectedRecipe(null); setSelectedPack(null); setScreen("kidshome"); };
+  const handleCook = () => { setSelectedRecipe(null); setSelectedPack(null); setScreen("home"); };
 
   const handleNavTab = (tab: NavTab) => {
-    if (tab === "home") handleHome();
-    else if (tab === "plan") setScreen("weekplan");
-    else if (tab === "progress") setScreen("medals");
-    else if (tab === "profile") setPlayersOpen(true);
+    if (tab === "home") handleCook();
+    else if (tab === "play") setScreen("play");
+    else if (tab === "awards") setScreen("medals");
   };
 
   const currentTab: NavTab =
-    screen === "weekplan" ? "plan"
-    : screen === "medals" ? "progress"
+    screen === "play" ? "play"
+    : screen === "medals" ? "awards"
     : "home";
 
-  const showBottomNav = screen !== "ingredients" && screen !== "cooking";
+  const showBottomNav =
+    screen !== "ingredients" && screen !== "cooking" && screen !== "kidshome";
 
   let content;
-  if (screen === "medals") {
-    content = <MedalsScreen onClose={() => setScreen("home")} />;
+  if (screen === "kidshome") {
+    content = (
+      <KidsHome
+        playerName={active?.name ?? "Chef"}
+        avatarId={active?.avatarId ?? "dino"}
+        starsCount={completed.length}
+        onChangeAvatar={() => setPlayersOpen(true)}
+        onOpenAdult={() => setAdultOpen(true)}
+        onCook={handleCook}
+        onPlay={() => setScreen("play")}
+        onAwards={() => setScreen("medals")}
+      />
+    );
+  } else if (screen === "play") {
+    content = (
+      <PlayScreen
+        challengeRecipe={challengeRecipe}
+        challengeName={challengeRecipe ? nameFor(challengeRecipe) : ""}
+        onPickChallenge={(r) => handleSelectRecipe(r, true)}
+        onClose={() => setScreen("kidshome")}
+      />
+    );
+  } else if (screen === "medals") {
+    content = <MedalsScreen onClose={() => setScreen("kidshome")} />;
   } else if (screen === "favorites") {
     content = (
       <FavoritesScreen
@@ -432,7 +457,7 @@ function Index() {
   return (
     <>
       {content}
-      {screen !== "cooking" && screen !== "ingredients" && <HomeButton onClick={handleHome} />}
+      {screen !== "cooking" && screen !== "ingredients" && screen !== "kidshome" && <HomeButton onClick={handleHome} />}
       {showBottomNav && <BottomNav active={currentTab} onChange={handleNavTab} />}
       {pendingDiploma && (
         <CategoryDiploma
