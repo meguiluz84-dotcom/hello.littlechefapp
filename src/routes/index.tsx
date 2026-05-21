@@ -49,8 +49,8 @@ export const Route = createFileRoute("/")({
 });
 
 type Screen =
-  | "splash" | "home" | "ingredients" | "cooking"
-  | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack"
+  | "splash" | "kidshome" | "home" | "ingredients" | "cooking"
+  | "play" | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack"
   | "custom" | "collections" | "generator" | "school";
 
 function Index() {
@@ -233,21 +233,22 @@ function Index() {
     );
   }
 
-  const handleHome = () => { setSelectedRecipe(null); setSelectedPack(null); setScreen("home"); };
+  const handleHome = () => { setSelectedRecipe(null); setSelectedPack(null); setScreen("kidshome"); };
+  const handleCook = () => { setSelectedRecipe(null); setSelectedPack(null); setScreen("home"); };
 
   const handleNavTab = (tab: NavTab) => {
-    if (tab === "home") handleHome();
-    else if (tab === "plan") setScreen("weekplan");
-    else if (tab === "progress") setScreen("medals");
-    else if (tab === "profile") setPlayersOpen(true);
+    if (tab === "home") handleCook();
+    else if (tab === "play") setScreen("play");
+    else if (tab === "awards") setScreen("medals");
   };
 
   const currentTab: NavTab =
-    screen === "weekplan" ? "plan"
-    : screen === "medals" ? "progress"
+    screen === "play" ? "play"
+    : screen === "medals" ? "awards"
     : "home";
 
-  const showBottomNav = screen !== "ingredients" && screen !== "cooking";
+  const showBottomNav =
+    screen !== "ingredients" && screen !== "cooking" && screen !== "kidshome";
 
   let content;
   if (screen === "medals") {
