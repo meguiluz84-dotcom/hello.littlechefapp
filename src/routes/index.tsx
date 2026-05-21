@@ -3,6 +3,8 @@ import { useMemo, useState } from "react";
 import type { Recipe } from "@/data/recipes";
 import { recipes as ALL_RECIPES } from "@/data/recipes";
 import RecipeHome from "@/components/RecipeHome";
+import KidsHome from "@/components/KidsHome";
+import PlayScreen from "@/components/PlayScreen";
 import RecipeIngredients from "@/components/RecipeIngredients";
 import RecipeStepper from "@/components/RecipeStepper";
 import HomeButton from "@/components/HomeButton";
@@ -164,7 +166,7 @@ function Index() {
     else handleFinish();
   };
 
-  const handleSplashStart = () => setScreen("home");
+  const handleSplashStart = () => setScreen("kidshome");
   const nameFor = (r: Recipe) =>
     getRecipeName(active?.avatarId ?? "dino", r.id, r.name);
 
@@ -251,8 +253,30 @@ function Index() {
     screen !== "ingredients" && screen !== "cooking" && screen !== "kidshome";
 
   let content;
-  if (screen === "medals") {
-    content = <MedalsScreen onClose={() => setScreen("home")} />;
+  if (screen === "kidshome") {
+    content = (
+      <KidsHome
+        playerName={active?.name ?? "Chef"}
+        avatarId={active?.avatarId ?? "dino"}
+        starsCount={completed.length}
+        onChangeAvatar={() => setPlayersOpen(true)}
+        onOpenAdult={() => setAdultOpen(true)}
+        onCook={handleCook}
+        onPlay={() => setScreen("play")}
+        onAwards={() => setScreen("medals")}
+      />
+    );
+  } else if (screen === "play") {
+    content = (
+      <PlayScreen
+        challengeRecipe={challengeRecipe}
+        challengeName={challengeRecipe ? nameFor(challengeRecipe) : ""}
+        onPickChallenge={(r) => handleSelectRecipe(r, true)}
+        onClose={() => setScreen("kidshome")}
+      />
+    );
+  } else if (screen === "medals") {
+    content = <MedalsScreen onClose={() => setScreen("kidshome")} />;
   } else if (screen === "favorites") {
     content = (
       <FavoritesScreen
