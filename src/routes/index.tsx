@@ -457,7 +457,7 @@ function Index() {
   return (
     <>
       {content}
-      {screen !== "cooking" && screen !== "ingredients" && <HomeButton onClick={handleHome} />}
+      {screen !== "cooking" && screen !== "ingredients" && screen !== "kidshome" && <HomeButton onClick={handleHome} />}
       {showBottomNav && <BottomNav active={currentTab} onChange={handleNavTab} />}
       {pendingDiploma && (
         <CategoryDiploma
