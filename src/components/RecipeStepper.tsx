@@ -329,32 +329,27 @@ export default function RecipeStepper({
         </motion.div>
       )}
 
-      {/* Progress bar with dots */}
-      <div className={`${needsAdult ? "mt-2" : "mt-12"} flex w-full max-w-xs items-center gap-1.5`}>
-        {recipe.steps.map((_, i) => (
-          <motion.div
-            key={i}
-            layout={!reduced}
-            className={`h-3 rounded-full transition-colors duration-300 ${
-              i === step ? "bg-primary" : i < step ? "bg-accent" : "bg-muted"
-            }`}
-            style={{ flex: i === step ? 2.5 : 1 }}
-          />
-        ))}
+      {/* Progress bar con estrellas */}
+      <div className={`${needsAdult ? "mt-2" : "mt-12"} flex w-full max-w-md items-center justify-center gap-1.5`}>
+        {recipe.steps.map((_, i) => {
+          const done = i < step;
+          const active = i === step;
+          return (
+            <motion.span
+              key={i}
+              initial={false}
+              animate={active ? { scale: [1, 1.25, 1] } : { scale: 1 }}
+              transition={active ? { repeat: Infinity, duration: 1.6, ease: "easeInOut" } : { duration: 0.2 }}
+              className={`text-2xl md:text-3xl ${done ? "drop-shadow-md" : active ? "" : "opacity-40 grayscale"}`}
+              aria-hidden
+            >
+              {done || active ? "⭐" : "☆"}
+            </motion.span>
+          );
+        })}
       </div>
 
-      {/* Step number badge */}
-      <motion.div
-        key={`num-${step}`}
-        initial={reduced ? false : { scale: 0, rotate: -180 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ type: "spring", bounce: 0.5 }}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-xl font-bold text-primary-foreground kids-shadow md:h-20 md:w-20 md:text-4xl"
-      >
-        {step + 1}
-      </motion.div>
-
-      {/* Step content — clean: just the image */}
+      {/* Step content — ilustración gigante + instrucción corta */}
       <AnimatePresence mode="wait" custom={direction}>
         <motion.div
           key={`${step}-${replayKey}`}
@@ -364,11 +359,11 @@ export default function RecipeStepper({
           animate="center"
           exit="exit"
           transition={{ type: "spring", bounce: 0.25, duration: reduced ? 0.2 : 0.5 }}
-          className="flex flex-col items-center gap-5"
+          className="flex flex-col items-center gap-4"
         >
           <motion.div
-            className={`relative flex h-72 w-72 items-center justify-center overflow-hidden rounded-3xl bg-card kids-shadow-lg md:h-96 md:w-96 ${
-              needsAdult ? "ring-8 ring-kids-orange/70" : ""
+            className={`relative flex h-80 w-80 items-center justify-center overflow-hidden rounded-[2.5rem] bg-card kids-shadow-lg md:h-[26rem] md:w-[26rem] ${
+              needsAdult ? "ring-8 ring-kids-orange/70" : "ring-4 ring-primary/15"
             }`}
             initial={reduced ? false : { rotateY: 90 }}
             animate={{ rotateY: 0 }}
@@ -381,9 +376,34 @@ export default function RecipeStepper({
                 className="h-full w-full object-cover"
               />
             ) : (
-              <span className="text-9xl">{current.emoji}</span>
+              <motion.span
+                className="text-[10rem] leading-none drop-shadow-md md:text-[14rem]"
+                animate={reduced ? undefined : actionAnim.animate}
+                transition={reduced ? undefined : actionAnim.transition}
+              >
+                {current.emoji}
+              </motion.span>
             )}
+            {/* Badge con número de paso */}
+            <span className="absolute left-3 top-3 flex h-11 w-11 items-center justify-center rounded-full bg-primary text-lg font-extrabold text-primary-foreground kids-shadow md:h-14 md:w-14 md:text-2xl">
+              {step + 1}
+            </span>
           </motion.div>
+
+          {/* Instrucción corta: emoji + verbo */}
+          <motion.div
+            key={`label-${step}`}
+            initial={reduced ? false : { y: 12, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.15 }}
+            className="flex items-center gap-3 rounded-full bg-card px-6 py-3 kids-shadow"
+          >
+            <span className="text-4xl md:text-5xl" aria-hidden>{actionIcons[current.actionIcon] ?? current.emoji}</span>
+            <span className="text-3xl font-extrabold text-foreground md:text-4xl">
+              {actionLabels[current.actionIcon] ?? "¡Vamos!"}
+            </span>
+          </motion.div>
+
 
           {(() => {
             const wait = getStepTimer(recipe.id, step) || (current.timerSeconds ?? 0);
