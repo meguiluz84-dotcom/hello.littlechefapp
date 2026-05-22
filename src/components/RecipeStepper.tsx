@@ -221,7 +221,13 @@ export default function RecipeStepper({
     setDirection(1);
     if (step < total - 1) {
       playActionSound(current.actionIcon, soundOn);
-      setStep((s) => s + 1);
+      // Mensaje positivo breve antes de avanzar.
+      const msg = PRAISE[Math.floor(Math.random() * PRAISE.length)];
+      setPraise(msg);
+      window.setTimeout(() => {
+        setPraise(null);
+        setStep((s) => s + 1);
+      }, 700);
     } else {
       playDoneSound(soundOn);
       onClearResume?.();
@@ -229,6 +235,7 @@ export default function RecipeStepper({
       setShowCelebration(true);
     }
   }, [step, total, current.actionIcon, soundOn, onClearResume, onComplete]);
+
 
   const prev = useCallback(() => {
     setDirection(-1);
