@@ -51,7 +51,7 @@ const actionLabels: Record<string, string> = {
 const PRAISE = ["¡Genial!", "¡Bien hecho!", "¡Súper!", "¡Wow!", "¡Eres un chef!", "¡Increíble!"];
 
 
-const actionAnimations: Record<string, { animate: object; transition: object }> = {
+const actionAnimations: Record<string, { animate: Record<string, number[]>; transition: { repeat: number; duration: number; ease: string } }> = {
   cut: { animate: { rotate: [0, -20, 0, -20, 0] }, transition: { repeat: Infinity, duration: 1.0, ease: "easeInOut" } },
   mix: { animate: { rotate: [0, 360] }, transition: { repeat: Infinity, duration: 1.5, ease: "linear" } },
   pour: { animate: { rotate: [0, -45, 0], y: [0, 5, 0] }, transition: { repeat: Infinity, duration: 1.2, ease: "easeInOut" } },
