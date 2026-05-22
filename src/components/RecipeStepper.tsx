@@ -378,8 +378,8 @@ export default function RecipeStepper({
             ) : (
               <motion.span
                 className="text-[10rem] leading-none drop-shadow-md md:text-[14rem]"
-                animate={reduced ? undefined : (actionAnim.animate as Record<string, unknown>)}
-                transition={reduced ? undefined : (actionAnim.transition as Record<string, unknown>)}
+                {...(reduced ? {} : actionAnim)}
+
 
               >
                 {current.emoji}
