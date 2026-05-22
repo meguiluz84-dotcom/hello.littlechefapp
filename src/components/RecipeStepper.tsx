@@ -506,6 +506,33 @@ export default function RecipeStepper({
           </div>
         </motion.div>
       )}
+
+      {/* Felicitación breve tras completar un paso */}
+      <AnimatePresence>
+        {praise && (
+          <motion.div
+            key="praise"
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.15 }}
+            transition={{ type: "spring", bounce: 0.55, duration: 0.5 }}
+            className="pointer-events-none fixed inset-0 z-40 flex items-center justify-center"
+            aria-live="polite"
+          >
+            <div className="flex flex-col items-center gap-3 rounded-[2rem] bg-kids-yellow/95 px-10 py-7 ring-4 ring-background kids-shadow-lg">
+              <motion.span
+                className="text-7xl"
+                animate={{ rotate: [0, -15, 15, 0], scale: [1, 1.2, 1] }}
+                transition={{ duration: 0.7 }}
+              >
+                🎉
+              </motion.span>
+              <span className="text-3xl font-extrabold text-foreground">{praise}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
+
   );
 }
