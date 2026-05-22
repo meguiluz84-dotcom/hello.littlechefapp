@@ -31,6 +31,26 @@ const actionIcons: Record<string, string> = {
   wait: "⏳",
 };
 
+// Etiqueta cortísima en español por acción — pensada para no-lectores.
+const actionLabels: Record<string, string> = {
+  cut: "Corta",
+  mix: "Mezcla",
+  pour: "Vierte",
+  spread: "Unta",
+  place: "Coloca",
+  shake: "Agita",
+  scoop: "Coge",
+  peel: "Pela",
+  wash: "Lava",
+  bake: "Hornea",
+  chill: "Enfría",
+  wait: "Espera",
+};
+
+// Mensajes positivos breves tras completar un paso.
+const PRAISE = ["¡Genial!", "¡Bien hecho!", "¡Súper!", "¡Wow!", "¡Eres un chef!", "¡Increíble!"];
+
+
 const actionAnimations: Record<string, { animate: object; transition: object }> = {
   cut: { animate: { rotate: [0, -20, 0, -20, 0] }, transition: { repeat: Infinity, duration: 1.0, ease: "easeInOut" } },
   mix: { animate: { rotate: [0, 360] }, transition: { repeat: Infinity, duration: 1.5, ease: "linear" } },
