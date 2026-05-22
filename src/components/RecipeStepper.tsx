@@ -164,7 +164,9 @@ export default function RecipeStepper({
   }, []);
   const [adultConfirmedStep, setAdultConfirmedStep] = useState<number | null>(null);
   const [exitConfirm, setExitConfirm] = useState(false);
+  const [praise, setPraise] = useState<string | null>(null);
   const [, forceUpdate] = useReducer((x: number) => x + 1, 0);
+
   useEffect(() => {
     const unsub = subscribeStepImages(forceUpdate);
     return () => { unsub(); };
