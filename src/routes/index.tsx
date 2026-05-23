@@ -25,6 +25,8 @@ import CustomRecipesScreen from "@/components/CustomRecipesScreen";
 import CollectionsScreen from "@/components/CollectionsScreen";
 import CookWhatIHave from "@/components/CookWhatIHave";
 import SchoolMode from "@/components/SchoolMode";
+import DailyRewardModal from "@/components/DailyRewardModal";
+import { useDailyReward } from "@/hooks/use-daily-reward";
 import { PACKS, type RecipePack } from "@/data/recipePacks";
 import { useCustomRecipes, customToRecipe } from "@/hooks/use-custom-recipes";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
