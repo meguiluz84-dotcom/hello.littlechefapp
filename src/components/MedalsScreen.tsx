@@ -1,8 +1,11 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { MEDALS } from "@/data/medals";
 import { SKILLS } from "@/data/skills";
 import { useMedals } from "@/hooks/use-medals";
 import { useSkills } from "@/hooks/use-skills";
+import { useHats } from "@/hooks/use-hats";
+import { useDailyReward } from "@/hooks/use-daily-reward";
 import DinoBubble from "./DinoBubble";
 
 interface Props { onClose: () => void }
@@ -10,6 +13,14 @@ interface Props { onClose: () => void }
 export default function MedalsScreen({ onClose }: Props) {
   const { earned, challengesDone } = useMedals();
   const { counters, earned: earnedSkills } = useSkills();
+  const { all: allHats, unlocked, next, equipped, equip, freshHats, markSeen } = useHats();
+  const { stickers, streak } = useDailyReward();
+
+  // Mark new hats as seen so the "¡Gorro nuevo!" badge disappears.
+  useEffect(() => {
+    if (freshHats.length > 0) markSeen(freshHats.map((h) => h.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [freshHats.length]);
 
   return (
     <div className="min-h-screen bg-background px-4 pb-10 pt-6">
