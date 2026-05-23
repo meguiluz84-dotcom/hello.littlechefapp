@@ -474,6 +474,13 @@ function Index() {
           }}
         />
       )}
+      <DailyRewardModal
+        open={!!daily.todayReward}
+        sticker={daily.todayReward?.sticker ?? "🌟"}
+        praise={daily.todayReward?.praise ?? "¡Genial!"}
+        streak={daily.streak}
+        onClose={daily.closeReward}
+      />
     </>
   );
 }
