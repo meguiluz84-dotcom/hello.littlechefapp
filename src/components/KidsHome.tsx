@@ -117,6 +117,36 @@ export default function KidsHome({
               ¡Hola, {playerName}! 🎉
             </span>
           </motion.div>
+
+          {dailyAvailable && onClaimDaily && (
+            <motion.button
+              type="button"
+              onClick={onClaimDaily}
+              whileTap={{ scale: 0.94 }}
+              animate={{ scale: [1, 1.05, 1], rotate: [0, -1.5, 1.5, 0] }}
+              transition={{ repeat: Infinity, duration: 1.8 }}
+              className="kids-press mt-3 flex items-center gap-2 rounded-full bg-kids-pink px-5 py-3 text-base font-extrabold text-foreground ring-4 ring-kids-pink/30"
+              aria-label="Recoger premio del día"
+            >
+              <span className="text-2xl">🎁</span>
+              <span>¡Premio del día!</span>
+            </motion.button>
+          )}
+
+          {freshHats.length > 0 && !dailyAvailable && (
+            <motion.button
+              type="button"
+              onClick={onAwards}
+              whileTap={{ scale: 0.94 }}
+              animate={{ scale: [1, 1.06, 1] }}
+              transition={{ repeat: Infinity, duration: 1.6 }}
+              className="kids-press mt-3 flex items-center gap-2 rounded-full bg-kids-purple px-5 py-3 text-base font-extrabold text-primary-foreground ring-4 ring-kids-purple/30"
+              aria-label={`Nuevo gorro: ${freshHats[freshHats.length - 1].label}`}
+            >
+              <span className="text-2xl">{freshHats[freshHats.length - 1].emoji}</span>
+              <span>¡Gorro nuevo!</span>
+            </motion.button>
+          )}
         </div>
 
         {/* 3 botones gigantes */}
