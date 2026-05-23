@@ -262,6 +262,8 @@ function Index() {
         playerName={active?.name ?? "Chef"}
         avatarId={active?.avatarId ?? "dino"}
         starsCount={completed.length}
+        dailyAvailable={daily.available}
+        onClaimDaily={() => daily.claim()}
         onChangeAvatar={() => setPlayersOpen(true)}
         onOpenAdult={() => setAdultOpen(true)}
         onCook={handleCook}
