@@ -85,6 +85,18 @@ export default function KidsHome({
               animate={{ rotate: [-4, 4, -4] }}
               transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
             />
+            {/* Gorro de chef equipado */}
+            <motion.span
+              key={equipped.id}
+              initial={{ y: -10, scale: 0.6, opacity: 0 }}
+              animate={{ y: 0, scale: 1, opacity: 1 }}
+              transition={{ type: "spring", bounce: 0.6, delay: 0.15 }}
+              className="absolute -top-6 left-1/2 -translate-x-1/2 text-5xl drop-shadow-md"
+              aria-label={`Gorro: ${equipped.label}`}
+            >
+              {equipped.emoji}
+            </motion.span>
+
             {/* Mano saludando */}
             <motion.span
               className="absolute -right-2 -top-1 text-4xl"
