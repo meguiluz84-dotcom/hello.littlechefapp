@@ -27,11 +27,12 @@ type Action = {
 };
 
 export default function KidsHome({
-  playerName, avatarId, starsCount,
+  playerName, avatarId, starsCount, dailyAvailable, onClaimDaily,
   onChangeAvatar, onOpenAdult, onCook, onPlay, onAwards,
 }: Props) {
   const avatar = avatarById(avatarId);
   const longPress = useLongPress(onOpenAdult, 800);
+  const { equipped, freshHats } = useHats();
 
   const actions: Action[] = [
     { id: "cook",   emoji: "🍕", label: "Cocinar", bg: "bg-kids-green",  ring: "ring-kids-green",  floaters: ["🥕", "🍅", "🥚"], onClick: onCook },
