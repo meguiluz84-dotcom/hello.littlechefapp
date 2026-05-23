@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import { avatarById, type AvatarId } from "@/data/avatars";
 import { useLongPress } from "@/hooks/use-long-press";
+import { useHats } from "@/hooks/use-hats";
 
 interface Props {
   playerName: string;
   avatarId: AvatarId;
   starsCount: number;
+  dailyAvailable?: boolean;
+  onClaimDaily?: () => void;
   onChangeAvatar: () => void;
   onOpenAdult: () => void;
   onCook: () => void;
@@ -24,11 +27,12 @@ type Action = {
 };
 
 export default function KidsHome({
-  playerName, avatarId, starsCount,
+  playerName, avatarId, starsCount, dailyAvailable, onClaimDaily,
   onChangeAvatar, onOpenAdult, onCook, onPlay, onAwards,
 }: Props) {
   const avatar = avatarById(avatarId);
   const longPress = useLongPress(onOpenAdult, 800);
+  const { equipped, freshHats } = useHats();
 
   const actions: Action[] = [
     { id: "cook",   emoji: "🍕", label: "Cocinar", bg: "bg-kids-green",  ring: "ring-kids-green",  floaters: ["🥕", "🍅", "🥚"], onClick: onCook },
@@ -81,6 +85,18 @@ export default function KidsHome({
               animate={{ rotate: [-4, 4, -4] }}
               transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
             />
+            {/* Gorro de chef equipado */}
+            <motion.span
+              key={equipped.id}
+              initial={{ y: -10, scale: 0.6, opacity: 0 }}
+              animate={{ y: 0, scale: 1, opacity: 1 }}
+              transition={{ type: "spring", bounce: 0.6, delay: 0.15 }}
+              className="absolute -top-6 left-1/2 -translate-x-1/2 text-5xl drop-shadow-md"
+              aria-label={`Gorro: ${equipped.label}`}
+            >
+              {equipped.emoji}
+            </motion.span>
+
             {/* Mano saludando */}
             <motion.span
               className="absolute -right-2 -top-1 text-4xl"
@@ -101,6 +117,36 @@ export default function KidsHome({
               ¡Hola, {playerName}! 🎉
             </span>
           </motion.div>
+
+          {dailyAvailable && onClaimDaily && (
+            <motion.button
+              type="button"
+              onClick={onClaimDaily}
+              whileTap={{ scale: 0.94 }}
+              animate={{ scale: [1, 1.05, 1], rotate: [0, -1.5, 1.5, 0] }}
+              transition={{ repeat: Infinity, duration: 1.8 }}
+              className="kids-press mt-3 flex items-center gap-2 rounded-full bg-kids-pink px-5 py-3 text-base font-extrabold text-foreground ring-4 ring-kids-pink/30"
+              aria-label="Recoger premio del día"
+            >
+              <span className="text-2xl">🎁</span>
+              <span>¡Premio del día!</span>
+            </motion.button>
+          )}
+
+          {freshHats.length > 0 && !dailyAvailable && (
+            <motion.button
+              type="button"
+              onClick={onAwards}
+              whileTap={{ scale: 0.94 }}
+              animate={{ scale: [1, 1.06, 1] }}
+              transition={{ repeat: Infinity, duration: 1.6 }}
+              className="kids-press mt-3 flex items-center gap-2 rounded-full bg-kids-purple px-5 py-3 text-base font-extrabold text-primary-foreground ring-4 ring-kids-purple/30"
+              aria-label={`Nuevo gorro: ${freshHats[freshHats.length - 1].label}`}
+            >
+              <span className="text-2xl">{freshHats[freshHats.length - 1].emoji}</span>
+              <span>¡Gorro nuevo!</span>
+            </motion.button>
+          )}
         </div>
 
         {/* 3 botones gigantes */}

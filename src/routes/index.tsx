@@ -25,6 +25,8 @@ import CustomRecipesScreen from "@/components/CustomRecipesScreen";
 import CollectionsScreen from "@/components/CollectionsScreen";
 import CookWhatIHave from "@/components/CookWhatIHave";
 import SchoolMode from "@/components/SchoolMode";
+import DailyRewardModal from "@/components/DailyRewardModal";
+import { useDailyReward } from "@/hooks/use-daily-reward";
 import { PACKS, type RecipePack } from "@/data/recipePacks";
 import { useCustomRecipes, customToRecipe } from "@/hooks/use-custom-recipes";
 import { useCompletedRecipes } from "@/hooks/use-completed-recipes";
@@ -77,6 +79,7 @@ function Index() {
   const noCook = useNoCook();
   const skills = useSkills();
   const customRecipes = useCustomRecipes();
+  const daily = useDailyReward();
   const earnedBeforeRef = medals.earned;
 
   const active = players.active;
@@ -259,6 +262,8 @@ function Index() {
         playerName={active?.name ?? "Chef"}
         avatarId={active?.avatarId ?? "dino"}
         starsCount={completed.length}
+        dailyAvailable={daily.available}
+        onClaimDaily={() => daily.claim()}
         onChangeAvatar={() => setPlayersOpen(true)}
         onOpenAdult={() => setAdultOpen(true)}
         onCook={handleCook}
@@ -469,6 +474,13 @@ function Index() {
           }}
         />
       )}
+      <DailyRewardModal
+        open={!!daily.todayReward}
+        sticker={daily.todayReward?.sticker ?? "🌟"}
+        praise={daily.todayReward?.praise ?? "¡Genial!"}
+        streak={daily.streak}
+        onClose={daily.closeReward}
+      />
     </>
   );
 }
