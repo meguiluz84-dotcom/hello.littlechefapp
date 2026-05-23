@@ -79,6 +79,7 @@ function Index() {
   const noCook = useNoCook();
   const skills = useSkills();
   const customRecipes = useCustomRecipes();
+  const daily = useDailyReward();
   const earnedBeforeRef = medals.earned;
 
   const active = players.active;
