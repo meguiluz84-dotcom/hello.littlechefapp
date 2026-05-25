@@ -41,6 +41,10 @@ export default function DailyRewardModal({ open, sticker, praise, streak, onClos
               🎁 Premio del día
             </div>
 
+            <div className="mt-2 flex justify-center">
+              <ChefMascot mood="celebrate" size={110} />
+            </div>
+
             <motion.div
               animate={{ rotate: [0, -10, 10, -10, 0], scale: [1, 1.15, 1] }}
               transition={{ repeat: Infinity, duration: 2 }}
