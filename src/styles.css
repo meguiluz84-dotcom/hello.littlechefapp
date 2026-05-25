@@ -62,60 +62,66 @@
 
 :root {
   /* Bordes muy redondeados */
-  --radius: 1.5rem;
+  --radius: 1.75rem;
 
-  /* Fondo crema cálido, nunca oscuro */
-  --background: oklch(0.985 0.015 95);
-  --foreground: oklch(0.28 0.04 260);
+  /* Fondo crema cálido y luminoso */
+  --background: oklch(0.98 0.025 85);
+  --foreground: oklch(0.3 0.05 270);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.28 0.04 260);
+  --card-foreground: oklch(0.3 0.05 270);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.28 0.04 260);
+  --popover-foreground: oklch(0.3 0.05 270);
 
-  /* Duolingo Kids: verde primario brillante */
-  --primary: oklch(0.74 0.21 142);          /* #58CC02 */
-  --primary-foreground: oklch(1 0 0);
+  /* Verde fresco amigable (más cálido y luminoso, menos saturado) */
+  --primary: oklch(0.78 0.17 148);
+  --primary-foreground: oklch(0.2 0.04 270);
 
-  --secondary: oklch(0.95 0.04 95);
-  --secondary-foreground: oklch(0.28 0.04 260);
-  --muted: oklch(0.96 0.02 95);
-  --muted-foreground: oklch(0.5 0.04 260);
+  --secondary: oklch(0.96 0.05 85);
+  --secondary-foreground: oklch(0.3 0.05 270);
+  --muted: oklch(0.97 0.025 85);
+  --muted-foreground: oklch(0.52 0.04 270);
 
-  --accent: oklch(0.88 0.18 95);            /* amarillo */
-  --accent-foreground: oklch(0.28 0.04 260);
+  --accent: oklch(0.9 0.15 92);
+  --accent-foreground: oklch(0.3 0.05 270);
 
-  --destructive: oklch(0.66 0.24 25);       /* #FF4B4B */
+  --destructive: oklch(0.72 0.2 28);
   --destructive-foreground: oklch(1 0 0);
 
-  --border: oklch(0.92 0.02 95);
-  --input: oklch(0.92 0.02 95);
-  --ring: oklch(0.74 0.21 142);
+  --border: oklch(0.93 0.025 85);
+  --input: oklch(0.93 0.025 85);
+  --ring: oklch(0.78 0.17 148);
 
-  --chart-1: oklch(0.74 0.21 142);
-  --chart-2: oklch(0.72 0.18 230);
-  --chart-3: oklch(0.88 0.18 95);
-  --chart-4: oklch(0.72 0.2 30);
-  --chart-5: oklch(0.65 0.22 320);
+  --chart-1: oklch(0.78 0.17 148);
+  --chart-2: oklch(0.78 0.14 230);
+  --chart-3: oklch(0.9 0.15 92);
+  --chart-4: oklch(0.82 0.16 55);
+  --chart-5: oklch(0.74 0.16 305);
 
-  --sidebar: oklch(0.985 0.015 95);
-  --sidebar-foreground: oklch(0.28 0.04 260);
-  --sidebar-primary: oklch(0.74 0.21 142);
+  --sidebar: oklch(0.98 0.025 85);
+  --sidebar-foreground: oklch(0.3 0.05 270);
+  --sidebar-primary: oklch(0.78 0.17 148);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.95 0.04 95);
-  --sidebar-accent-foreground: oklch(0.28 0.04 260);
-  --sidebar-border: oklch(0.92 0.02 95);
-  --sidebar-ring: oklch(0.74 0.21 142);
+  --sidebar-accent: oklch(0.96 0.05 85);
+  --sidebar-accent-foreground: oklch(0.3 0.05 270);
+  --sidebar-border: oklch(0.93 0.025 85);
+  --sidebar-ring: oklch(0.78 0.17 148);
 
-  /* Paleta infantil estilo Duolingo Kids */
-  --kids-green:  oklch(0.74 0.21 142);  /* #58CC02 */
-  --kids-yellow: oklch(0.88 0.18 95);   /* #FFC800 */
-  --kids-red:    oklch(0.66 0.24 25);   /* #FF4B4B */
-  --kids-blue:   oklch(0.72 0.18 230);  /* #1CB0F6 */
-  --kids-orange: oklch(0.78 0.18 55);   /* naranja cálido */
-  --kids-pink:   oklch(0.74 0.18 350);  /* rosa kawaii */
-  --kids-purple: oklch(0.65 0.2 305);   /* morado alegre */
-  --kids-teal:   oklch(0.78 0.13 195);  /* turquesa suave */
+  /* Paleta infantil cálida — brillante pero no agresiva */
+  --kids-green:  oklch(0.82 0.16 148);   /* menta vivo */
+  --kids-yellow: oklch(0.9 0.16 92);     /* amarillo mantequilla */
+  --kids-red:    oklch(0.74 0.18 28);    /* coral cálido */
+  --kids-blue:   oklch(0.8 0.13 230);    /* azul cielo suave */
+  --kids-orange: oklch(0.84 0.15 55);    /* mandarina cálida */
+  --kids-pink:   oklch(0.84 0.13 355);   /* rosa algodón */
+  --kids-purple: oklch(0.76 0.15 305);   /* lila alegre */
+  --kids-teal:   oklch(0.84 0.11 195);   /* turquesa pastel */
+
+  /* Gradientes cálidos reutilizables */
+  --gradient-warm: linear-gradient(135deg, oklch(0.98 0.04 85), oklch(0.95 0.06 60));
+  --gradient-sunny: linear-gradient(135deg, var(--kids-yellow), var(--kids-orange));
+  --gradient-mint:  linear-gradient(135deg, var(--kids-green), var(--kids-teal));
+  --gradient-berry: linear-gradient(135deg, var(--kids-pink), var(--kids-purple));
 }
 
 /* Nada de modo oscuro: forzamos paleta clara siempre */
