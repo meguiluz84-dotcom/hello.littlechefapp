@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import ChefMascot from "./ChefMascot";
 
 interface Props {
   open: boolean;
@@ -38,6 +39,10 @@ export default function DailyRewardModal({ open, sticker, praise, streak, onClos
           >
             <div className="text-sm font-extrabold uppercase tracking-wide text-kids-pink">
               🎁 Premio del día
+            </div>
+
+            <div className="mt-2 flex justify-center">
+              <ChefMascot mood="celebrate" size={110} />
             </div>
 
             <motion.div

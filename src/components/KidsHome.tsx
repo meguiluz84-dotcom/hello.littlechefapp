@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { avatarById, type AvatarId } from "@/data/avatars";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useHats } from "@/hooks/use-hats";
+import ChefMascot from "./ChefMascot";
+
 
 interface Props {
   playerName: string;
@@ -72,59 +74,48 @@ export default function KidsHome({
 
 
       <div className="relative mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-md flex-col">
-        {/* Chef saludando */}
-        <div className="mb-2 flex flex-col items-center pt-2">
+        {/* Mascota dando la bienvenida */}
+        <div className="mb-1 flex flex-col items-center pt-1">
+          <ChefMascot
+            mood={dailyAvailable ? "celebrate" : "greet"}
+            size={128}
+            message={`¡Hola, ${playerName}! 🎉`}
+          />
+        </div>
+
+        {/* Chef del jugador (avatar compacto, junto a la mascota) */}
+        <div className="mb-1 mt-2 flex flex-col items-center">
           <motion.button
             type="button"
             onClick={onChangeAvatar}
             aria-label="Cambiar chef"
-            initial={{ scale: 0, y: -20 }}
-            animate={{ scale: 1, y: 0 }}
-            transition={{ type: "spring", bounce: 0.55 }}
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", bounce: 0.55, delay: 0.2 }}
             whileTap={{ scale: 0.92 }}
-            className={`relative flex h-36 w-36 items-center justify-center rounded-full ${avatar.color} kids-shadow-lg ring-4 ring-background`}
+            className={`relative flex h-20 w-20 items-center justify-center rounded-full ${avatar.color} kids-shadow ring-4 ring-background`}
           >
             <motion.img
               src={avatar.image}
               alt={avatar.label}
-              width={144}
-              height={144}
-              className="h-32 w-32 object-contain drop-shadow-md"
-              animate={{ rotate: [-4, 4, -4] }}
+              width={80}
+              height={80}
+              className="h-16 w-16 object-contain drop-shadow-sm"
+              animate={{ rotate: [-3, 3, -3] }}
               transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
             />
-            {/* Gorro de chef equipado */}
             <motion.span
               key={equipped.id}
-              initial={{ y: -10, scale: 0.6, opacity: 0 }}
+              initial={{ y: -8, scale: 0.6, opacity: 0 }}
               animate={{ y: 0, scale: 1, opacity: 1 }}
-              transition={{ type: "spring", bounce: 0.6, delay: 0.15 }}
-              className="absolute -top-6 left-1/2 -translate-x-1/2 text-5xl drop-shadow-md"
+              transition={{ type: "spring", bounce: 0.6, delay: 0.3 }}
+              className="absolute -top-4 left-1/2 -translate-x-1/2 text-3xl drop-shadow-md"
               aria-label={`Gorro: ${equipped.label}`}
             >
               {equipped.emoji}
             </motion.span>
-
-            {/* Mano saludando */}
-            <motion.span
-              className="absolute -right-2 -top-1 text-4xl"
-              animate={{ rotate: [0, 25, -10, 25, 0] }}
-              transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
-            >
-              👋
-            </motion.span>
           </motion.button>
 
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mt-3 rounded-full bg-card px-5 py-2 kids-shadow"
-          >
-            <span className="text-xl font-extrabold text-foreground">
-              ¡Hola, {playerName}! 🎉
-            </span>
-          </motion.div>
 
           {dailyAvailable && onClaimDaily && (
             <motion.button
