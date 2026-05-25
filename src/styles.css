@@ -154,29 +154,61 @@
 
 @layer utilities {
   .kids-shadow {
-    box-shadow: 0 6px 0 -1px oklch(0.5 0.1 260 / 14%), 0 10px 24px -6px oklch(0.5 0.1 260 / 18%);
+    box-shadow:
+      0 4px 0 -1px oklch(0.55 0.08 50 / 12%),
+      0 12px 28px -8px oklch(0.55 0.08 50 / 22%);
   }
 
   .kids-shadow-lg {
-    box-shadow: 0 10px 0 -2px oklch(0.5 0.1 260 / 16%), 0 20px 40px -10px oklch(0.5 0.1 260 / 22%);
+    box-shadow:
+      0 8px 0 -2px oklch(0.55 0.08 50 / 14%),
+      0 24px 48px -12px oklch(0.55 0.08 50 / 26%);
   }
 
-  /* Botón "tactil 3D" estilo Duolingo: borde inferior grueso */
+  .kids-soft-shadow {
+    box-shadow: 0 18px 40px -16px oklch(0.55 0.08 50 / 24%);
+  }
+
+  /* Botón "tactil 3D" suave */
   .kids-press {
-    box-shadow: inset 0 -6px 0 0 oklch(0 0 0 / 14%), 0 8px 20px -6px oklch(0.5 0.1 260 / 22%);
-    transition: transform 80ms ease, box-shadow 80ms ease;
+    box-shadow:
+      inset 0 -5px 0 0 oklch(0 0 0 / 12%),
+      0 10px 24px -8px oklch(0.55 0.08 50 / 28%);
+    transition: transform 120ms cubic-bezier(.34,1.56,.64,1), box-shadow 120ms ease;
   }
   .kids-press:active {
-    transform: translateY(3px);
-    box-shadow: inset 0 -2px 0 0 oklch(0 0 0 / 14%), 0 4px 12px -4px oklch(0.5 0.1 260 / 18%);
+    transform: translateY(3px) scale(0.98);
+    box-shadow:
+      inset 0 -2px 0 0 oklch(0 0 0 / 12%),
+      0 4px 12px -6px oklch(0.55 0.08 50 / 22%);
   }
 
   .bounce-tap:active {
     transform: scale(0.92);
-    transition: transform 0.1s ease;
+    transition: transform 0.12s ease;
   }
+
+  .bg-gradient-warm  { background: var(--gradient-warm); }
+  .bg-gradient-sunny { background: var(--gradient-sunny); }
+  .bg-gradient-mint  { background: var(--gradient-mint); }
+  .bg-gradient-berry { background: var(--gradient-berry); }
+
+  @keyframes kids-bob {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  .kids-bob { animation: kids-bob 3s ease-in-out infinite; }
+
+  @keyframes kids-pop {
+    0%   { transform: scale(0.6); opacity: 0; }
+    60%  { transform: scale(1.08); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  .kids-pop { animation: kids-pop 0.45s cubic-bezier(.34,1.56,.64,1) both; }
 
   @media (prefers-reduced-motion: reduce) {
     .kids-press, .bounce-tap { transition: none; }
+    .kids-bob, .kids-pop { animation: none; }
   }
 }
+
