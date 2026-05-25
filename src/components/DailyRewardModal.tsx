@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import ChefMascot from "./ChefMascot";
 
 interface Props {
   open: boolean;
