@@ -44,24 +44,32 @@ export default function KidsHome({
   const shownStars = Math.min(starsCount, 5);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background px-5 pb-8 pt-4">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-warm px-5 pb-10 pt-4">
+      {/* Manchas suaves de color de fondo */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-20 -left-16 h-64 w-64 rounded-full bg-kids-yellow/40 blur-3xl" />
+        <div className="absolute top-1/3 -right-20 h-72 w-72 rounded-full bg-kids-pink/35 blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 h-56 w-56 rounded-full bg-kids-teal/35 blur-3xl" />
+      </div>
+
       {/* Fondo decorativo: comida flotando */}
       <div aria-hidden className="pointer-events-none absolute inset-0 select-none">
         {["🍓", "🥦", "🧀", "🍞", "🥑", "🍌"].map((e, i) => (
           <motion.span
             key={i}
-            className="absolute text-3xl opacity-30"
+            className="absolute text-3xl opacity-40"
             style={{
               top: `${10 + (i * 13) % 70}%`,
               left: `${(i * 37) % 90}%`,
             }}
-            animate={{ y: [0, -10, 0], rotate: [0, 8, -8, 0] }}
-            transition={{ repeat: Infinity, duration: 4 + i * 0.3, ease: "easeInOut" }}
+            animate={{ y: [0, -12, 0], rotate: [0, 8, -8, 0] }}
+            transition={{ repeat: Infinity, duration: 5 + i * 0.4, ease: "easeInOut" }}
           >
             {e}
           </motion.span>
         ))}
       </div>
+
 
       <div className="relative mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-md flex-col">
         {/* Chef saludando */}
