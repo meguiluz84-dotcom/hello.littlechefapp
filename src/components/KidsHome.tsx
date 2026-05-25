@@ -74,8 +74,18 @@ export default function KidsHome({
 
 
       <div className="relative mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-md flex-col">
-        {/* Chef saludando */}
+        {/* Mascota dando la bienvenida */}
+        <div className="mb-1 flex flex-col items-center pt-1">
+          <ChefMascot
+            mood={dailyAvailable ? "celebrate" : "greet"}
+            size={128}
+            message={`¡Hola, ${playerName}! 🎉`}
+          />
+        </div>
+
+        {/* Chef del jugador (avatar) */}
         <div className="mb-2 flex flex-col items-center pt-2">
+
           <motion.button
             type="button"
             onClick={onChangeAvatar}
