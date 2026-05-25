@@ -44,24 +44,32 @@ export default function KidsHome({
   const shownStars = Math.min(starsCount, 5);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background px-5 pb-8 pt-4">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-warm px-5 pb-10 pt-4">
+      {/* Manchas suaves de color de fondo */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-20 -left-16 h-64 w-64 rounded-full bg-kids-yellow/40 blur-3xl" />
+        <div className="absolute top-1/3 -right-20 h-72 w-72 rounded-full bg-kids-pink/35 blur-3xl" />
+        <div className="absolute bottom-0 left-1/4 h-56 w-56 rounded-full bg-kids-teal/35 blur-3xl" />
+      </div>
+
       {/* Fondo decorativo: comida flotando */}
       <div aria-hidden className="pointer-events-none absolute inset-0 select-none">
         {["🍓", "🥦", "🧀", "🍞", "🥑", "🍌"].map((e, i) => (
           <motion.span
             key={i}
-            className="absolute text-3xl opacity-30"
+            className="absolute text-3xl opacity-40"
             style={{
               top: `${10 + (i * 13) % 70}%`,
               left: `${(i * 37) % 90}%`,
             }}
-            animate={{ y: [0, -10, 0], rotate: [0, 8, -8, 0] }}
-            transition={{ repeat: Infinity, duration: 4 + i * 0.3, ease: "easeInOut" }}
+            animate={{ y: [0, -12, 0], rotate: [0, 8, -8, 0] }}
+            transition={{ repeat: Infinity, duration: 5 + i * 0.4, ease: "easeInOut" }}
           >
             {e}
           </motion.span>
         ))}
       </div>
+
 
       <div className="relative mx-auto flex min-h-[calc(100vh-3rem)] w-full max-w-md flex-col">
         {/* Chef saludando */}
@@ -150,32 +158,38 @@ export default function KidsHome({
         </div>
 
         {/* 3 botones gigantes */}
-        <div className="mt-6 flex flex-1 flex-col justify-center gap-5">
+        <div className="mt-8 flex flex-1 flex-col justify-center gap-6">
           {actions.map((a, i) => (
             <motion.button
               key={a.id}
               type="button"
-              initial={{ opacity: 0, x: i % 2 === 0 ? -40 : 40, scale: 0.9 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ delay: 0.25 + i * 0.1, type: "spring", bounce: 0.5 }}
-              whileTap={{ scale: 0.94, rotate: -1 }}
-              whileHover={{ y: -4 }}
+              initial={{ opacity: 0, y: 24, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: 0.25 + i * 0.12, type: "spring", bounce: 0.45, duration: 0.7 }}
+              whileTap={{ scale: 0.95 }}
+              whileHover={{ y: -5, scale: 1.02 }}
               onClick={a.onClick}
               aria-label={a.label}
-              className={`kids-press relative flex min-h-[120px] w-full items-center justify-between overflow-hidden rounded-[2.25rem] ${a.bg} px-6 ring-4 ${a.ring}/40`}
+              className={`kids-press relative flex min-h-[136px] w-full items-center justify-between overflow-hidden rounded-[2.75rem] ${a.bg} px-7 ring-4 ${a.ring}/40`}
             >
+              {/* Brillo superior tipo cristal */}
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-x-4 top-2 h-8 rounded-full bg-white/35 blur-md"
+              />
+
               {/* Floaters decorativos */}
               <span aria-hidden className="pointer-events-none absolute inset-0">
                 {a.floaters.map((f, idx) => (
                   <motion.span
                     key={idx}
-                    className="absolute text-2xl opacity-70"
+                    className="absolute text-2xl opacity-75"
                     style={{
                       top: `${15 + idx * 25}%`,
                       right: `${10 + idx * 18}%`,
                     }}
-                    animate={{ y: [0, -6, 0], rotate: [0, 10, -10, 0] }}
-                    transition={{ repeat: Infinity, duration: 2.5 + idx * 0.4, ease: "easeInOut" }}
+                    animate={{ y: [0, -8, 0], rotate: [0, 12, -12, 0] }}
+                    transition={{ repeat: Infinity, duration: 3 + idx * 0.5, ease: "easeInOut" }}
                   >
                     {f}
                   </motion.span>
@@ -183,18 +197,19 @@ export default function KidsHome({
               </span>
 
               <motion.span
-                className="relative z-10 text-7xl drop-shadow-md"
-                animate={{ rotate: [0, -8, 8, 0], scale: [1, 1.05, 1] }}
-                transition={{ repeat: Infinity, duration: 2.8 + i * 0.3, ease: "easeInOut" }}
+                className="relative z-10 text-[5.5rem] leading-none drop-shadow-md"
+                animate={{ rotate: [0, -6, 6, 0], scale: [1, 1.06, 1] }}
+                transition={{ repeat: Infinity, duration: 3.2 + i * 0.3, ease: "easeInOut" }}
               >
                 {a.emoji}
               </motion.span>
-              <span className="relative z-10 text-4xl font-extrabold uppercase tracking-tight text-foreground">
+              <span className="relative z-10 text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm">
                 {a.label}
               </span>
             </motion.button>
           ))}
         </div>
+
 
         {/* Pie: estrellas + adultos */}
         <div className="mt-6 flex flex-col items-center gap-3">
