@@ -6,26 +6,13 @@ import {
   getRecipeMeta,
   recipeAllowedForAge,
   recipeMatchesRestrictions,
-  type FoodTag,
   type Restrictions,
-  type RecipeLevel,
 } from "@/data/recipeMeta";
-import RecipeOfTheDay from "./RecipeOfTheDay";
-import CategoryFilters from "./CategoryFilters";
-import LevelFilters from "./LevelFilters";
 import EmptyState from "./EmptyState";
-import DinoBubble from "./DinoBubble";
-import DifficultyBadges from "./DifficultyBadges";
-import ChallengeBanner from "./ChallengeBanner";
+import ChefMascot from "./ChefMascot";
 import { useLongPress } from "@/hooks/use-long-press";
-import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
-import { useChallengeMode } from "@/hooks/use-challenge-mode";
-import { useNoCook } from "@/hooks/use-no-cook";
-import { PACKS, type RecipePack } from "@/data/recipePacks";
-import LevelBadge from "./LevelBadge";
 import type { AgeBucket } from "@/hooks/use-players";
-import { useMedals } from "@/hooks/use-medals";
-import { MEDALS } from "@/data/medals";
+import type { RecipePack } from "@/data/recipePacks";
 
 const colorMap: Record<string, string> = {
   "kids-pink": "bg-kids-pink",
@@ -49,12 +36,13 @@ interface RecipeHomeProps {
   onOpenAdult: () => void;
   isFavorite: (id: string) => boolean;
   ageBucket: AgeBucket;
-  challengeRecipe: Recipe | null;
-  onPickChallenge: (r: Recipe) => void;
-  onOpenMedals: () => void;
-  onOpenFavorites: () => void;
-  onOpenWeekPlan: () => void;
-  onOpenShopping: () => void;
+  // Props mantenidas por compatibilidad con index.tsx (no se usan en la home simplificada).
+  challengeRecipe?: Recipe | null;
+  onPickChallenge?: (r: Recipe) => void;
+  onOpenMedals?: () => void;
+  onOpenFavorites?: () => void;
+  onOpenWeekPlan?: () => void;
+  onOpenShopping?: () => void;
   onOpenPantry?: () => void;
   onOpenCookWhat?: () => void;
   onOpenMissions?: () => void;
@@ -66,22 +54,11 @@ interface RecipeHomeProps {
 export default function RecipeHome({
   onSelectRecipe, isCompleted, avatarId, onChangeAvatar, getRecipeName,
   restrictions, lastRecipeId, onOpenAdult, isFavorite,
-  ageBucket, challengeRecipe, onPickChallenge,
-  onOpenMedals, onOpenFavorites, onOpenWeekPlan, onOpenShopping,
-  onOpenPantry, onOpenCookWhat, onOpenMissions, onOpenPack, extraRecipes, playerName,
+  ageBucket, extraRecipes,
 }: RecipeHomeProps) {
   const avatar = avatarById(avatarId);
   const [activeCategory, setActiveCategory] = useState<RecipeCategory | null>(null);
-  const [tag, setTag] = useState<FoodTag | null>(null);
-  const [level, setLevel] = useState<RecipeLevel | null>(null);
-  const { plan } = useWeekPlan();
-  const challenge = useChallengeMode();
-  const noCook = useNoCook();
-  const { earned: earnedMedals } = useMedals();
-  const recentMedals = useMemo(
-    () => MEDALS.filter((m) => earnedMedals.includes(m.id)).slice(-3).reverse(),
-    [earnedMedals]
-  );
+  const longPress = useLongPress(onOpenAdult, 800);
 
   const allowed = useMemo(
     () => [...recipes, ...(extraRecipes ?? [])].filter((r) => {
@@ -91,375 +68,172 @@ export default function RecipeHome({
     [restrictions, ageBucket, extraRecipes]
   );
 
-  const recipeOfDay = useMemo(() => {
-    if (allowed.length === 0) return null;
-    const day = Math.floor(Date.now() / 86400000);
-    return allowed[day % allowed.length];
-  }, [allowed]);
-
   const lastRecipe = useMemo(
-    () => (lastRecipeId ? recipes.find((r) => r.id === lastRecipeId) ?? null : null),
-    [lastRecipeId]
+    () => (lastRecipeId ? allowed.find((r) => r.id === lastRecipeId) ?? null : null),
+    [lastRecipeId, allowed]
   );
 
-  const todayMorning = plan[`${todayKey()}-desayuno`];
-  const todaySnack = plan[`${todayKey()}-merienda`];
-  const todayMorningRecipe = todayMorning ? recipes.find((r) => r.id === todayMorning) : null;
-  const todaySnackRecipe = todaySnack ? recipes.find((r) => r.id === todaySnack) : null;
+  const visibleCategories = categories.filter(
+    (cat) => allowed.some((r) => r.category === cat.id),
+  );
 
-  const filteredByTag = useMemo(() => {
-    if (!tag) return null;
-    return allowed.filter((r) => getRecipeMeta(r.id).tags.includes(tag));
-  }, [allowed, tag]);
-
-  const filteredByCategory = useMemo(() => {
-    if (!activeCategory) return null;
-    return allowed.filter((r) => r.category === activeCategory);
-  }, [allowed, activeCategory]);
-
-  const levelProgress = useMemo(() => {
-    const out: Partial<Record<RecipeLevel, { done: number; total: number }>> = {};
-    ([1, 2, 3, 4] as RecipeLevel[]).forEach((lv) => {
-      const list = allowed.filter((r) => getRecipeMeta(r.id).level === lv);
-      out[lv] = {
-        total: list.length,
-        done: isCompleted ? list.filter((r) => isCompleted(r.id)).length : 0,
-      };
-    });
-    return out;
-  }, [allowed, isCompleted]);
-
-  const applyLevel = (list: Recipe[]) =>
-    level === null ? list : list.filter((r) => getRecipeMeta(r.id).level === level);
-
-  const completedCount = isCompleted ? allowed.filter((r) => isCompleted(r.id)).length : 0;
-  const countByCategory = (cat: RecipeCategory) => allowed.filter((r) => r.category === cat).length;
-  const completedByCategory = (cat: RecipeCategory) =>
-    isCompleted ? allowed.filter((r) => r.category === cat && isCompleted(r.id)).length : 0;
+  const recipesInCategory = activeCategory
+    ? allowed.filter((r) => r.category === activeCategory)
+    : [];
 
   const activeCat = activeCategory ? categories.find((c) => c.id === activeCategory) : null;
-  const longPress = useLongPress(onOpenAdult, 800);
 
   return (
-    <div className="min-h-screen bg-background px-4 pb-24 pt-6">
-      {/* Header - avatar + name */}
-      <div className="mb-3 flex items-center justify-center gap-3">
+    <div className="min-h-screen bg-gradient-warm px-5 pb-28 pt-6">
+      {/* Encabezado mínimo: mascota + avatar */}
+      <div className="mx-auto flex w-full max-w-md flex-col items-center">
+        <ChefMascot mood="greet" size={104} />
         <motion.button
           type="button"
+          {...longPress}
           initial={{ scale: 0 }} animate={{ scale: 1 }}
           transition={{ type: "spring", bounce: 0.5 }}
           whileTap={{ scale: 0.9 }}
           onClick={onChangeAvatar}
-          aria-label="Cambiar perfil"
-          className={`relative flex h-24 w-24 items-center justify-center rounded-full ${avatar.color} kids-shadow-lg`}
+          aria-label="Mi chef (mantén pulsado para padres)"
+          className={`mt-1 flex h-16 w-16 items-center justify-center rounded-full ${avatar.color} kids-shadow-lg ring-4 ring-background`}
         >
-          <img src={avatar.image} alt={avatar.label} width={96} height={96} className="h-20 w-20 object-contain" />
-          <span className="absolute -bottom-1 -right-1 flex h-8 w-8 items-center justify-center rounded-full bg-card text-base kids-shadow ring-2 ring-background">👥</span>
+          <img src={avatar.image} alt="" width={64} height={64} className="h-12 w-12 object-contain" />
         </motion.button>
-      </div>
-      <div className="mb-4 flex justify-center">
-        <DinoBubble
-          emojis="👋"
-          message={`¡Hola, ${playerName}! ¿Cocinamos algo rico?`}
-          tone="yellow"
-          size="md"
-          bubbleKey={playerName}
-        />
-      </div>
-
-      {/* Stars + medals trophy counter */}
-      <div className="mx-auto mb-4 flex w-fit items-center gap-2">
-        {completedCount > 0 && (
-          <motion.div
-            {...longPress}
-            initial={{ scale: 0 }} animate={{ scale: 1 }}
-            transition={{ type: "spring", bounce: 0.5 }}
-            className="flex cursor-pointer select-none items-center gap-2 rounded-full bg-kids-yellow px-4 py-2 kids-shadow"
-            aria-label={`${completedCount} estrellas (mantén pulsado para padres)`}
-          >
-            <span className="text-2xl">⭐</span>
-            <span className="text-xl font-extrabold text-foreground">×{completedCount}</span>
-          </motion.div>
-        )}
-        <button
-          type="button" onClick={onOpenMedals} aria-label="Mis medallas"
-          className="flex h-12 min-h-12 items-center gap-1 rounded-full bg-card px-3 text-xl kids-shadow"
-        >🏅</button>
-        <button
-          type="button" onClick={onOpenFavorites} aria-label="Favoritos"
-          className="flex h-12 min-h-12 items-center gap-1 rounded-full bg-card px-3 text-xl kids-shadow"
-        >❤️</button>
-        <button
-          type="button" onClick={challenge.toggle}
-          aria-pressed={challenge.enabled}
-          aria-label={challenge.enabled ? "Modo reto activo (toca para desactivar)" : "Activar modo reto"}
-          className={`flex h-12 min-h-12 items-center gap-1 rounded-full px-3 text-xl kids-shadow ${challenge.enabled ? "bg-kids-orange ring-4 ring-kids-yellow" : "bg-card"}`}
-          title="Modo reto: menos pistas visuales"
-        >🎯</button>
-        <button
-          type="button" onClick={noCook.toggle}
-          aria-pressed={noCook.enabled}
-          aria-label={noCook.enabled ? "Modo sin cocción activo (toca para desactivar)" : "Activar modo sin cocción"}
-          className={`flex h-12 min-h-12 items-center gap-1 rounded-full px-3 text-xl kids-shadow ${noCook.enabled ? "bg-kids-blue ring-4 ring-kids-teal" : "bg-card"}`}
-          title="Solo recetas sin cocción"
-        >❄️</button>
       </div>
 
       <AnimatePresence mode="wait">
-        {!activeCategory && !tag && level === null ? (
+        {!activeCategory ? (
           <motion.div
             key="home"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="mx-auto max-w-xl"
+            className="mx-auto mt-6 w-full max-w-md"
           >
-            {allowed.length === 0 && (
+            {allowed.length === 0 ? (
               <EmptyState
                 emoji="🍳"
                 tone="orange"
-                message="Hoy no encuentro recetas para ti"
-                hint="Pide a un adulto que revise tus filtros y alergias."
-                cta={{ label: "Ajustes para padres", onClick: onOpenAdult }}
+                message="Hoy no hay recetas"
+                hint="Pide a un adulto que revise los filtros."
+                cta={{ label: "Ajustes", onClick: onOpenAdult }}
               />
-            )}
-
-            {/* Today's plan */}
-            {(todayMorningRecipe || todaySnackRecipe) && (
-              <div className="mb-4 rounded-2xl bg-kids-blue/30 p-3 kids-shadow">
-                <div className="mb-2 text-xs font-extrabold text-foreground">📅 Hoy toca</div>
-                <div className="flex gap-2">
-                  {todayMorningRecipe && (
-                    <button
-                      type="button" onClick={() => onSelectRecipe(todayMorningRecipe)}
-                      className="flex flex-1 items-center gap-2 rounded-xl bg-card p-2 kids-shadow"
-                    >
-                      <span className="text-2xl">🥣</span>
-                      <img src={todayMorningRecipe.image} alt="" className="h-10 w-10 rounded-lg object-cover" />
-                      <span className="flex-1 text-left text-xs font-extrabold text-foreground line-clamp-2">{getRecipeName(todayMorningRecipe)}</span>
-                    </button>
-                  )}
-                  {todaySnackRecipe && (
-                    <button
-                      type="button" onClick={() => onSelectRecipe(todaySnackRecipe)}
-                      className="flex flex-1 items-center gap-2 rounded-xl bg-card p-2 kids-shadow"
-                    >
-                      <span className="text-2xl">🍎</span>
-                      <img src={todaySnackRecipe.image} alt="" className="h-10 w-10 rounded-lg object-cover" />
-                      <span className="flex-1 text-left text-xs font-extrabold text-foreground line-clamp-2">{getRecipeName(todaySnackRecipe)}</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-
-            <ChallengeBanner
-              recipe={challengeRecipe}
-              displayName={challengeRecipe ? getRecipeName(challengeRecipe) : ""}
-              onPick={onPickChallenge}
-            />
-
-            {recipeOfDay && (
-              <RecipeOfTheDay
-                recipe={recipeOfDay}
-                displayName={getRecipeName(recipeOfDay)}
-                onOpen={onSelectRecipe}
-              />
-            )}
-
-            {lastRecipe && (
-              <motion.button
-                type="button"
-                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => onSelectRecipe(lastRecipe)}
-                className="mb-5 flex w-full items-center gap-3 rounded-2xl bg-card p-3 kids-shadow"
-                aria-label={`Continuar ${getRecipeName(lastRecipe)}`}
-              >
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl">
-                  <img src={lastRecipe.image} alt="" className="h-full w-full object-cover" />
-                </div>
-                <div className="flex flex-1 flex-col items-start text-left">
-                  <span className="text-xs font-extrabold text-muted-foreground">▶️ Continuar</span>
-                  <span className="text-base font-extrabold text-foreground line-clamp-2">{getRecipeName(lastRecipe)}</span>
-                </div>
-                <span className="text-3xl">➡️</span>
-              </motion.button>
-            )}
-
-            <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
-
-            {recentMedals.length > 0 && (
-              <button
-                type="button"
-                onClick={onOpenMedals}
-                aria-label="Ver mis medallas"
-                className="mb-4 flex w-full items-center gap-2 rounded-2xl bg-kids-yellow/40 p-3 kids-shadow"
-              >
-                <span className="text-xs font-extrabold text-foreground">🏅 Últimas</span>
-                <div className="flex flex-1 items-center justify-end gap-2">
-                  {recentMedals.map((m) => (
-                    <span
-                      key={m.id}
-                      title={m.label}
-                      className="flex h-10 w-10 items-center justify-center rounded-full bg-card text-2xl kids-shadow"
-                    >
-                      {m.emoji}
+            ) : (
+              <>
+                {lastRecipe && (
+                  <motion.button
+                    type="button"
+                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => onSelectRecipe(lastRecipe)}
+                    className="kids-press mb-5 flex w-full items-center gap-4 rounded-[2rem] bg-card p-3 kids-shadow-lg"
+                    aria-label={`Seguir con ${getRecipeName(lastRecipe)}`}
+                  >
+                    <div className="h-20 w-20 shrink-0 overflow-hidden rounded-3xl">
+                      <img src={lastRecipe.image} alt="" className="h-full w-full object-cover" />
+                    </div>
+                    <span className="flex-1 text-left text-2xl font-extrabold text-foreground">
+                      ▶️ Seguir
                     </span>
+                    <span className="pr-2 text-4xl">➡️</span>
+                  </motion.button>
+                )}
+
+                {/* Una sola palabra por categoría: icono enorme + 1 palabra */}
+                <div className="grid grid-cols-2 gap-5">
+                  {visibleCategories.map((cat, i) => (
+                    <motion.button
+                      key={cat.id}
+                      type="button"
+                      initial={{ opacity: 0, scale: 0.85, y: 16 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ delay: i * 0.06, type: "spring", bounce: 0.45 }}
+                      whileTap={{ scale: 0.94 }}
+                      whileHover={{ y: -4 }}
+                      onClick={() => setActiveCategory(cat.id)}
+                      aria-label={cat.label}
+                      className={`kids-press relative flex min-h-[160px] flex-col items-center justify-center gap-2 overflow-hidden rounded-[2.25rem] ${colorMap[cat.color] ?? "bg-primary"} p-4 ring-4 ring-background`}
+                    >
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute inset-x-4 top-2 h-6 rounded-full bg-white/35 blur-md"
+                      />
+                      <motion.span
+                        className="relative z-10 text-7xl drop-shadow-md"
+                        animate={{ rotate: [0, -6, 6, 0], scale: [1, 1.06, 1] }}
+                        transition={{ repeat: Infinity, duration: 3 + i * 0.25, ease: "easeInOut" }}
+                      >
+                        {cat.emoji}
+                      </motion.span>
+                      <span className="relative z-10 text-2xl font-extrabold text-foreground">
+                        {cat.label}
+                      </span>
+                    </motion.button>
                   ))}
                 </div>
-              </button>
+              </>
             )}
-
-            {/* Packs carousel shortcut */}
-            {onOpenPack && (
-              <div className="mb-3">
-                <div className="mb-2 flex items-center justify-between px-1">
-                  <span className="text-sm font-extrabold text-foreground">📦 Packs</span>
-                </div>
-                <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-                  {PACKS.map((p) => {
-                    const list = allowed.filter(p.match);
-                    if (list.length === 0) return null;
-                    const done = isCompleted ? list.filter((r) => isCompleted(r.id)).length : 0;
-                    return (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => onOpenPack(p)}
-                        className={`flex min-w-[7rem] shrink-0 flex-col items-center gap-1 rounded-2xl ${p.color} p-2 kids-shadow`}
-                        aria-label={p.label}
-                      >
-                        <span className="text-3xl">{p.emoji}</span>
-                        <span className="text-balance text-center text-[11px] font-extrabold leading-tight text-foreground">{p.label}</span>
-                        <span className="rounded-full bg-card/80 px-2 py-0.5 text-[10px] font-extrabold text-foreground">{done}/{list.length} ⭐</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            <CategoryFilters active={tag} onChange={setTag} />
-
-            <div className="grid grid-cols-2 gap-4">
-              {categories.map((cat, i) => {
-                const total = countByCategory(cat.id);
-                if (total === 0) return null;
-                const done = completedByCategory(cat.id);
-                return (
-                  <motion.button
-                    key={cat.id}
-                    initial={{ opacity: 0, scale: 0.8, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ delay: i * 0.06, type: "spring", bounce: 0.4 }}
-                    whileTap={{ scale: 0.95 }} whileHover={{ y: -4 }}
-                    onClick={() => setActiveCategory(cat.id)}
-                    className={`flex min-h-32 flex-col items-center justify-center gap-2 rounded-3xl ${colorMap[cat.color] ?? "bg-primary"} p-4 kids-shadow-lg`}
-                  >
-                    <span className="text-6xl">{cat.emoji}</span>
-                    <span className="text-xl font-extrabold text-foreground">{cat.label}</span>
-                    <span className="rounded-full bg-card/80 px-3 py-1 text-sm font-extrabold text-foreground">{done}/{total} ⭐</span>
-                  </motion.button>
-                );
-              })}
-            </div>
-
-            {/* Cocinar con lo que tengo */}
-            {onOpenCookWhat && (
-              <motion.button
-                type="button"
-                whileTap={{ scale: 0.97 }}
-                onClick={onOpenCookWhat}
-                className="mt-4 flex w-full items-center gap-3 rounded-3xl bg-kids-green/60 p-4 kids-shadow-lg ring-2 ring-kids-green"
-                aria-label="Cocinar con lo que tengo"
-              >
-                <span className="text-4xl">🧑‍🍳</span>
-                <div className="flex flex-1 flex-col items-start text-left">
-                  <span className="text-base font-extrabold text-foreground">Cocinar con lo que tengo</span>
-                  <span className="text-xs font-bold text-foreground/70">Marca ingredientes y mira qué puedes preparar.</span>
-                </div>
-                <span className="text-2xl">➡️</span>
-              </motion.button>
-            )}
-
-            {/* Acceso adultos (los demás accesos viven dentro del panel adulto) */}
-            <div className="mt-6 flex justify-center">
-              <button
-                type="button"
-                onClick={onOpenAdult}
-                className="kids-press flex min-h-16 items-center gap-2 rounded-2xl bg-kids-purple/40 px-6 ring-2 ring-kids-purple"
-              >
-                <span className="text-2xl">👨‍👩‍👧</span>
-                <span className="text-sm font-extrabold text-foreground">Modo adultos</span>
-              </button>
-            </div>
-
-            <p className="mt-4 px-2 text-center text-[11px] font-bold text-muted-foreground">
-              👀 Cocina siempre con un adulto · ⚠️ Revisad alergias · Contenido orientativo
-            </p>
           </motion.div>
         ) : (
           <motion.div
             key="filtered"
             initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-            className="mx-auto max-w-xl"
+            className="mx-auto mt-6 w-full max-w-md"
           >
             <div className="mb-5 flex items-center gap-3">
               <motion.button
+                type="button"
                 whileTap={{ scale: 0.9 }}
-                onClick={() => { setActiveCategory(null); setTag(null); setLevel(null); }}
+                onClick={() => setActiveCategory(null)}
                 aria-label="Volver"
-                className="flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-2xl bg-card text-2xl kids-shadow"
+                className="kids-press flex h-16 w-16 min-h-16 min-w-16 items-center justify-center rounded-3xl bg-card text-3xl kids-shadow-lg"
               >⬅️</motion.button>
-              <div className={`flex flex-1 items-center gap-2 rounded-2xl ${activeCat ? colorMap[activeCat.color] ?? "bg-primary" : "bg-primary"} px-4 py-3 kids-shadow`}>
-                <span className="text-3xl">{activeCat?.emoji ?? (level !== null ? "👨‍🍳" : "🔍")}</span>
-                <span className="text-xl font-extrabold text-foreground">
-                  {activeCat?.label ?? (tag ? tag : level !== null ? `Nivel ${level}` : "")}
-                </span>
+              <div className={`flex flex-1 items-center justify-center gap-3 rounded-3xl ${activeCat ? colorMap[activeCat.color] ?? "bg-primary" : "bg-primary"} px-4 py-4 kids-shadow-lg`}>
+                <span className="text-4xl">{activeCat?.emoji}</span>
+                <span className="text-2xl font-extrabold text-foreground">{activeCat?.label}</span>
               </div>
             </div>
 
-            <LevelFilters active={level} onChange={setLevel} progress={levelProgress} />
-
-            {(applyLevel((filteredByCategory ?? filteredByTag) ?? allowed)).length === 0 ? (
+            {recipesInCategory.length === 0 ? (
               <EmptyState
                 emoji="🔍"
                 tone="blue"
-                message="No hay recetas con este filtro"
-                hint="Prueba otro nivel o categoría."
-                cta={{ label: "Quitar filtros", onClick: () => { setActiveCategory(null); setTag(null); setLevel(null); } }}
+                message="Sin recetas aquí"
+                cta={{ label: "Volver", onClick: () => setActiveCategory(null) }}
               />
             ) : (
-              <div className="grid grid-cols-2 gap-4">
-                {applyLevel((filteredByCategory ?? filteredByTag) ?? allowed).map((recipe, i) => {
-                  return (
-                    <motion.button
-                      key={recipe.id}
-                      initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: i * 0.04, type: "spring", bounce: 0.3 }}
-                      whileTap={{ scale: 0.92 }}
-                      onClick={() => onSelectRecipe(recipe)}
-                      className="group flex flex-col items-center overflow-hidden rounded-3xl bg-card kids-shadow-lg"
-                    >
-                      <div className={`relative w-full overflow-hidden ${colorMap[recipe.color] ?? "bg-primary"} p-2`}>
-                        <img src={recipe.image} alt="" className="aspect-square w-full rounded-2xl object-cover" loading="lazy" width={256} height={256} />
-                        {isCompleted?.(recipe.id) && (
-                          <motion.div
-                            initial={{ scale: 0, rotate: -45 }} animate={{ scale: 1, rotate: -15 }}
-                            transition={{ type: "spring", bounce: 0.6 }}
-                            className="absolute -right-1 -top-1 flex h-12 w-12 items-center justify-center rounded-full bg-kids-yellow text-3xl kids-shadow-lg ring-4 ring-background"
-                          >⭐</motion.div>
-                        )}
-                        {isFavorite(recipe.id) && (
-                          <div className="absolute left-1 top-1 flex h-9 w-9 items-center justify-center rounded-full bg-card text-xl kids-shadow">❤️</div>
-                        )}
+              <div className="grid grid-cols-2 gap-5">
+                {recipesInCategory.map((recipe, i) => (
+                  <motion.button
+                    key={recipe.id}
+                    type="button"
+                    initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.05, type: "spring", bounce: 0.4 }}
+                    whileTap={{ scale: 0.93 }}
+                    onClick={() => onSelectRecipe(recipe)}
+                    aria-label={getRecipeName(recipe)}
+                    className="kids-press group flex flex-col items-center overflow-hidden rounded-[2rem] bg-card kids-shadow-lg ring-4 ring-background"
+                  >
+                    <div className={`relative w-full overflow-hidden ${colorMap[recipe.color] ?? "bg-primary"} p-2`}>
+                      <img src={recipe.image} alt="" className="aspect-square w-full rounded-3xl object-cover" loading="lazy" width={256} height={256} />
+                      {isCompleted?.(recipe.id) && (
+                        <motion.div
+                          initial={{ scale: 0, rotate: -45 }} animate={{ scale: 1, rotate: -15 }}
+                          transition={{ type: "spring", bounce: 0.6 }}
+                          className="absolute -right-1 -top-1 flex h-12 w-12 items-center justify-center rounded-full bg-kids-yellow text-3xl kids-shadow-lg ring-4 ring-background"
+                          aria-hidden
+                        >⭐</motion.div>
+                      )}
+                      {isFavorite(recipe.id) && (
+                        <div className="absolute left-1 top-1 flex h-9 w-9 items-center justify-center rounded-full bg-card text-xl kids-shadow" aria-hidden>❤️</div>
+                      )}
+                    </div>
+                    <div className="flex flex-col items-center px-2 py-3">
+                      <div className="text-balance text-center text-base font-extrabold leading-tight text-foreground line-clamp-2">
+                        {getRecipeName(recipe)}
                       </div>
-                      <div className="flex flex-col items-center gap-2 px-2 py-3">
-                        <div className="text-balance text-center text-sm font-extrabold leading-tight text-foreground line-clamp-2">{getRecipeName(recipe)}</div>
-                        <LevelBadge level={getRecipeMeta(recipe.id).level} size="sm" withLabel={false} />
-                        <DifficultyBadges recipe={recipe} size="sm" compact />
-                      </div>
-                    </motion.button>
-                  );
-                })}
+                    </div>
+                  </motion.button>
+                ))}
               </div>
             )}
           </motion.div>
