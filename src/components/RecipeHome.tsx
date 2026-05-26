@@ -10,6 +10,7 @@ import {
 } from "@/data/recipeMeta";
 import EmptyState from "./EmptyState";
 import ChefMascot from "./ChefMascot";
+import LivelyFood, { effectForEmoji } from "./LivelyFood";
 import { useLongPress } from "@/hooks/use-long-press";
 import type { AgeBucket } from "@/hooks/use-players";
 import type { RecipePack } from "@/data/recipePacks";
