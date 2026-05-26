@@ -188,13 +188,15 @@ export default function KidsHome({
                 ))}
               </span>
 
-              <motion.span
-                className="relative z-10 text-[5.5rem] leading-none drop-shadow-md"
-                animate={{ rotate: [0, -6, 6, 0], scale: [1, 1.06, 1] }}
-                transition={{ repeat: Infinity, duration: 3.2 + i * 0.3, ease: "easeInOut" }}
+              <LivelyFood
+                effect={effectForEmoji(a.emoji) as FoodEffect}
+                size={88}
+                className="relative z-10"
+                interactive={false}
+                ariaLabel={a.label}
               >
                 {a.emoji}
-              </motion.span>
+              </LivelyFood>
               <span className="relative z-10 text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm">
                 {a.label}
               </span>
