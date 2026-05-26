@@ -216,7 +216,29 @@ export default function RecipeHome({
                     className="kids-press group flex flex-col items-center overflow-hidden rounded-[2rem] bg-card kids-shadow-lg ring-4 ring-background"
                   >
                     <div className={`relative w-full overflow-hidden ${colorMap[recipe.color] ?? "bg-primary"} p-2`}>
-                      <img src={recipe.image} alt="" className="aspect-square w-full rounded-3xl object-cover" loading="lazy" width={256} height={256} />
+                      <motion.img
+                        src={recipe.image}
+                        alt=""
+                        className="aspect-square w-full rounded-3xl object-cover"
+                        loading="lazy" width={256} height={256}
+                        animate={{ y: [0, -3, 0], rotate: [0, -1.2, 1.2, 0], scale: [1, 1.02, 1] }}
+                        transition={{ repeat: Infinity, duration: 3 + (i % 4) * 0.3, ease: "easeInOut" }}
+                        whileTap={{ scale: 0.92, rotate: -4 }}
+                      />
+                      {/* Brillos flotando sobre la comida */}
+                      <span aria-hidden className="pointer-events-none absolute inset-0">
+                        {["✨", "⭐", "💫"].map((s, idx) => (
+                          <motion.span
+                            key={idx}
+                            className="absolute text-lg"
+                            style={{ top: `${15 + idx * 25}%`, left: `${20 + idx * 22}%` }}
+                            animate={{ opacity: [0, 1, 0], scale: [0.6, 1.1, 0.6], y: [0, -10, 0] }}
+                            transition={{ repeat: Infinity, duration: 2 + idx * 0.4, delay: idx * 0.5 + (i % 3) * 0.3 }}
+                          >
+                            {s}
+                          </motion.span>
+                        ))}
+                      </span>
                       {isCompleted?.(recipe.id) && (
                         <motion.div
                           initial={{ scale: 0, rotate: -45 }} animate={{ scale: 1, rotate: -15 }}
