@@ -158,13 +158,14 @@ export default function RecipeHome({
                         aria-hidden
                         className="pointer-events-none absolute inset-x-4 top-2 h-6 rounded-full bg-white/35 blur-md"
                       />
-                      <motion.span
-                        className="relative z-10 text-7xl drop-shadow-md"
-                        animate={{ rotate: [0, -6, 6, 0], scale: [1, 1.06, 1] }}
-                        transition={{ repeat: Infinity, duration: 3 + i * 0.25, ease: "easeInOut" }}
+                      <LivelyFood
+                        effect={effectForEmoji(cat.emoji)}
+                        size={88}
+                        className="relative z-10"
+                        ariaLabel={cat.label}
                       >
                         {cat.emoji}
-                      </motion.span>
+                      </LivelyFood>
                       <span className="relative z-10 text-2xl font-extrabold text-foreground">
                         {cat.label}
                       </span>
