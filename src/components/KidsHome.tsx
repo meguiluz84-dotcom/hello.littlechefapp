@@ -3,6 +3,7 @@ import { avatarById, type AvatarId } from "@/data/avatars";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useHats } from "@/hooks/use-hats";
 import ChefMascot from "./ChefMascot";
+import LivelyFood, { effectForEmoji, type FoodEffect } from "./LivelyFood";
 
 
 interface Props {
