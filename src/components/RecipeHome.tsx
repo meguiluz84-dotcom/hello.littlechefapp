@@ -10,6 +10,7 @@ import {
 } from "@/data/recipeMeta";
 import EmptyState from "./EmptyState";
 import ChefMascot from "./ChefMascot";
+import LivelyFood, { effectForEmoji } from "./LivelyFood";
 import { useLongPress } from "@/hooks/use-long-press";
 import type { AgeBucket } from "@/hooks/use-players";
 import type { RecipePack } from "@/data/recipePacks";
@@ -157,13 +158,14 @@ export default function RecipeHome({
                         aria-hidden
                         className="pointer-events-none absolute inset-x-4 top-2 h-6 rounded-full bg-white/35 blur-md"
                       />
-                      <motion.span
-                        className="relative z-10 text-7xl drop-shadow-md"
-                        animate={{ rotate: [0, -6, 6, 0], scale: [1, 1.06, 1] }}
-                        transition={{ repeat: Infinity, duration: 3 + i * 0.25, ease: "easeInOut" }}
+                      <LivelyFood
+                        effect={effectForEmoji(cat.emoji)}
+                        size={88}
+                        className="relative z-10"
+                        ariaLabel={cat.label}
                       >
                         {cat.emoji}
-                      </motion.span>
+                      </LivelyFood>
                       <span className="relative z-10 text-2xl font-extrabold text-foreground">
                         {cat.label}
                       </span>
@@ -214,7 +216,29 @@ export default function RecipeHome({
                     className="kids-press group flex flex-col items-center overflow-hidden rounded-[2rem] bg-card kids-shadow-lg ring-4 ring-background"
                   >
                     <div className={`relative w-full overflow-hidden ${colorMap[recipe.color] ?? "bg-primary"} p-2`}>
-                      <img src={recipe.image} alt="" className="aspect-square w-full rounded-3xl object-cover" loading="lazy" width={256} height={256} />
+                      <motion.img
+                        src={recipe.image}
+                        alt=""
+                        className="aspect-square w-full rounded-3xl object-cover"
+                        loading="lazy" width={256} height={256}
+                        animate={{ y: [0, -3, 0], rotate: [0, -1.2, 1.2, 0], scale: [1, 1.02, 1] }}
+                        transition={{ repeat: Infinity, duration: 3 + (i % 4) * 0.3, ease: "easeInOut" }}
+                        whileTap={{ scale: 0.92, rotate: -4 }}
+                      />
+                      {/* Brillos flotando sobre la comida */}
+                      <span aria-hidden className="pointer-events-none absolute inset-0">
+                        {["✨", "⭐", "💫"].map((s, idx) => (
+                          <motion.span
+                            key={idx}
+                            className="absolute text-lg"
+                            style={{ top: `${15 + idx * 25}%`, left: `${20 + idx * 22}%` }}
+                            animate={{ opacity: [0, 1, 0], scale: [0.6, 1.1, 0.6], y: [0, -10, 0] }}
+                            transition={{ repeat: Infinity, duration: 2 + idx * 0.4, delay: idx * 0.5 + (i % 3) * 0.3 }}
+                          >
+                            {s}
+                          </motion.span>
+                        ))}
+                      </span>
                       {isCompleted?.(recipe.id) && (
                         <motion.div
                           initial={{ scale: 0, rotate: -45 }} animate={{ scale: 1, rotate: -15 }}
