@@ -42,6 +42,22 @@ export default function MedalsScreen({ onClose, onOpenCollection }: Props) {
           )}
         </div>
 
+        {onOpenCollection && (
+          <motion.button
+            type="button"
+            onClick={onOpenCollection}
+            whileTap={{ scale: 0.95 }}
+            animate={{ scale: [1, 1.03, 1] }}
+            transition={{ repeat: Infinity, duration: 1.8 }}
+            className="kids-press mb-6 flex w-full items-center justify-center gap-3 rounded-[2rem] bg-gradient-to-r from-kids-pink via-kids-orange to-kids-yellow px-6 py-5 text-2xl font-extrabold text-foreground ring-4 ring-kids-pink/30 kids-shadow"
+            aria-label="Abrir colección"
+          >
+            <span className="text-4xl">🎁</span>
+            <span>Mi Colección</span>
+            <span className="text-4xl">✨</span>
+          </motion.button>
+        )}
+
         {/* GORROS DE CHEF */}
         <h2 className="mb-3 px-1 text-xl font-extrabold text-foreground">🎩 Mis gorros</h2>
         <div className="mb-2 grid grid-cols-4 gap-3">
