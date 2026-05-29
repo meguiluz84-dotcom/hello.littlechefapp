@@ -291,7 +291,19 @@ function Index() {
       />
     );
   } else if (screen === "medals") {
-    content = <MedalsScreen onClose={() => setScreen("kidshome")} />;
+    content = (
+      <MedalsScreen
+        onClose={() => setScreen("kidshome")}
+        onOpenCollection={() => setScreen("collection")}
+      />
+    );
+  } else if (screen === "collection") {
+    content = (
+      <CollectionScreen
+        stars={completed.length}
+        onClose={() => setScreen("medals")}
+      />
+    );
   } else if (screen === "favorites") {
     content = (
       <FavoritesScreen
