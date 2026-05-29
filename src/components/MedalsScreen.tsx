@@ -8,9 +8,9 @@ import { useHats } from "@/hooks/use-hats";
 import { useDailyReward } from "@/hooks/use-daily-reward";
 import DinoBubble from "./DinoBubble";
 
-interface Props { onClose: () => void }
+interface Props { onClose: () => void; onOpenCollection?: () => void }
 
-export default function MedalsScreen({ onClose }: Props) {
+export default function MedalsScreen({ onClose, onOpenCollection }: Props) {
   const { earned, challengesDone } = useMedals();
   const { counters, earned: earnedSkills } = useSkills();
   const { all: allHats, unlocked, next, equipped, equip, freshHats, markSeen } = useHats();
