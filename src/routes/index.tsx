@@ -23,6 +23,9 @@ import PackScreen from "@/components/PackScreen";
 import BottomNav, { type NavTab } from "@/components/BottomNav";
 import CustomRecipesScreen from "@/components/CustomRecipesScreen";
 import CollectionsScreen from "@/components/CollectionsScreen";
+import CollectionScreen from "@/components/CollectionScreen";
+import SurpriseChest from "@/components/SurpriseChest";
+import { newlyUnlocked, type UnlockEvent } from "@/data/collectibles";
 import CookWhatIHave from "@/components/CookWhatIHave";
 import SchoolMode from "@/components/SchoolMode";
 import DailyRewardModal from "@/components/DailyRewardModal";
@@ -55,7 +58,7 @@ export const Route = createFileRoute("/")({
 type Screen =
   | "splash" | "kidshome" | "home" | "ingredients" | "cooking"
   | "play" | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack"
-  | "custom" | "collections" | "generator" | "school";
+  | "custom" | "collections" | "collection" | "generator" | "school";
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -69,6 +72,7 @@ function Index() {
   const [isChallenge, setIsChallenge] = useState(false);
   const [newMedalId, setNewMedalId] = useState<string | null>(null);
   const [pendingDiploma, setPendingDiploma] = useState<RecipeCategory | null>(null);
+  const [chestEvents, setChestEvents] = useState<UnlockEvent[]>([]);
 
   const players = usePlayers();
   const { markCompleted, isCompleted, completed, reset: resetCompleted } = useCompletedRecipes();
@@ -132,9 +136,15 @@ function Index() {
   // Called the moment the recipe is finished — before navigating away.
   // Marks completion and figures out which medal (if any) was newly earned.
   const handleRecipeFinished = (recipe: Recipe, asChallenge: boolean) => {
+    const alreadyDone = completed.includes(recipe.id);
+    const prevStars = completed.length;
+    const nextStars = alreadyDone ? prevStars : prevStars + 1;
     markCompleted(recipe.id);
     prefs.clearResume(recipe.id);
     missions.onCompleteRecipe();
+    // Surprise chest: collectibles unlocked by the new ⭐ total.
+    const unlocks = newlyUnlocked(prevStars, nextStars);
+    if (unlocks.length > 0) setChestEvents(unlocks);
     skills.addRecipe(recipe, asChallenge);
     if (asChallenge) { medals.completeChallenge(recipe.id); missions.onChallenge(); }
     // Detect newly earned medal by re-running the rule with the next state.
@@ -281,7 +291,19 @@ function Index() {
       />
     );
   } else if (screen === "medals") {
-    content = <MedalsScreen onClose={() => setScreen("kidshome")} />;
+    content = (
+      <MedalsScreen
+        onClose={() => setScreen("kidshome")}
+        onOpenCollection={() => setScreen("collection")}
+      />
+    );
+  } else if (screen === "collection") {
+    content = (
+      <CollectionScreen
+        stars={completed.length}
+        onClose={() => setScreen("medals")}
+      />
+    );
   } else if (screen === "favorites") {
     content = (
       <FavoritesScreen
@@ -481,6 +503,9 @@ function Index() {
         streak={daily.streak}
         onClose={daily.closeReward}
       />
+      {chestEvents.length > 0 && (
+        <SurpriseChest events={chestEvents} onClose={() => setChestEvents([])} />
+      )}
     </>
   );
 }
