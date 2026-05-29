@@ -503,6 +503,9 @@ function Index() {
         streak={daily.streak}
         onClose={daily.closeReward}
       />
+      {chestEvents.length > 0 && (
+        <SurpriseChest events={chestEvents} onClose={() => setChestEvents([])} />
+      )}
     </>
   );
 }
