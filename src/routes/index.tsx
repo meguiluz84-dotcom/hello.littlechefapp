@@ -136,9 +136,15 @@ function Index() {
   // Called the moment the recipe is finished — before navigating away.
   // Marks completion and figures out which medal (if any) was newly earned.
   const handleRecipeFinished = (recipe: Recipe, asChallenge: boolean) => {
+    const alreadyDone = completed.includes(recipe.id);
+    const prevStars = completed.length;
+    const nextStars = alreadyDone ? prevStars : prevStars + 1;
     markCompleted(recipe.id);
     prefs.clearResume(recipe.id);
     missions.onCompleteRecipe();
+    // Surprise chest: collectibles unlocked by the new ⭐ total.
+    const unlocks = newlyUnlocked(prevStars, nextStars);
+    if (unlocks.length > 0) setChestEvents(unlocks);
     skills.addRecipe(recipe, asChallenge);
     if (asChallenge) { medals.completeChallenge(recipe.id); missions.onChallenge(); }
     // Detect newly earned medal by re-running the rule with the next state.
