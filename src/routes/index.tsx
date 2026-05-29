@@ -23,6 +23,9 @@ import PackScreen from "@/components/PackScreen";
 import BottomNav, { type NavTab } from "@/components/BottomNav";
 import CustomRecipesScreen from "@/components/CustomRecipesScreen";
 import CollectionsScreen from "@/components/CollectionsScreen";
+import CollectionScreen from "@/components/CollectionScreen";
+import SurpriseChest from "@/components/SurpriseChest";
+import { newlyUnlocked, type UnlockEvent } from "@/data/collectibles";
 import CookWhatIHave from "@/components/CookWhatIHave";
 import SchoolMode from "@/components/SchoolMode";
 import DailyRewardModal from "@/components/DailyRewardModal";
@@ -55,7 +58,7 @@ export const Route = createFileRoute("/")({
 type Screen =
   | "splash" | "kidshome" | "home" | "ingredients" | "cooking"
   | "play" | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack"
-  | "custom" | "collections" | "generator" | "school";
+  | "custom" | "collections" | "collection" | "generator" | "school";
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -69,6 +72,7 @@ function Index() {
   const [isChallenge, setIsChallenge] = useState(false);
   const [newMedalId, setNewMedalId] = useState<string | null>(null);
   const [pendingDiploma, setPendingDiploma] = useState<RecipeCategory | null>(null);
+  const [chestEvents, setChestEvents] = useState<UnlockEvent[]>([]);
 
   const players = usePlayers();
   const { markCompleted, isCompleted, completed, reset: resetCompleted } = useCompletedRecipes();
