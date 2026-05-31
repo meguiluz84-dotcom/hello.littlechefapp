@@ -27,6 +27,7 @@ import CollectionScreen from "@/components/CollectionScreen";
 import SurpriseChest from "@/components/SurpriseChest";
 import { newlyUnlocked, type UnlockEvent } from "@/data/collectibles";
 import CookWhatIHave from "@/components/CookWhatIHave";
+import FreeKitchen from "@/components/FreeKitchen";
 import SchoolMode from "@/components/SchoolMode";
 import DailyRewardModal from "@/components/DailyRewardModal";
 import { useDailyReward } from "@/hooks/use-daily-reward";
