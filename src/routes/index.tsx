@@ -280,6 +280,7 @@ function Index() {
         onCook={handleCook}
         onPlay={() => setScreen("play")}
         onAwards={() => setScreen("medals")}
+        onFree={() => setScreen("free")}
       />
     );
   } else if (screen === "play") {
