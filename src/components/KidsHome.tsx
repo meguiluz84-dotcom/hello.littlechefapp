@@ -17,10 +17,11 @@ interface Props {
   onCook: () => void;
   onPlay: () => void;
   onAwards: () => void;
+  onFree: () => void;
 }
 
 type Action = {
-  id: "cook" | "play" | "awards";
+  id: "cook" | "play" | "awards" | "free";
   emoji: string;
   label: string;
   bg: string;
@@ -31,7 +32,7 @@ type Action = {
 
 export default function KidsHome({
   playerName, avatarId, starsCount, dailyAvailable, onClaimDaily,
-  onChangeAvatar, onOpenAdult, onCook, onPlay, onAwards,
+  onChangeAvatar, onOpenAdult, onCook, onPlay, onAwards, onFree,
 }: Props) {
   const avatar = avatarById(avatarId);
   const longPress = useLongPress(onOpenAdult, 800);
@@ -39,6 +40,7 @@ export default function KidsHome({
 
   const actions: Action[] = [
     { id: "cook",   emoji: "🍕", label: "Cocinar", bg: "bg-kids-green",  ring: "ring-kids-green",  floaters: ["🥕", "🍅", "🥚"], onClick: onCook },
+    { id: "free",   emoji: "🌈", label: "Crear",   bg: "bg-kids-pink",   ring: "ring-kids-pink",   floaters: ["✨", "🍭", "🧁"], onClick: onFree },
     { id: "play",   emoji: "🎮", label: "Jugar",   bg: "bg-kids-blue",   ring: "ring-kids-blue",   floaters: ["🎯", "🎲", "✨"], onClick: onPlay },
     { id: "awards", emoji: "⭐", label: "Premios", bg: "bg-kids-yellow", ring: "ring-kids-yellow", floaters: ["🏆", "🎖️", "🥇"], onClick: onAwards },
   ];
@@ -150,7 +152,7 @@ export default function KidsHome({
         </div>
 
         {/* 3 botones gigantes */}
-        <div className="mt-8 flex flex-1 flex-col justify-center gap-6">
+        <div className="mt-6 flex flex-1 flex-col justify-center gap-4">
           {actions.map((a, i) => (
             <motion.button
               key={a.id}
@@ -162,7 +164,7 @@ export default function KidsHome({
               whileHover={{ y: -5, scale: 1.02 }}
               onClick={a.onClick}
               aria-label={a.label}
-              className={`kids-press relative flex min-h-[136px] w-full items-center justify-between overflow-hidden rounded-[2.75rem] ${a.bg} px-7 ring-4 ${a.ring}/40`}
+              className={`kids-press relative flex min-h-[108px] w-full items-center justify-between overflow-hidden rounded-[2.5rem] ${a.bg} px-6 ring-4 ${a.ring}/40`}
             >
               {/* Brillo superior tipo cristal */}
               <span

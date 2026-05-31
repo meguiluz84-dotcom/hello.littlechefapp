@@ -27,6 +27,7 @@ import CollectionScreen from "@/components/CollectionScreen";
 import SurpriseChest from "@/components/SurpriseChest";
 import { newlyUnlocked, type UnlockEvent } from "@/data/collectibles";
 import CookWhatIHave from "@/components/CookWhatIHave";
+import FreeKitchen from "@/components/FreeKitchen";
 import SchoolMode from "@/components/SchoolMode";
 import DailyRewardModal from "@/components/DailyRewardModal";
 import { useDailyReward } from "@/hooks/use-daily-reward";
@@ -58,7 +59,7 @@ export const Route = createFileRoute("/")({
 type Screen =
   | "splash" | "kidshome" | "home" | "ingredients" | "cooking"
   | "play" | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack"
-  | "custom" | "collections" | "collection" | "generator" | "school";
+  | "custom" | "collections" | "collection" | "generator" | "school" | "free";
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -279,6 +280,7 @@ function Index() {
         onCook={handleCook}
         onPlay={() => setScreen("play")}
         onAwards={() => setScreen("medals")}
+        onFree={() => setScreen("free")}
       />
     );
   } else if (screen === "play") {
@@ -412,6 +414,8 @@ function Index() {
         onClose={() => setScreen("home")}
       />
     );
+  } else if (screen === "free") {
+    content = <FreeKitchen onClose={() => setScreen("kidshome")} />;
   }
 
   if (!content) {
