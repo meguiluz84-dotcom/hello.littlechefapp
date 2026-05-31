@@ -32,7 +32,7 @@ type Action = {
 
 export default function KidsHome({
   playerName, avatarId, starsCount, dailyAvailable, onClaimDaily,
-  onChangeAvatar, onOpenAdult, onCook, onPlay, onAwards,
+  onChangeAvatar, onOpenAdult, onCook, onPlay, onAwards, onFree,
 }: Props) {
   const avatar = avatarById(avatarId);
   const longPress = useLongPress(onOpenAdult, 800);
@@ -40,6 +40,7 @@ export default function KidsHome({
 
   const actions: Action[] = [
     { id: "cook",   emoji: "🍕", label: "Cocinar", bg: "bg-kids-green",  ring: "ring-kids-green",  floaters: ["🥕", "🍅", "🥚"], onClick: onCook },
+    { id: "free",   emoji: "🌈", label: "Crear",   bg: "bg-kids-pink",   ring: "ring-kids-pink",   floaters: ["✨", "🍭", "🧁"], onClick: onFree },
     { id: "play",   emoji: "🎮", label: "Jugar",   bg: "bg-kids-blue",   ring: "ring-kids-blue",   floaters: ["🎯", "🎲", "✨"], onClick: onPlay },
     { id: "awards", emoji: "⭐", label: "Premios", bg: "bg-kids-yellow", ring: "ring-kids-yellow", floaters: ["🏆", "🎖️", "🥇"], onClick: onAwards },
   ];
