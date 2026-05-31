@@ -17,10 +17,11 @@ interface Props {
   onCook: () => void;
   onPlay: () => void;
   onAwards: () => void;
+  onFree: () => void;
 }
 
 type Action = {
-  id: "cook" | "play" | "awards";
+  id: "cook" | "play" | "awards" | "free";
   emoji: string;
   label: string;
   bg: string;
