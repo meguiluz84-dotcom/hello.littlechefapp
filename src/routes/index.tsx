@@ -59,7 +59,7 @@ export const Route = createFileRoute("/")({
 type Screen =
   | "splash" | "kidshome" | "home" | "ingredients" | "cooking"
   | "play" | "medals" | "favorites" | "weekplan" | "shopping" | "pantry" | "missions" | "pack"
-  | "custom" | "collections" | "collection" | "generator" | "school";
+  | "custom" | "collections" | "collection" | "generator" | "school" | "free";
 
 function Index() {
   const [screen, setScreen] = useState<Screen>("splash");
