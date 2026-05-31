@@ -164,7 +164,7 @@ export default function KidsHome({
               whileHover={{ y: -5, scale: 1.02 }}
               onClick={a.onClick}
               aria-label={a.label}
-              className={`kids-press relative flex min-h-[136px] w-full items-center justify-between overflow-hidden rounded-[2.75rem] ${a.bg} px-7 ring-4 ${a.ring}/40`}
+              className={`kids-press relative flex min-h-[108px] w-full items-center justify-between overflow-hidden rounded-[2.5rem] ${a.bg} px-6 ring-4 ${a.ring}/40`}
             >
               {/* Brillo superior tipo cristal */}
               <span
