@@ -414,6 +414,8 @@ function Index() {
         onClose={() => setScreen("home")}
       />
     );
+  } else if (screen === "free") {
+    content = <FreeKitchen onClose={() => setScreen("kidshome")} />;
   }
 
   if (!content) {
