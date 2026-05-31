@@ -152,7 +152,7 @@ export default function KidsHome({
         </div>
 
         {/* 3 botones gigantes */}
-        <div className="mt-8 flex flex-1 flex-col justify-center gap-6">
+        <div className="mt-6 flex flex-1 flex-col justify-center gap-4">
           {actions.map((a, i) => (
             <motion.button
               key={a.id}
