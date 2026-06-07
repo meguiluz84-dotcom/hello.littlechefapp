@@ -15,6 +15,18 @@ interface Props {
  */
 export default function SurpriseChest({ events, onClose }: Props) {
   const [open, setOpen] = useState(false);
+  const voice = useVoice();
+
+  const handleOpen = () => {
+    setOpen(true);
+    voice.sfx("jingle");
+    const first = events[0];
+    if (first) {
+      // Speak the first unlock so non-readers know what they got.
+      window.setTimeout(() => voice.speak(`¡Sorpresa! ${first.message}`, { pitch: 1.3 }), 350);
+    }
+  };
+
 
   if (events.length === 0) return null;
 
