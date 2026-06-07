@@ -252,15 +252,32 @@ export default function KidsHome({
             )}
           </motion.div>
 
-          <button
-            type="button"
-            onClick={onOpenAdult}
-            aria-label="Modo adultos"
-            className="flex h-11 items-center gap-2 rounded-full bg-card/90 px-4 text-xs font-extrabold text-muted-foreground kids-shadow"
-          >
-            <span className="text-base">👨‍👩‍👧</span>
-            Modo adultos
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                voice.toggle();
+                if (!voice.enabled) {
+                  // Will become enabled after toggle; play a confirmation.
+                  setTimeout(() => voice.sfx("sparkle"), 60);
+                }
+              }}
+              aria-label={voice.enabled ? "Apagar sonido" : "Encender sonido"}
+              className="kids-press flex h-12 w-12 items-center justify-center rounded-full bg-card text-2xl kids-shadow"
+            >
+              {voice.enabled ? "🔊" : "🔇"}
+            </button>
+
+            <button
+              type="button"
+              onClick={onOpenAdult}
+              aria-label="Modo adultos"
+              className="flex h-11 items-center gap-2 rounded-full bg-card/90 px-4 text-xs font-extrabold text-muted-foreground kids-shadow"
+            >
+              <span className="text-base">👨‍👩‍👧</span>
+              Modo adultos
+            </button>
+          </div>
         </div>
       </div>
     </div>
