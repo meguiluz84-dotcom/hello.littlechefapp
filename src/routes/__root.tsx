@@ -97,8 +97,10 @@ function RootComponent() {
   }, []);
 
   return (
-    <PlayersProvider>
-      <Outlet />
-    </PlayersProvider>
+    <VoiceProvider>
+      <PlayersProvider>
+        <Outlet />
+      </PlayersProvider>
+    </VoiceProvider>
   );
 }
