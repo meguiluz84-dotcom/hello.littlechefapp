@@ -39,7 +39,7 @@ export default function SurpriseChest({ events, onClose }: Props) {
           <motion.button
             key="closed"
             type="button"
-            onClick={() => setOpen(true)}
+            onClick={handleOpen}
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
             exit={{ scale: 0 }}
