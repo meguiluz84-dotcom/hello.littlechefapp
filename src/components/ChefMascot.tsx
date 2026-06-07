@@ -16,6 +16,8 @@ interface Props {
   size?: number;
   message?: string;
   className?: string;
+  /** Speak the message aloud whenever it changes. Default: true. */
+  speakMessage?: boolean;
 }
 
 const variants: Record<MascotMood, Variants> = {
