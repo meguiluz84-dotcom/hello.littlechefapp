@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { UnlockEvent } from "@/data/collectibles";
+import { useVoice } from "@/hooks/use-voice";
 
 interface Props {
   events: UnlockEvent[];
