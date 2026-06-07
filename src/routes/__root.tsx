@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { PlayersProvider } from "@/hooks/use-players";
+import { VoiceProvider } from "@/hooks/use-voice";
 
 import appCss from "../styles.css?url";
 
