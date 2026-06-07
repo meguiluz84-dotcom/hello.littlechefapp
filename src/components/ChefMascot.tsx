@@ -70,10 +70,24 @@ export default function ChefMascot({
   size = 144,
   message,
   className = "",
+  speakMessage = true,
 }: Props) {
   const showHand = mood === "greet" || mood === "celebrate";
   const showConfetti = mood === "celebrate";
   const showClapHands = mood === "clap";
+
+  const voice = useVoice();
+  const lastSpoken = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (!speakMessage || !message) return;
+    if (lastSpoken.current === message) return;
+    lastSpoken.current = message;
+    // Strip emoji-only noise so TTS reads cleanly.
+    const clean = message.replace(/[\p{Extended_Pictographic}\u200d\uFE0F]/gu, "").trim();
+    if (clean.length > 0) voice.speak(clean);
+    if (mood === "celebrate") voice.sfx("sparkle");
+  }, [message, speakMessage, mood, voice]);
+
 
   return (
     <div className={`relative inline-flex flex-col items-center ${className}`}>
