@@ -1,5 +1,7 @@
+import { useEffect, useRef } from "react";
 import { motion, type Variants } from "framer-motion";
 import mascotImg from "@/assets/chef-mascot.png";
+import { useVoice } from "@/hooks/use-voice";
 
 export type MascotMood =
   | "greet"     // saluda con la mano
