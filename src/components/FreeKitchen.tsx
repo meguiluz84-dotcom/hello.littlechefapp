@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import ChefMascot from "./ChefMascot";
+import { useVoice } from "@/hooks/use-voice";
 
 interface Props {
   onClose: () => void;
@@ -52,16 +53,17 @@ export default function FreeKitchen({ onClose }: Props) {
   const plateRef = useRef<HTMLDivElement>(null);
   const plateControls = useAnimationControls();
   const idRef = useRef(0);
+  const voice = useVoice();
 
   const baseDef = BASES.find((b) => b.id === base)!;
 
   const addIngredient = (emoji: string) => {
     const id = ++idRef.current;
-    // Spread placements around center
     const x = 0.2 + Math.random() * 0.6;
     const y = 0.2 + Math.random() * 0.6;
     const rot = (Math.random() - 0.5) * 40;
     setItems((it) => [...it, { id, emoji, x, y, rot }]);
+    voice.sfx("pop");
     plateControls.start({
       scale: [1, 1.06, 1],
       rotate: [0, -2, 2, 0],
@@ -70,6 +72,7 @@ export default function FreeKitchen({ onClose }: Props) {
   };
 
   const clearAll = () => {
+    voice.sfx("whoosh");
     setItems([]);
     setSplash(null);
   };
@@ -78,6 +81,8 @@ export default function FreeKitchen({ onClose }: Props) {
     const p = PRAISES[Math.floor(Math.random() * PRAISES.length)];
     setPraise(p);
     setCelebrating(true);
+    voice.sfx("jingle");
+    window.setTimeout(() => voice.speak(p, { pitch: 1.35 }), 250);
     plateControls.start({
       scale: [1, 1.25, 0.95, 1.1, 1],
       rotate: [0, -8, 8, -4, 0],
