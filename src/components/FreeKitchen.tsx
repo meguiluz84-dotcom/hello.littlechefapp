@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useAnimationControls } from "framer-motion";
 import ChefMascot from "./ChefMascot";
+import { useVoice } from "@/hooks/use-voice";
 
 interface Props {
   onClose: () => void;
