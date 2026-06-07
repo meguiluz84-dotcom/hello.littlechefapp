@@ -1,7 +1,9 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { avatarById, type AvatarId } from "@/data/avatars";
 import { useLongPress } from "@/hooks/use-long-press";
 import { useHats } from "@/hooks/use-hats";
+import { useVoice } from "@/hooks/use-voice";
 import ChefMascot from "./ChefMascot";
 import LivelyFood, { effectForEmoji, type FoodEffect } from "./LivelyFood";
 
