@@ -39,12 +39,31 @@ export default function KidsHome({
   const avatar = avatarById(avatarId);
   const longPress = useLongPress(onOpenAdult, 800);
   const { equipped, freshHats } = useHats();
+  const voice = useVoice();
+
+  // Greet the child once on first mount (after audio is unlocked by a tap).
+  const greeted = useRef(false);
+  useEffect(() => {
+    if (greeted.current) return;
+    const t = window.setTimeout(() => {
+      if (greeted.current) return;
+      greeted.current = true;
+      voice.sfx("sparkle");
+      voice.speak(`¡Hola ${playerName}! ¿Qué quieres cocinar hoy?`, { pitch: 1.3 });
+    }, 600);
+    return () => window.clearTimeout(t);
+  }, [voice, playerName]);
+
+  const withTap = (fn: () => void) => () => {
+    voice.sfx("tap");
+    fn();
+  };
 
   const actions: Action[] = [
-    { id: "cook",   emoji: "🍕", label: "Cocinar", bg: "bg-kids-green",  ring: "ring-kids-green",  floaters: ["🥕", "🍅", "🥚"], onClick: onCook },
-    { id: "free",   emoji: "🌈", label: "Crear",   bg: "bg-kids-pink",   ring: "ring-kids-pink",   floaters: ["✨", "🍭", "🧁"], onClick: onFree },
-    { id: "play",   emoji: "🎮", label: "Jugar",   bg: "bg-kids-blue",   ring: "ring-kids-blue",   floaters: ["🎯", "🎲", "✨"], onClick: onPlay },
-    { id: "awards", emoji: "⭐", label: "Premios", bg: "bg-kids-yellow", ring: "ring-kids-yellow", floaters: ["🏆", "🎖️", "🥇"], onClick: onAwards },
+    { id: "cook",   emoji: "🍕", label: "Cocinar", bg: "bg-kids-green",  ring: "ring-kids-green",  floaters: ["🥕", "🍅", "🥚"], onClick: withTap(onCook) },
+    { id: "free",   emoji: "🌈", label: "Crear",   bg: "bg-kids-pink",   ring: "ring-kids-pink",   floaters: ["✨", "🍭", "🧁"], onClick: withTap(onFree) },
+    { id: "play",   emoji: "🎮", label: "Jugar",   bg: "bg-kids-blue",   ring: "ring-kids-blue",   floaters: ["🎯", "🎲", "✨"], onClick: withTap(onPlay) },
+    { id: "awards", emoji: "⭐", label: "Premios", bg: "bg-kids-yellow", ring: "ring-kids-yellow", floaters: ["🏆", "🎖️", "🥇"], onClick: withTap(onAwards) },
   ];
 
   // Cap shown stars to avoid overflow on small screens.
