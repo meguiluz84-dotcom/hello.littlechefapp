@@ -7,6 +7,8 @@ import PhotoCapture from "./PhotoCapture";
 import { useTastings, type Reaction } from "@/hooks/use-tastings";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
 import { useEffect, useState } from "react";
+import { useVoice } from "@/hooks/use-voice";
+
 
 interface Props {
   recipe?: Recipe;
@@ -30,6 +32,19 @@ export default function Celebration({
   const finishHome = onHome ?? onDone ?? (() => {});
   const dishEmoji = recipe?.emoji ?? recipeEmoji ?? "🍽️";
   const newMedal = newMedalId ? MEDALS.find((m) => m.id === newMedalId) ?? null : null;
+
+  const voice = useVoice();
+  useEffect(() => {
+    voice.sfx("jingle");
+    const name = displayName?.trim();
+    const phrase = name
+      ? `¡Lo lograste, chef ${name}! ¡Qué rico!`
+      : "¡Lo lograste, chef! ¡Qué rico!";
+    window.setTimeout(() => voice.speak(phrase, { pitch: 1.35 }), 400);
+    // Run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const { reactionFor, log, items, setNote } = useTastings();
   const recipeId = recipe?.id ?? "";

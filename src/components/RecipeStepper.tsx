@@ -221,32 +221,39 @@ export default function RecipeStepper({
     setDirection(1);
     if (step < total - 1) {
       playActionSound(current.actionIcon, soundOn);
+      voice.sfx("tap");
       // Mensaje positivo breve antes de avanzar.
       const msg = PRAISE[Math.floor(Math.random() * PRAISE.length)];
       setPraise(msg);
+      voice.speak(msg, { pitch: 1.35, rate: 1.0 });
+      voice.sfx("success");
       window.setTimeout(() => {
         setPraise(null);
         setStep((s) => s + 1);
       }, 700);
     } else {
       playDoneSound(soundOn);
+      voice.sfx("jingle");
       onClearResume?.();
       onComplete?.();
       setShowCelebration(true);
     }
-  }, [step, total, current.actionIcon, soundOn, onClearResume, onComplete]);
+  }, [step, total, current.actionIcon, soundOn, onClearResume, onComplete, voice]);
 
 
   const prev = useCallback(() => {
     setDirection(-1);
+    voice.sfx("tap");
     if (step > 0) setStep((s) => s - 1);
     else onBack();
-  }, [step, onBack]);
+  }, [step, onBack, voice]);
 
   const replay = useCallback(() => {
     playActionSound(current.actionIcon, soundOn);
+    voice.speak(lineForAction(current.actionIcon));
     setReplayKey((k) => k + 1);
-  }, [current.actionIcon, soundOn]);
+  }, [current.actionIcon, soundOn, voice]);
+
 
   const pauseAndExit = useCallback(() => {
     onPause?.(step);
