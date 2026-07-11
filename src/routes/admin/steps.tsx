@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import {
   getQueueStatus,
   processQueue,
-} from "@/server/stepQueue.functions";
+} from "@/lib/stepQueue.functions";
 
 export const Route = createFileRoute("/admin/steps")({
   component: AdminStepsPage,
