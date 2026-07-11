@@ -1,3 +1,4 @@
+import AmbientBackground from "./AmbientBackground";
 import { motion } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
 import { useMissions } from "@/hooks/use-missions";
@@ -14,7 +15,8 @@ export default function PlayScreen({ challengeRecipe, challengeName, onPickChall
   const { missions, state, allDone, claimed, claimReward } = useMissions();
 
   return (
-    <div className="min-h-screen bg-background px-5 pb-28 pt-6">
+    <div className="relative overflow-hidden min-h-screen bg-background px-5 pb-28 pt-6">
+      <AmbientBackground />
       <div className="mx-auto w-full max-w-md">
         <div className="mb-5 flex items-center justify-between">
           <h1 className="text-3xl font-extrabold text-foreground">🎮 Jugar</h1>

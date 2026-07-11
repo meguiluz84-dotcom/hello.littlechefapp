@@ -1,3 +1,4 @@
+import AmbientBackground from "./AmbientBackground";
 import { motion } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
 import EmptyState from "./EmptyState";
@@ -13,7 +14,8 @@ interface Props {
 export default function FavoritesScreen({ recipes, favorites, onPick, onClose, getName }: Props) {
   const favRecipes = recipes.filter((r) => favorites.includes(r.id));
   return (
-    <div className="min-h-screen bg-background px-4 pb-10 pt-6">
+    <div className="relative overflow-hidden min-h-screen bg-background px-4 pb-10 pt-6">
+      <AmbientBackground />
       <div className="mx-auto w-full max-w-md">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-extrabold text-foreground">❤️ Favoritos</h1>

@@ -1,3 +1,4 @@
+import AmbientBackground from "./AmbientBackground";
 import { motion } from "framer-motion";
 import { COLLECTION, totalCollectibles, unlockedCount, type CategoryDef } from "@/data/collectibles";
 
@@ -15,7 +16,8 @@ export default function CollectionScreen({ stars, onClose }: Props) {
   const got = unlockedCount(stars);
 
   return (
-    <div className="min-h-screen bg-gradient-warm px-4 pb-10 pt-6">
+    <div className="relative overflow-hidden min-h-screen bg-gradient-warm px-4 pb-10 pt-6">
+      <AmbientBackground />
       <div className="mx-auto w-full max-w-md">
         <div className="mb-4 flex items-center justify-between">
           <h1 className="text-3xl font-extrabold text-foreground">🎁 Colección</h1>

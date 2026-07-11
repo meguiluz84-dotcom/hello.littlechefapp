@@ -1,3 +1,4 @@
+import AmbientBackground from "./AmbientBackground";
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { recipes, categories, type Recipe, type RecipeCategory } from "@/data/recipes";
@@ -85,7 +86,8 @@ export default function RecipeHome({
   const activeCat = activeCategory ? categories.find((c) => c.id === activeCategory) : null;
 
   return (
-    <div className="min-h-screen bg-gradient-warm px-5 pb-28 pt-6">
+    <div className="relative overflow-hidden min-h-screen bg-gradient-warm px-5 pb-28 pt-6">
+      <AmbientBackground />
       {/* Encabezado mínimo: mascota + avatar */}
       <div className="mx-auto flex w-full max-w-md flex-col items-center">
         <ChefMascot mood="greet" size={104} />
