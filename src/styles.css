@@ -2,8 +2,8 @@
 @source "../src";
 @import "tw-animate-css";
 
-/* Fuentes infantiles: Fredoka (titulares) + Nunito (cuerpo) */
-@import url("https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap");
+/* Fuentes infantiles: Fredoka + Nunito cargadas via <link> en __root.tsx */
+
 
 @custom-variant dark (&:is(.dark *));
 

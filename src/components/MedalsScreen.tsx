@@ -1,3 +1,4 @@
+import AmbientBackground from "./AmbientBackground";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { MEDALS } from "@/data/medals";
@@ -23,7 +24,8 @@ export default function MedalsScreen({ onClose, onOpenCollection }: Props) {
   }, [freshHats.length]);
 
   return (
-    <div className="min-h-screen bg-background px-4 pb-10 pt-6">
+    <div className="relative overflow-hidden min-h-screen bg-background px-4 pb-10 pt-6">
+      <AmbientBackground />
       <div className="mx-auto w-full max-w-md">
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-extrabold text-foreground">⭐ Mis premios</h1>

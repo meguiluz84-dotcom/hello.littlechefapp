@@ -1,3 +1,4 @@
+import AmbientBackground from "./AmbientBackground";
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Recipe } from "@/data/recipes";
@@ -222,7 +223,8 @@ export default function CookWhatIHave({
     (results?.now.length ?? 0) + (results?.oneMissing.length ?? 0) + (results?.several.length ?? 0);
 
   return (
-    <div className="min-h-screen bg-background px-4 pb-28 pt-6">
+    <div className="relative overflow-hidden min-h-screen bg-background px-4 pb-28 pt-6">
+      <AmbientBackground />
       <div className="mx-auto w-full max-w-md">
         <div className="mb-4 flex items-center justify-between gap-2">
           <h1 className="text-2xl font-extrabold text-foreground">🧑‍🍳 Cocinar con lo que tengo</h1>
