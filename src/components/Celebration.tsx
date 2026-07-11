@@ -7,6 +7,8 @@ import PhotoCapture from "./PhotoCapture";
 import { useTastings, type Reaction } from "@/hooks/use-tastings";
 import { useWeekPlan, todayKey } from "@/hooks/use-week-plan";
 import { useEffect, useState } from "react";
+import { useVoice } from "@/hooks/use-voice";
+
 
 interface Props {
   recipe?: Recipe;
